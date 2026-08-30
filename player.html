@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
-  <title>YogiStream Universal Master Player | @yogiprojects</title>
+  <title>YogiStream Ultra Pro Player | @yogiprojects</title>
 
   <!-- Shaka Player Core + UI -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
@@ -544,12 +544,12 @@
     if (banner) banner.classList.add('hidden');
   }
 
-  // Main Stream Initializer
+  // Main Stream Initializer with Multi-Fallback
   async function initPlayer() {
     resetHideTimer();
     const p = new URLSearchParams(window.location.search);
     const type = p.get('type') || (p.get('mpd') ? 'dash' : 'hls');
-    const mpdUrl = p.get('mpd') || p.get('url');
+    let mpdUrl = p.get('mpd') || p.get('url');
     const keyId = p.get('keyid');
     const key = p.get('key');
     const title = p.get('title') || 'YogiStream Live';
@@ -582,13 +582,20 @@
       drmConfig.clearKeys[keyId] = key;
     }
 
+    // True 0-Buffer Aggressive Low Latency Setup
     player.configure({
       drm: drmConfig,
       streaming: {
         lowLatencyMode: true,
-        bufferingGoal: 2,
-        rebufferingGoal: 0.5,
-        inaccurateManifestTolerance: 0
+        bufferingGoal: 1.5,
+        rebufferingGoal: 0.3,
+        bufferBehind: 5,
+        inaccurateManifestTolerance: 0,
+        retryParameters: {
+          maxAttempts: 5,
+          baseDelay: 100,
+          backoffFactor: 1.1
+        }
       }
     });
 
@@ -600,7 +607,14 @@
         document.getElementById('unmuteBanner')?.classList.remove('hidden');
       });
     } catch (e) {
-      console.warn('Stream play error:', e);
+      console.warn('Direct stream failed, trying proxy fallback...', e);
+      try {
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(mpdUrl)}`;
+        await player.load(proxyUrl);
+        video.play().catch(() => {});
+      } catch(err2) {
+        console.warn('Proxy fallback error:', err2);
+      }
     }
   }
 
