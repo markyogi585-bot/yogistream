@@ -1,305 +1,436 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>YogiStream - SonyLiv Live Events & Sports | @yogiprojects</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root{
-  --accent:#ff2c55;
-  --bg1:#1b2340;
-  --bg2:#070a14;
-  --card:#121a34;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>YogiStream - SonyLiv Live Matches & Sports Hub | @yogiprojects</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-*{box-sizing:border-box; margin:0; padding:0;}
+  <style>
+    :root {
+      --primary-red: #ff0055;
+      --glow-red: rgba(255, 0, 85, 0.4);
+      --accent-gold: #ffaa00;
+      --dark-bg: #07080e;
+      --card-bg: rgba(18, 20, 36, 0.8);
+      --text-muted: #8b9bb4;
+    }
 
-body{
-  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-  background: radial-gradient(circle at top,var(--bg1),var(--bg2));
-  color:#fff;
-  overflow-x:hidden;
-  min-height:100vh;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-}
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #20101d 0%, #07080e 65%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #1c2136;
-  color: #ff416c;
-  text-decoration: none;
-  padding: 8px 18px;
-  border-radius: 40px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid #323b63;
-  transition: all 0.3s ease;
-}
+    /* Top Bar */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary-red);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .brand-title span {
+      background: linear-gradient(90deg, #ff0055, #ffaa00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-.back-btn:hover {
-  background: #ff416c;
-  color: #fff;
-  box-shadow: 0 0 15px rgba(255, 65, 108, 0.4);
-  transform: translateY(-2px);
-}
+    .tg-pill {
+      background: linear-gradient(90deg, #0088cc, #00c6ff);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(0, 136, 204, 0.35);
+      transition: transform 0.2s;
+    }
+    .tg-pill:hover { transform: scale(1.04); }
 
-/* ---------- HEADER ---------- */
-.header{
-  text-align:center;
-  padding: 20px 16px 24px;
-}
-.header h1{
-  font-size:clamp(26px,5vw,42px);
-  margin:0;
-  background:linear-gradient(90deg,#ff416c,#ff4b2b);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-.header p{
-  color:#aaa;
-  margin-top:10px;
-  font-size:14px;
-}
+    /* Header Banner */
+    .header-banner {
+      max-width: 1400px;
+      margin: 10px auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 0, 85, 0.15);
+      border: 1px solid rgba(255, 0, 85, 0.35);
+      color: #ff6b8b;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .banner-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .banner-title span {
+      background: linear-gradient(90deg, #ff0055, #ffaa00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .banner-sub {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-/* ---------- TABS ---------- */
-.tabs{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  margin-bottom:28px;
-  flex-wrap:wrap;
-  padding: 0 10px;
-}
-.tabs button{
-  background:#1c2547;
-  color:#fff;
-  border:none;
-  padding:10px 22px;
-  border-radius:999px;
-  cursor:pointer;
-  font-weight:600;
-  transition:.3s ease;
-}
-.tabs button:hover{transform:translateY(-2px)}
-.tabs button.active{
-  background:var(--accent);
-  box-shadow:0 8px 25px rgba(255,44,85,.45);
-}
+    /* Search & Filter Bar */
+    .controls-wrapper {
+      max-width: 1400px;
+      margin: 0 auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .search-box {
+      background: rgba(19, 23, 40, 0.85);
+      border: 1px solid rgba(255, 0, 85, 0.25);
+      border-radius: 40px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    .search-box i { color: var(--primary-red); font-size: 1.1rem; }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.96rem;
+      font-family: inherit;
+      width: 100%;
+    }
+    .search-box input::placeholder { color: #627290; }
 
-/* ---------- GRID ---------- */
-.container{
-  padding:0 20px 60px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:26px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+    /* Matches Grid */
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      width: 100%;
+    }
 
-/* ---------- CARD ---------- */
-.card{
-  background:var(--card);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 20px 40px rgba(0,0,0,.4);
-  cursor:pointer;
-  position:relative;
-  opacity:0;
-  transform:translateY(30px);
-  animation:cardIn .6s ease forwards;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover{
-  transform:translateY(-8px) scale(1.02);
-  box-shadow:0 25px 50px rgba(255,44,85,.35);
-  border-color: rgba(255, 44, 85, 0.4);
-}
-.card.upcoming{
-  opacity:.7;
-  cursor:not-allowed;
-}
-.card img{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  transition:transform .45s ease;
-}
-.card:hover img{transform:scale(1.05)}
+    .match-card {
+      background: linear-gradient(180deg, rgba(25, 22, 40, 0.85), rgba(12, 14, 25, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 22px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .match-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 18px 40px var(--glow-red);
+      border-color: rgba(255, 0, 85, 0.45);
+    }
 
-.card-body{padding:18px}
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .live-badge-mini {
+      background: rgba(255, 0, 85, 0.2);
+      border: 1px solid rgba(255, 0, 85, 0.5);
+      color: #ff0055;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .live-dot-mini {
+      width: 6px;
+      height: 6px;
+      background: #ff0055;
+      border-radius: 50%;
+      animation: pulseDot 1.2s infinite;
+    }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* ---------- BADGE ---------- */
-.badge{
-  display:inline-block;
-  padding:5px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-  background:var(--accent);
-}
-.badge.up{background:#555}
+    .sport-tag {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
 
-/* ---------- TEXT ---------- */
-.title{
-  font-size:16px;
-  font-weight: 600;
-  margin:12px 0 6px;
-  line-height: 1.3;
-}
-.meta{
-  color:#bbb;
-  font-size:13px;
-}
+    .match-banner-wrap {
+      width: 100%;
+      height: 140px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .match-banner-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .match-card:hover .match-banner-wrap img {
+      transform: scale(1.06);
+    }
 
-/* ---------- FOOTER ---------- */
-.footer{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:16px;
-}
-.watch{
-  background:var(--accent);
-  color:#fff;
-  padding:8px 18px;
-  border-radius:999px;
-  font-weight:700;
-  font-size:13px;
-}
+    .match-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 8px;
+      min-height: 44px;
+    }
 
-/* ---------- ANIMATIONS ---------- */
-@keyframes cardIn{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
+    .match-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 16px;
+    }
 
-@media(max-width:600px){
-  .card img{height:160px}
-  .container{gap:16px; padding: 0 12px 40px;}
-  .header-bar { padding: 1rem; }
-}
-</style>
+    .play-btn-full {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: auto;
+      transition: all 0.2s;
+    }
+    .match-card:hover .play-btn-full {
+      background: linear-gradient(90deg, #ff0055, #ffaa00);
+      color: #000;
+      border-color: transparent;
+      box-shadow: 0 0 15px var(--glow-red);
+    }
+
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 18px; }
+      .banner-title { font-size: 1.7rem; }
+      .matches-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 0 14px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="header-bar">
-  <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
-</div>
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="brand-title">SonyLiv <span>Live Sports</span></div>
+    </div>
+    <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-pill">
+      <i class="fab fa-telegram-plane"></i> @yogiprojects
+    </a>
+  </header>
 
-<div class="header">
-  <h1>YogiStream Live Events</h1>
-  <p id="updated">Loading live matches powered by @yogiprojects…</p>
-</div>
+  <!-- Banner -->
+  <section class="header-banner">
+    <div class="banner-badge"><i class="fas fa-satellite-dish"></i> LIVE MATCH FEEDS & FIXTURES</div>
+    <h1 class="banner-title">Live <span>Cricket & Sports Matches</span></h1>
+    <p class="banner-sub">Watch international cricket tournaments, football, tennis, and live matches with zero ads.</p>
+  </section>
 
-<div class="tabs">
-  <button class="active" onclick="filter('all')">All Events</button>
-  <button onclick="filter('live')">Live Now</button>
-  <button onclick="filter('upcoming')">Upcoming</button>
-</div>
+  <!-- Search -->
+  <section class="controls-wrapper">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="matchSearch" placeholder="Search live matches, teams, tournaments (e.g. India, Women, Tennis)..." oninput="renderMatches()">
+    </div>
+  </section>
 
-<div class="container" id="list"></div>
+  <!-- Matches Grid -->
+  <main class="matches-grid" id="matchesContainer">
+    <div class="loading-state">
+      <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary-red); margin-bottom:12px;"></i>
+      <div>Fetching live match schedules…</div>
+    </div>
+  </main>
 
-<script>
-const JSON_SOURCES = [
-  "sonyliv.json",
-  "../api/sonyliv_events.json",
-  "https://raw.githubusercontent.com/drmlive/sliv-live-events/main/sonyliv.json"
-];
+  <script>
+    let allMatches = [];
 
-const STREAM_PROXY = "https://mini.allinonereborn.site/events/stream_proxy.php?url=";
+    async function loadMatches() {
+      const sources = [
+        'https://raw.githubusercontent.com/drmlive/sliv-live-events/main/sonyliv.json',
+        'sonyliv.json',
+        '../api/sonyliv_events.json',
+        '/api/sonyliv_events.json'
+      ];
 
-let DATA=[];
-
-async function loadData() {
-  for (const src of JSON_SOURCES) {
-    try {
-      const res = await fetch(src);
-      if (res.ok) {
-        const j = await res.json();
-        if (j && j.matches) {
-          DATA = j.matches;
-          document.getElementById("updated").innerText = "Last updated: " + (j["last update time"] || "Live");
-          render(DATA);
-          return;
-        }
+      let data = null;
+      for (const src of sources) {
+        try {
+          const res = await fetch(src);
+          if (res.ok) {
+            data = await res.json();
+            if (data && data.matches && data.matches.length > 0) break;
+          }
+        } catch (e) {}
       }
-    } catch(e) {}
-  }
-  showEmpty();
-}
 
-function render(arr){
-  const box=document.getElementById("list");
-  box.innerHTML="";
-  if(!arr.length){showEmpty();return;}
+      if (data && data.matches) {
+        allMatches = data.matches;
+        renderMatches();
+      } else {
+        document.getElementById('matchesContainer').innerHTML = '<div class="loading-state" style="color:#ff5555;">No active match feeds right now. Check back soon!</div>';
+      }
+    }
 
-  arr.forEach((m,i)=>{
-    const live=m.isLive===true;
-    const streamTarget = m.video_url || m.dai_url || m.pub_url || "";
-    const url=live && streamTarget
-      ? "player1.html?url="+encodeURIComponent(STREAM_PROXY + streamTarget)
-      : "";
+    function renderMatches() {
+      const q = (document.getElementById('matchSearch')?.value || '').toLowerCase().trim();
+      const container = document.getElementById('matchesContainer');
+      if (!container) return;
 
-    box.innerHTML+=`
-      <div class="card ${live?'':'upcoming'}"
-           style="animation-delay:${i*0.06}s"
-           ${live?`onclick="window.open('${url}','_blank')"`:""}>
-        <img src="${m.src||''}" onerror="this.src='../assets/sonyliv_events.png'">
-        <div class="card-body">
-          <span class="badge ${live?'':'up'}">
-            ${live?'LIVE NOW':'UPCOMING'}
-          </span>
+      const filtered = allMatches.filter(m => {
+        const title = (m.match_name || m.event_name || m.title || '').toLowerCase();
+        return !q || title.includes(q);
+      });
 
-          <div class="title">
-            ${m.match_name||m.event_name||'Live Event'}
-          </div>
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="loading-state">No matches found matching your search.</div>';
+        return;
+      }
 
-          <div class="meta">
-            ${m.broadcast_channel||''} • ${m.audioLanguageName||''}
-          </div>
+      container.innerHTML = filtered.map(m => {
+        const title = m.match_name || m.event_name || m.title || 'Live Match';
+        const poster = m.src || m.image || m.poster || '../assets/sonyliv_events.png';
+        const streamUrl = m.video_url || m.dai_url || m.url || '';
+        const playLink = `player1.html?url=${encodeURIComponent(streamUrl)}&name=${encodeURIComponent(title)}`;
+        const sport = m.sport || 'Live Sports';
+        const dateStr = m.event_date || 'Today Live';
 
-          <div class="footer">
-            <div class="meta">${m.event_category||''}</div>
-            ${live?`<div class="watch">Watch Live</div>`:""}
-          </div>
-        </div>
-      </div>`;
-  });
-}
+        return `
+          <a href="${playLink}" class="match-card">
+            <div class="card-top-row">
+              <div class="live-badge-mini">
+                <div class="live-dot-mini"></div>
+                <span>LIVE</span>
+              </div>
+              <span class="sport-tag">${sport}</span>
+            </div>
 
-function filter(type){
-  document.querySelectorAll(".tabs button")
-    .forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
+            <div class="match-banner-wrap">
+              <img src="${poster}" onerror="this.src='../assets/sonyliv_events.png'" alt="${title}" loading="lazy">
+            </div>
 
-  if(type==="live") render(DATA.filter(x=>x.isLive));
-  else if(type==="upcoming") render(DATA.filter(x=>!x.isLive));
-  else render(DATA);
-}
+            <div class="match-title">${title}</div>
 
-function showEmpty(){
-  document.getElementById("list").innerHTML =
-    "<div style='opacity:.6; text-align:center; grid-column: 1/-1;'>No events available at this moment.</div>";
-}
+            <div class="match-meta-row">
+              <i class="far fa-clock"></i>
+              <span>${dateStr}</span>
+            </div>
 
-loadData();
-</script>
-<script src="../assets/security.js"></script>
+            <div class="play-btn-full"><i class="fas fa-play"></i> Watch Match</div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadMatches);
+  </script>
+  <script src="../assets/security.js"></script>
 </body>
 </html>

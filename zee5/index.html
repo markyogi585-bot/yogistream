@@ -1,254 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YogiStream - Zee5 Live Channels | @yogiprojects</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #0b0c13;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>YogiStream - Zee5 Live TV & ClearKey DRM Hub | @yogiprojects</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .header-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
+  <style>
+    :root {
+      --primary-purple: #a855f7;
+      --glow-purple: rgba(168, 85, 247, 0.4);
+      --accent-pink: #ec4899;
+      --dark-bg: #07080e;
+      --card-bg: rgba(17, 19, 34, 0.75);
+      --text-muted: #8c9cb8;
+    }
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #191c2b;
-            color: #ff9900;
-            text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid #2f3552;
-            transition: all 0.3s ease;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .back-btn:hover {
-            background: #ff9900;
-            color: #000;
-            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
-            transform: translateY(-2px);
-        }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #17112c 0%, #07080e 65%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-        .header-section {
-            text-align: center;
-            padding: 10px 20px 20px;
-        }
+    /* Top Bar */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary-purple);
+      color: #000;
+      transform: translateY(-2px);
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .brand-title span {
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(90deg, #ff9900, #ff5500, #ff0077);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
+    .tg-pill {
+      background: linear-gradient(90deg, #0088cc, #00c6ff);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(0, 136, 204, 0.35);
+      transition: transform 0.2s;
+    }
+    .tg-pill:hover { transform: scale(1.04); }
 
-        .search-box {
-            margin: 15px auto;
-            max-width: 400px;
-            position: relative;
-        }
+    /* Header Banner */
+    .header-banner {
+      max-width: 1400px;
+      margin: 10px auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #d8b4fe;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .banner-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .banner-title span {
+      background: linear-gradient(90deg, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .banner-sub {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        .search-box input {
-            width: 100%;
-            padding: 10px 18px 10px 40px;
-            background: #171a29;
-            border: 1px solid #2a304a;
-            border-radius: 30px;
-            color: #fff;
-            outline: none;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
+    /* Search & Filter Bar */
+    .controls-wrapper {
+      max-width: 1400px;
+      margin: 0 auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .search-box {
+      background: rgba(19, 23, 40, 0.85);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 40px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    .search-box i { color: var(--primary-purple); font-size: 1.1rem; }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.96rem;
+      font-family: inherit;
+      width: 100%;
+    }
+    .search-box input::placeholder { color: #627290; }
 
-        .search-box input:focus {
-            border-color: #ff9900;
-        }
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .category-pills::-webkit-scrollbar { display: none; }
+    .pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .pill.active, .pill:hover {
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 15px var(--glow-purple);
+    }
 
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #727b9c;
-        }
+    /* Channel Grid */
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      max-width: 1400px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      width: 100%;
+    }
 
-        .channel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1300px;
-            margin: 0 auto 40px;
-            width: 100%;
-        }
+    .channel-card {
+      background: linear-gradient(180deg, rgba(22, 26, 46, 0.8), rgba(12, 14, 26, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .channel-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 36px var(--glow-purple);
+      border-color: rgba(168, 85, 247, 0.45);
+    }
 
-        .channel-card {
-            background: #141724;
-            border-radius: 16px;
-            padding: 14px;
-            cursor: pointer;
-            border: 1px solid #232840;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            text-decoration: none;
-        }
+    .card-drm-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #d8b4fe;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
 
-        .channel-card:hover {
-            transform: translateY(-6px) scale(1.03);
-            border-color: #ff9900;
-            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.25);
-            background: #1c2035;
-        }
+    .card-logo-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s;
+    }
+    .channel-card:hover .card-logo-wrap {
+      transform: scale(1.08);
+      border-color: var(--primary-purple);
+    }
+    .card-logo-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
 
-        .channel-card img {
-            width: 100%;
-            height: 110px;
-            object-fit: contain;
-            border-radius: 10px;
-            background: #090c14;
-            padding: 8px;
-            transition: transform 0.3s;
-        }
+    .card-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      min-height: 26px;
+    }
 
-        .channel-card:hover img {
-            transform: scale(1.08);
-        }
+    .card-meta {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .meta-tag {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
 
-        .channel-card p {
-            margin-top: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #e5e9f8;
-            line-height: 1.3;
-        }
+    .play-action-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 8px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .channel-card:hover .play-action-btn {
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 15px var(--glow-purple);
+    }
 
-        .drm-badge {
-            margin-top: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            background: rgba(255, 153, 0, 0.15);
-            color: #ff9900;
-            padding: 2px 8px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 153, 0, 0.3);
-        }
+    /* Loading Spinner */
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
 
-        @media (max-width: 600px) {
-            .header-bar { padding: 1rem; }
-            .channel-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 12px;
-            }
-            .channel-card img { height: 90px; }
-            .channel-card p { font-size: 12px; }
-            h1 { font-size: 1.6rem; }
-        }
-    </style>
+    /* Mobile */
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 18px; }
+      .banner-title { font-size: 1.7rem; }
+      .channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 14px;
+      }
+      .card-logo-wrap { width: 68px; height: 68px; }
+      .card-name { font-size: 0.94rem; }
+      .card-meta { display: none; }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="header-bar">
-        <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="brand-title">Zee5 <span>ClearKey Hub</span></div>
+    </div>
+    <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-pill">
+      <i class="fab fa-telegram-plane"></i> @yogiprojects
+    </a>
+  </header>
+
+  <!-- Banner -->
+  <section class="header-banner">
+    <div class="banner-badge"><i class="fas fa-shield-check"></i> 100% WORKING • DECODED STREAM FEEDS</div>
+    <h1 class="banner-title">Live <span>Zee5 HD Channels</span></h1>
+    <p class="banner-sub">Stream Zee TV, Zee Cinema, Zee Marathi, &TV, Discovery & Regional TV with instant ClearKey DRM decoding.</p>
+  </section>
+
+  <!-- Search & Filters -->
+  <section class="controls-wrapper">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="channelSearch" placeholder="Search Zee5 channels (e.g. Cinema, TV, Marathi, Discovery, News)..." oninput="renderChannels()">
     </div>
 
-    <div class="header-section">
-        <h1>Zee5 Live - YogiStream</h1>
-        <p style="color:#8fa0dd; font-size: 0.95rem;">ClearKey DRM Protected DASH Streams Powered by @yogiprojects</p>
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search Zee channels..." oninput="filterChannels()">
-        </div>
+    <div class="category-pills">
+      <button class="pill active" onclick="setFilter('all', this)">All Channels</button>
+      <button class="pill" onclick="setFilter('Entertainment', this)">🎭 Entertainment</button>
+      <button class="pill" onclick="setFilter('Movies', this)">🎬 Movies</button>
+      <button class="pill" onclick="setFilter('News', this)">📰 News</button>
+      <button class="pill" onclick="setFilter('Regional', this)">🌍 Regional</button>
+      <button class="pill" onclick="setFilter('Infotainment', this)">🔬 Infotainment</button>
+      <button class="pill" onclick="setFilter('Music', this)">🎵 Music</button>
     </div>
+  </section>
 
-    <div class="channel-grid" id="channelGrid">
-        <div style="grid-column: 1/-1; text-align: center; color: #8fa0dd; padding: 40px;">Loading Zee5 Channels...</div>
+  <!-- Channel Container -->
+  <main class="channels-grid" id="channelsContainer">
+    <div class="loading-state">
+      <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary-purple); margin-bottom:12px;"></i>
+      <div>Loading verified live channels…</div>
     </div>
+  </main>
 
-    <script>
-        let allChannels = [];
-        const JSON_SOURCES = [
-            'channels199.json',
-            '../api/channels199.json',
-            'https://allinonereborn2.online/zee5/channels199.json'
-        ];
+  <script>
+    let allChannels = [];
+    let selectedCategory = 'all';
 
-        async function loadChannels() {
-            let data = null;
-            for (const src of JSON_SOURCES) {
-                try {
-                    const res = await fetch(src);
-                    if (res.ok) {
-                        data = await res.json();
-                        if (data && data.channels && data.channels.length > 0) break;
-                    }
-                } catch(e) {}
-            }
+    async function loadChannelList() {
+      const sources = ['channels199.json', '../api/channels199.json', '/api/channels199.json'];
+      let data = null;
 
-            if (data && data.channels) {
-                allChannels = data.channels;
-                renderChannels(allChannels);
-            } else {
-                document.getElementById('channelGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ff6b6b;">Failed to load Zee5 channels.</div>';
-            }
-        }
+      for (const src of sources) {
+        try {
+          const res = await fetch(src);
+          if (res.ok) {
+            data = await res.json();
+            if (data && data.channels) break;
+          }
+        } catch (e) {}
+      }
 
-        function renderChannels(channels) {
-            const grid = document.getElementById('channelGrid');
-            if (channels.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #8fa0dd;">No channels found.</div>';
-                return;
-            }
+      if (data && data.channels) {
+        allChannels = data.channels;
+        renderChannels();
+      } else {
+        document.getElementById('channelsContainer').innerHTML = '<div class="loading-state" style="color:#ff5555;">Could not load channel catalog. Please retry.</div>';
+      }
+    }
 
-            grid.innerHTML = channels.map(ch => {
-                const keyId = ch.clearkey ? (ch.clearkey.keyId || '') : '';
-                const key = ch.clearkey ? (ch.clearkey.key || '') : '';
-                const playUrl = `player.html?mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}`;
-                
-                return `
-                    <div class="channel-card" onclick="window.location.href='${playUrl}'">
-                        <img src="${ch.logo}" alt="${ch.name}" loading="lazy" onerror="this.src='../assets/zee5.jpg'">
-                        <p>${ch.name}</p>
-                        <span class="drm-badge">ClearKey DRM</span>
-                    </div>
-                `;
-            }).join('');
-        }
+    function setFilter(cat, btn) {
+      selectedCategory = cat;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderChannels();
+    }
 
-        function filterChannels() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            const filtered = allChannels.filter(ch => ch.name.toLowerCase().includes(query));
-            renderChannels(filtered);
-        }
+    function renderChannels() {
+      const q = (document.getElementById('channelSearch')?.value || '').toLowerCase().trim();
+      const container = document.getElementById('channelsContainer');
+      if (!container) return;
 
-        loadChannels();
-    </script>
-    <script src="../assets/security.js"></script>
+      const filtered = allChannels.filter(ch => {
+        const nameMatch = !q || (ch.name || '').toLowerCase().includes(q) || (ch.language || '').toLowerCase().includes(q);
+        const catMatch = (selectedCategory === 'all') || (ch.genre === selectedCategory);
+        return nameMatch && catMatch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="loading-state">No channels match your search.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(ch => {
+        const keyId = ch.clearkey?.keyId || '';
+        const key = ch.clearkey?.key || '';
+        const playUrl = `player.html?mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}`;
+        const genre = ch.genre || 'Live TV';
+        const lang = ch.language || 'Hindi';
+
+        return `
+          <a href="${playUrl}" class="channel-card">
+            <span class="card-drm-badge">CLEARKEY</span>
+            <div class="card-logo-wrap">
+              <img src="${ch.logo}" onerror="this.src='../assets/zee5.jpg'" alt="${ch.name}" loading="lazy">
+            </div>
+            <div class="card-name">${ch.name}</div>
+            <div class="card-meta">
+              <span class="meta-tag">${genre}</span>
+              <span class="meta-tag">${lang}</span>
+            </div>
+            <div class="play-action-btn"><i class="fas fa-play"></i> Watch Now</div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadChannelList);
+  </script>
+  <script src="../assets/security.js"></script>
 </body>
 </html>

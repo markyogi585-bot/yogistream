@@ -1,25 +1,9 @@
 {
   "channels": [
     {
-      "name": "Zee Bihar Jharkhand",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/5zkMvEbF.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebiharjharkhand/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "e1ec6098b5014ac7aae0b37f72d5e85e",
-        "key": "c04950f25d8e4107a96e828e7911e53b"
-      }
-    },
-    {
-      "name": "Zee Kannada HD",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/1PrOGXAh.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeekannada/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "50e714b65ead453cbfab9b20bed5c79d",
-        "key": "bc08e108b9ee4f65b99cb9dad9532f3f"
-      }
-    },
-    {
       "name": "Zee TV SD",
+      "genre": "Entertainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/yHNSuG1V.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetv/default/manifest.mpd",
       "clearkey": {
@@ -28,61 +12,9 @@
       }
     },
     {
-      "name": "Zee Telugu HD",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/6vNzRaRK.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetelgu/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "1ce5cd75a6ad44a38a7d1b8dbaf9c330",
-        "key": "657fc8e7d533456cb0644fe03458a4b2"
-      }
-    },
-	{
-      "name": "Zee Tamil HD",
-      "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Zee_Tamil.png",
-      "mpd": "https://linearjitp-playback.astro.com.my/dash-wv/linear/2311/default_ott.mpd",
-      "clearkey": {
-        "keyId": "0d4e3e7dac2d58b93bf819a72fe8d510",
-        "key": "667a33f4d5bb3587f2d5209886839eac"
-      }
-    },
-    {
-      "name": "Zee Bangala HD",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/9XHWylqs.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebangla/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "1df83e058b864da896c9288eef63b113",
-        "key": "fc32f26239054b56aab48225305598fe"
-      }
-    },
-    {
-      "name": "Zee Bangala Cinema",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/gLSSl4nG.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebanglacinema/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "fbbfd9ce4bbe4d818b16df7dfe89f05b",
-        "key": "1e96d0f88ef740e982d6f6105721c8bc"
-      }
-    },
-    {
-      "name": "Zee Marathi",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/4bimlHJj.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeemarathi/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "2a8d6c938ea647248f7a10eedc39f097",
-        "key": "7d81feb84ed84bd88fdc5ca9de3c16da"
-      }
-    },
-    {
-      "name": "Zee Talkies",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/VGfIqjrc.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetalkies/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "f081f32756374c3d8265e1a1e029614e",
-        "key": "356a3a6d8ce34d49a84ad464b20b1a3e"
-      }
-    },
-    {
       "name": "Zee Cinema SD",
+      "genre": "Movies",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/qss9gFuH.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeecinema/default/manifest.mpd",
       "clearkey": {
@@ -92,6 +24,8 @@
     },
     {
       "name": "Zee Bollywood",
+      "genre": "Movies",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/EqDlflgi.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebollywood/default/manifest.mpd",
       "clearkey": {
@@ -101,6 +35,8 @@
     },
     {
       "name": "Zee Anmol",
+      "genre": "Entertainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/QjKdER9Z.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeeanmol/default/manifest.mpd",
       "clearkey": {
@@ -109,7 +45,9 @@
       }
     },
     {
-      "name": "Zee Anoml Cinema",
+      "name": "Zee Anmol Cinema",
+      "genre": "Movies",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/diYkUOnX.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeeanmolcinema/default/manifest.mpd",
       "clearkey": {
@@ -118,7 +56,31 @@
       }
     },
     {
+      "name": "&TV SD",
+      "genre": "Entertainment",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/T1CCvaAQ.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Andtv/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "26df86eeebb04d7fbc45c948f76e81fd",
+        "key": "5f3a23f1a73c4c96ababce5fffe7b06b"
+      }
+    },
+    {
+      "name": "&pictures SD",
+      "genre": "Movies",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/HivVrdof.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Andpictures/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "8dea532cabfe4f71ba20f62310e7949f",
+        "key": "7a214a974e4f4d1d9bb66364d5f0cb92"
+      }
+    },
+    {
       "name": "Zee Business",
+      "genre": "News",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/vExrDK9r.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebusiness/default/manifest.mpd",
       "clearkey": {
@@ -128,6 +90,8 @@
     },
     {
       "name": "Zee Hindustan",
+      "genre": "News",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/TknReKLD.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeehindustan/default/manifest.mpd",
       "clearkey": {
@@ -136,16 +100,152 @@
       }
     },
     {
-      "name": "Discovery Kids",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/RzedYhFG.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Discoverykids2/default/manifest.mpd",
+      "name": "Zee Marathi",
+      "genre": "Regional",
+      "language": "Marathi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/4bimlHJj.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeemarathi/default/manifest.mpd",
       "clearkey": {
-        "keyId": "601f58d4b7094d2baf78c85d1d9cb6c9",
-        "key": "609e0cc03198455fa36fd2cc3e7f940d"
+        "keyId": "2a8d6c938ea647248f7a10eedc39f097",
+        "key": "7d81feb84ed84bd88fdc5ca9de3c16da"
       }
     },
     {
-      "name": "Discovey",
+      "name": "Zee Talkies",
+      "genre": "Movies",
+      "language": "Marathi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/VGfIqjrc.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetalkies/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "f081f32756374c3d8265e1a1e029614e",
+        "key": "356a3a6d8ce34d49a84ad464b20b1a3e"
+      }
+    },
+    {
+      "name": "Zee Kannada HD",
+      "genre": "Regional",
+      "language": "Kannada",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/1PrOGXAh.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeekannada/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "50e714b65ead453cbfab9b20bed5c79d",
+        "key": "bc08e108b9ee4f65b99cb9dad9532f3f"
+      }
+    },
+    {
+      "name": "Zee Telugu HD",
+      "genre": "Regional",
+      "language": "Telugu",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/6vNzRaRK.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetelgu/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "1ce5cd75a6ad44a38a7d1b8dbaf9c330",
+        "key": "657fc8e7d533456cb0644fe03458a4b2"
+      }
+    },
+    {
+      "name": "Zee Tamil HD",
+      "genre": "Regional",
+      "language": "Tamil",
+      "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Zee_Tamil.png",
+      "mpd": "https://linearjitp-playback.astro.com.my/dash-wv/linear/2311/default_ott.mpd",
+      "clearkey": {
+        "keyId": "0d4e3e7dac2d58b93bf819a72fe8d510",
+        "key": "667a33f4d5bb3587f2d5209886839eac"
+      }
+    },
+    {
+      "name": "Zee Bangala HD",
+      "genre": "Regional",
+      "language": "Bengali",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/9XHWylqs.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebangla/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "1df83e058b864da896c9288eef63b113",
+        "key": "fc32f26239054b56aab48225305598fe"
+      }
+    },
+    {
+      "name": "Zee Bangala Cinema",
+      "genre": "Movies",
+      "language": "Bengali",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/gLSSl4nG.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebanglacinema/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "fbbfd9ce4bbe4d818b16df7dfe89f05b",
+        "key": "1e96d0f88ef740e982d6f6105721c8bc"
+      }
+    },
+    {
+      "name": "Zee Bihar Jharkhand",
+      "genre": "News",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/5zkMvEbF.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeebiharjharkhand/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "e1ec6098b5014ac7aae0b37f72d5e85e",
+        "key": "c04950f25d8e4107a96e828e7911e53b"
+      }
+    },
+    {
+      "name": "Zee Sarthak",
+      "genre": "Regional",
+      "language": "Odia",
+      "logo": "https://d388d59m61mm0v.cloudfront.net/optimized/content/common/logos/channel/logos/zee-sarthak.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeesarthak/default/devil.mpd",
+      "clearkey": {
+        "keyId": "ecad0b097b574078a4a1bde24bfdb2e5",
+        "key": "568bb13d04db4b738864f6c849474cd5"
+      }
+    },
+    {
+      "name": "Movies Now HD",
+      "genre": "Movies",
+      "language": "English",
+      "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Movies_Now_HD.png",
+      "mpd": "https://times-ott-live.akamaized.net/moviesnow_wv_drm/index.mpd",
+      "clearkey": {
+        "keyId": "40f019b86241d23ef075633fd7f1e927",
+        "key": "058dec845bd340178a388edd104a015e"
+      }
+    },
+    {
+      "name": "MN+ HD",
+      "genre": "Movies",
+      "language": "English",
+      "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/MNPlus_HD.png",
+      "mpd": "https://times-ott-live.akamaized.net/mnplus_wv_drm/index.mpd",
+      "clearkey": {
+        "keyId": "1ee6fbbff9e585f401f80757d5fbbdf8",
+        "key": "4f6c4495204ef962137976e109d784a9"
+      }
+    },
+    {
+      "name": "MNX HD",
+      "genre": "Movies",
+      "language": "English",
+      "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/MNX_HD.png",
+      "mpd": "https://times-ott-live.akamaized.net/mnxhd_wv_drm/index.mpd",
+      "clearkey": {
+        "keyId": "314cfcf05ba13824ee184c79803bf3a1",
+        "key": "509a2faec4924a2ef6934a36298e09f5"
+      }
+    },
+    {
+      "name": "Romedy Now",
+      "genre": "Movies",
+      "language": "English",
+      "logo": "https://jiotv.catchup.cdn.jio.com/dare_images/images/Romedy_Now.png",
+      "mpd": "https://times-ott-live.akamaized.net/romedynow_wv_drm/index.mpd",
+      "clearkey": {
+        "keyId": "36e76cf20a232f3be9b31d044237d45e",
+        "key": "a25ca5282ee0a905dae08216c5a04df5"
+      }
+    },
+    {
+      "name": "Discovery Channel",
+      "genre": "Infotainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/UyI5ljKM.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Discoverychannel2/default/manifest.mpd",
       "clearkey": {
@@ -154,25 +254,9 @@
       }
     },
     {
-      "name": "TLC",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/FOvFsIgt.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Tlc2/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "e48e7373d6be47ecab83a20849f6823e",
-        "key": "513ce07a2ee24ffdbe667eff5a9d46a8"
-      }
-    },
-    {
-      "name": "Discovery Investigation",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/mHhlDCiL.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Investigationdiscovery2/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "2828ea6f6a984505b0454da0c03f68b9",
-        "key": "5d3b7195086544c2807aa8c1544e7379"
-      }
-    },
-    {
       "name": "Discovery Science",
+      "genre": "Infotainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/vIA7TExn.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Discoveryscience2/default/manifest.mpd",
       "clearkey": {
@@ -182,6 +266,8 @@
     },
     {
       "name": "Discovery Turbo",
+      "genre": "Infotainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/6eCv1iuk.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Discoveryturbo2/default/manifest.mpd",
       "clearkey": {
@@ -190,25 +276,42 @@
       }
     },
     {
-      "name": "And TV SD",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/T1CCvaAQ.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Andtv/default/manifest.mpd",
+      "name": "Investigation Discovery",
+      "genre": "Infotainment",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/mHhlDCiL.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Investigationdiscovery2/default/manifest.mpd",
       "clearkey": {
-        "keyId": "26df86eeebb04d7fbc45c948f76e81fd",
-        "key": "5f3a23f1a73c4c96ababce5fffe7b06b"
+        "keyId": "2828ea6f6a984505b0454da0c03f68b9",
+        "key": "5d3b7195086544c2807aa8c1544e7379"
       }
     },
     {
-      "name": "And Pictures SD",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/HivVrdof.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Andpictures/default/manifest.mpd",
+      "name": "TLC",
+      "genre": "Infotainment",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/FOvFsIgt.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Tlc2/default/manifest.mpd",
       "clearkey": {
-        "keyId": "8dea532cabfe4f71ba20f62310e7949f",
-        "key": "7a214a974e4f4d1d9bb66364d5f0cb92"
+        "keyId": "e48e7373d6be47ecab83a20849f6823e",
+        "key": "513ce07a2ee24ffdbe667eff5a9d46a8"
+      }
+    },
+    {
+      "name": "Discovery Kids",
+      "genre": "Kids",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/RzedYhFG.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Discoverykids2/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "601f58d4b7094d2baf78c85d1d9cb6c9",
+        "key": "609e0cc03198455fa36fd2cc3e7f940d"
       }
     },
     {
       "name": "MTV Beats",
+      "genre": "Music",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/MJZdklJi.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Mtvbeats2/default/manifest.mpd",
       "clearkey": {
@@ -217,7 +320,31 @@
       }
     },
     {
-      "name": "Shorts Tv Active",
+      "name": "Zing",
+      "genre": "Music",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/Nyi83z1G.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zing/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "f0fb14eebe474a6ab74c8301d55a7224",
+        "key": "f9f8b2e30704458b8db844a285ce32be"
+      }
+    },
+    {
+      "name": "Zoom",
+      "genre": "Music",
+      "language": "Hindi",
+      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/jLvKrs62.png",
+      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zoom2/default/manifest.mpd",
+      "clearkey": {
+        "keyId": "86edec9e3b7d4042a4d4a1ca14f847ee",
+        "key": "9def4315f0004019a3705bcb3cf30ca3"
+      }
+    },
+    {
+      "name": "Shorts TV Active",
+      "genre": "Entertainment",
+      "language": "English",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/lcMc75Xr.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Shortstv2/default/manifest.mpd",
       "clearkey": {
@@ -227,47 +354,13 @@
     },
     {
       "name": "Korean Drama Active",
+      "genre": "Entertainment",
+      "language": "Hindi",
       "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/BNu8WvFw.png",
       "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Koreandramas2/default/manifest.mpd",
       "clearkey": {
         "keyId": "ed197e7253c04946903f03bad9afac91",
         "key": "99ebb8683ea74b70a9fda1cbdc2cc1b4"
-      }
-    },
-    {
-      "name": "Zing",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/Nyi83z1G.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zing/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "f0fb14eebe474a6ab74c8301d55a7224",
-        "key": "f9f8b2e30704458b8db844a285ce32be"
-      }
-    },
-	{
-      "name": "NDTV India",
-      "logo": "https://d388d59m61mm0v.cloudfront.net/optimized/content/common/logos/channel/logos/iqfloc.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Ndtvindia2/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "d78c01625c3f4ed98912609799298544",
-        "key": "b91bb882f9624872ada6125006fe5c73"
-      }
-    },
-	{
-      "name": "Zee Sarthak",
-      "logo": "https://d388d59m61mm0v.cloudfront.net/optimized/content/common/logos/channel/logos/zee-sarthak.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeesarthak/default/devil.mpd",
-      "clearkey": {
-        "keyId": "ecad0b097b574078a4a1bde24bfdb2e5",
-        "key": "568bb13d04db4b738864f6c849474cd5"
-      }
-    },
-    {
-      "name": "Zoom",
-      "logo": "https://imagesdishtvd2h.whatsonindia.com/dasimages/channel/landscape/360x270/jLvKrs62.png",
-      "mpd": "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zoom2/default/manifest.mpd",
-      "clearkey": {
-        "keyId": "86edec9e3b7d4042a4d4a1ca14f847ee",
-        "key": "9def4315f0004019a3705bcb3cf30ca3"
       }
     }
   ]
