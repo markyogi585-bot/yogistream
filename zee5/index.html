@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YogiStream - Zee5 Live Channels | @yogiprojects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #0b0c13;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #191c2b;
+            color: #ff9900;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid #2f3552;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff9900;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .header-section {
+            text-align: center;
+            padding: 10px 20px 20px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, #ff9900, #ff5500, #ff0077);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .search-box {
+            margin: 15px auto;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 18px 10px 40px;
+            background: #171a29;
+            border: 1px solid #2a304a;
+            border-radius: 30px;
+            color: #fff;
+            outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #ff9900;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #727b9c;
+        }
+
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1300px;
+            margin: 0 auto 40px;
+            width: 100%;
+        }
+
+        .channel-card {
+            background: #141724;
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            border: 1px solid #232840;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            border-color: #ff9900;
+            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.25);
+            background: #1c2035;
+        }
+
+        .channel-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #090c14;
+            padding: 8px;
+            transition: transform 0.3s;
+        }
+
+        .channel-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .channel-card p {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e5e9f8;
+            line-height: 1.3;
+        }
+
+        .drm-badge {
+            margin-top: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            background: rgba(255, 153, 0, 0.15);
+            color: #ff9900;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 153, 0, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .header-bar { padding: 1rem; }
+            .channel-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 12px;
+            }
+            .channel-card img { height: 90px; }
+            .channel-card p { font-size: 12px; }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+    </div>
+
+    <div class="header-section">
+        <h1>Zee5 Live - YogiStream</h1>
+        <p style="color:#8fa0dd; font-size: 0.95rem;">ClearKey DRM Protected DASH Streams Powered by @yogiprojects</p>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search Zee channels..." oninput="filterChannels()">
+        </div>
+    </div>
+
+    <div class="channel-grid" id="channelGrid">
+        <div style="grid-column: 1/-1; text-align: center; color: #8fa0dd; padding: 40px;">Loading Zee5 Channels...</div>
+    </div>
+
+    <script>
+        let allChannels = [];
+        const JSON_SOURCES = [
+            'channels199.json',
+            '../api/channels199.json',
+            'https://allinonereborn2.online/zee5/channels199.json'
+        ];
+
+        async function loadChannels() {
+            let data = null;
+            for (const src of JSON_SOURCES) {
+                try {
+                    const res = await fetch(src);
+                    if (res.ok) {
+                        data = await res.json();
+                        if (data && data.channels && data.channels.length > 0) break;
+                    }
+                } catch(e) {}
+            }
+
+            if (data && data.channels) {
+                allChannels = data.channels;
+                renderChannels(allChannels);
+            } else {
+                document.getElementById('channelGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ff6b6b;">Failed to load Zee5 channels.</div>';
+            }
+        }
+
+        function renderChannels(channels) {
+            const grid = document.getElementById('channelGrid');
+            if (channels.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #8fa0dd;">No channels found.</div>';
+                return;
+            }
+
+            grid.innerHTML = channels.map(ch => {
+                const keyId = ch.clearkey ? (ch.clearkey.keyId || '') : '';
+                const key = ch.clearkey ? (ch.clearkey.key || '') : '';
+                const playUrl = `player.html?mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}`;
+                
+                return `
+                    <div class="channel-card" onclick="window.location.href='${playUrl}'">
+                        <img src="${ch.logo}" alt="${ch.name}" loading="lazy" onerror="this.src='../assets/zee5.jpg'">
+                        <p>${ch.name}</p>
+                        <span class="drm-badge">ClearKey DRM</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterChannels() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const filtered = allChannels.filter(ch => ch.name.toLowerCase().includes(query));
+            renderChannels(filtered);
+        }
+
+        loadChannels();
+    </script>
+    <script src="../assets/security.js"></script>
+</body>
+</html>

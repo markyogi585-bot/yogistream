@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>YogiStream - JioTV+ Pro | @yogiprojects</title>
+    <!-- Font & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 30% 10%, #13182b, #0b0f1a);
+            min-height: 100vh;
+            padding: 1.5rem 1rem;
+            color: #f0f4ff;
+        }
+
+        .app {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-icon {
+            background: #5b4caf;
+            width: 40px;
+            height: 40px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            box-shadow: 0 8px 14px #372e6b;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #e0dbff, #b1c4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            background: #282f44;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #b1c4ff;
+            margin-left: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-left: auto;
+        }
+
+        .bookmark-header-btn {
+            background: #1f253e;
+            border: 1px solid #515c88;
+            color: #cfd6ff;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+        .bookmark-header-btn:hover {
+            background: #2e3657;
+            color: #ffb748;
+            border-color: #ffb748;
+        }
+        .bookmark-header-btn.active {
+            background: #4a3c96;
+            color: #ffd966;
+            border-color: #ffd966;
+        }
+        .bookmark-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e12d4a;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1f253e;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: #1e243b;
+            border-radius: 48px;
+            padding: 0.3rem 1rem 0.3rem 1.2rem;
+            border: 1px solid #3b425e;
+            width: min(300px, 100%);
+            transition: 0.2s;
+        }
+        .search-wrapper:focus-within {
+            border-color: #9f87ff;
+            box-shadow: 0 0 0 3px rgba(159, 135, 255, 0.2);
+        }
+        .search-wrapper i {
+            color: #7b84b0;
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        .search-wrapper input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.4rem 0;
+        }
+        .search-wrapper input::placeholder {
+            color: #5e668a;
+        }
+
+        /* categories */
+        .category-shell {
+            background: rgba(16, 20, 31, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 0.8rem 0.8rem;
+            margin: 1.2rem 0 0.8rem;
+            border: 1px solid #2c334f;
+        }
+
+        .cats-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .cat-chip {
+            background: #262e47;
+            padding: 0.5rem 1.1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #d0d8ff;
+            cursor: pointer;
+            border: 1px solid #3d4668;
+            transition: 0.15s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            flex: 0 1 auto;
+        }
+        .cat-chip:hover {
+            background: #38416b;
+            color: white;
+        }
+        .cat-chip.active {
+            background: #9f87ff;
+            border-color: #cbb9ff;
+            color: #0a0d18;
+            font-weight: 600;
+            box-shadow: 0 6px 12px #6b5acd;
+        }
+
+        .toggle-cat-btn {
+            background: #1f253e;
+            border: 1px solid #515c88;
+            color: #cfd6ff;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px #0c1020;
+            width: auto;
+            margin-top: 0.2rem;
+        }
+        .toggle-cat-btn:hover {
+            background: #2e3657;
+            color: white;
+        }
+
+        /* channel grid */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        @keyframes cardPop {
+            0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .channel-card {
+            background: #1f263e;
+            border-radius: 28px;
+            padding: 1.2rem 0.4rem 0.8rem;
+            border: 1px solid #313b5a;
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            box-shadow: 0 12px 24px -10px #00000080;
+            animation: cardPop 0.4s ease forwards;
+            opacity: 0;
+        }
+        .channel-card:hover {
+            transform: translateY(-4px);
+            border-color: #9680f0;
+            background: #293150;
+            box-shadow: 0 20px 28px -10px #201f40;
+        }
+
+        .telegram-card {
+            background: linear-gradient(135deg, #262f51, #1a2140);
+            border: 2px solid #5b5099;
+            cursor: pointer;
+        }
+        .telegram-card:hover {
+            border-color: #8f7be0;
+        }
+
+        .card-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            background: #12182b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            margin-bottom: 10px;
+            border: 1px solid #3f4870;
+        }
+        .card-logo img {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 16px;
+            object-fit: contain;
+        }
+
+        .card-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            color: #f0f4ff;
+            padding: 0 4px;
+            word-break: break-word;
+            line-height: 1.3;
+            margin-bottom: 5px;
+        }
+
+        .card-badge-row {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .hd-badge {
+            background: #e12d4a;
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 30px;
+            color: white;
+            letter-spacing: 0.3px;
+            box-shadow: 0 0 6px #ff4d6d;
+        }
+        .cat-mini {
+            background: #313b5c;
+            font-size: 0.55rem;
+            padding: 3px 8px;
+            border-radius: 30px;
+            color: #b8c4ff;
+        }
+
+        .bookmark-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: #13182b;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8e9ad4;
+            border: 1px solid #455079;
+            transition: 0.2s;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 0.9rem;
+        }
+        .bookmark-btn:hover {
+            background: #1d253f;
+            color: #ffcd5c;
+            border-color: #ffcd5c;
+        }
+        .bookmark-btn.active {
+            color: #ffb347;
+            background: #1f284a;
+            border-color: #ffb347;
+        }
+
+        /* modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(5, 7, 18, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-card {
+            background: #232b48;
+            max-width: 360px;
+            width: 90%;
+            border-radius: 52px;
+            padding: 2rem 1.5rem 1.8rem;
+            border: 1px solid #7c72b1;
+            box-shadow: 0 40px 70px -10px black;
+            transform: scale(0.94);
+            transition: transform 0.3s cubic-bezier(0.18, 1.3, 0.6, 1);
+            text-align: center;
+        }
+        .modal-overlay.show .modal-card {
+            transform: scale(1);
+        }
+        .modal-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .modal-sub {
+            color: #b6c2ff;
+            background: #1b2140;
+            display: inline-block;
+            padding: 0.3rem 1.3rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        /* neon blinking instruction - clean & visible */
+@keyframes gentleNeon {
+    0%, 100% { 
+        text-shadow: 0 0 5px #ff8080, 0 0 10px #ff4d4d;
+        background-color: rgba(220, 38, 38, 0.25);
+        border-color: #ff6b6b;
+        color: #ffffff;
+    }
+    50% { 
+        text-shadow: 0 0 8px #ffb3b3, 0 0 15px #ff3333;
+        background-color: rgba(220, 38, 38, 0.4);
+        border-color: #ff4444;
+        color: #ffffff;
+    }
+}
+
+.neon-instruction {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.6rem 0.5rem;
+    margin: 0.5rem 0 1rem 0;
+    border-radius: 40px;
+    background: rgba(220, 38, 38, 0.2);
+    border: 2px solid #ff4d4d;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+    animation: gentleNeon 1.2s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+.neon-instruction i {
+    color: #ffcccc;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* mobile adjustment */
+@media (max-width: 480px) {
+    .neon-instruction {
+        font-size: 0.65rem;
+        padding: 0.5rem 0.3rem;
+        gap: 4px;
+        border-width: 1.5px;
+    }
+    .neon-instruction i {
+        font-size: 0.65rem;
+    }
+}
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        .player-link {
+            text-decoration: none;
+            color: white;
+            background: #323d68;
+            padding: 0.9rem 0;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid #787fba;
+            transition: 0.2s;
+        }
+        .player-link.world {
+            background: #4a3c96;
+            border-color: #ab92ff;
+        }
+        .player-link.india {
+            background: #1e634f;
+            border-color: #3cb896;
+        }
+        .player-link:hover {
+            filter: brightness(1.15);
+            transform: scale(1.02);
+        }
+        .player-link.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.8);
+        }
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: #9aa9df;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .channel-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.7rem; }
+            .card-logo { width: 80px; height: 80px; }
+            .card-logo img { max-width: 70px; max-height: 70px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .search-wrapper { width: 100%; }
+            .header-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
+            .category-shell { padding: 0.6rem; }
+            .cat-chip { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
+            .toggle-cat-btn { width: 100%; justify-content: center; }
+            .neon-instruction {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.3rem;
+                gap: 4px;
+            }
+            .neon-instruction i {
+                font-size: 0.7rem;
+            }
+        }
+
+        .empty-box {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 2rem;
+            color: #8590c2;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <!-- header with bookmark button -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+            <div class="logo-text">
+                <h1>YOGISTREAM JIOTV+ <span>PRO</span></h1>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="../index.html" class="bookmark-header-btn" title="Back to Hub" style="text-decoration:none;">
+                <i class="fas fa-home"></i>
+            </a>
+            <div class="bookmark-header-btn" id="bookmarkHeaderBtn" title="Favorites">
+                <i class="fas fa-bookmark"></i>
+                <span class="bookmark-count" id="bookmarkCount">0</span>
+            </div>
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search...">
+            </div>
+        </div>
+    </div>
+
+    <!-- category strip -->
+    <div class="category-shell">
+        <div class="cats-inner" id="catInner"></div>
+        <button class="toggle-cat-btn" id="toggleCatsBtn"><i class="fas fa-layer-group"></i> <span id="toggleBtnText">Expand</span></button>
+    </div>
+
+    <!-- channel grid -->
+    <div id="channelGrid" class="channel-grid"></div>
+
+    <!-- modal popup with neon instruction -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <div class="modal-title">▶️ play</div>
+            <div class="modal-sub" id="modalChannelName">loading..</div>
+            
+            <!-- neon blinking instruction for Indian users -->
+            <div class="neon-instruction">
+                <i class="fas fa-exclamation-triangle"></i> INDIAN USERS PLEASE USE INDIAN STREAM ONLY <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            
+            <div class="modal-buttons">
+                <a class="player-link world" id="worldLink" target="_blank" rel="noopener"><i class="fas fa-globe"></i> Worldwide Stream</a>
+                <a class="player-link india" id="indiaLink" target="_blank" rel="noopener"><i class="fas fa-map-marker-alt"></i> Only India Stream</a>
+            </div>
+            <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i> close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // data
+        let allChannels = [];
+        let filtered = [];
+        let bookmarks = JSON.parse(localStorage.getItem('allinone_bookmarks_final')) || [];
+        let categories = ['All'];
+        let activeCategory = 'All';
+        let categoriesExpanded = false;
+        let showingBookmarksOnly = false;
+        let isIndianUser = false; // IP detection flag
+
+        // dom
+        const grid = document.getElementById('channelGrid');
+        const catInner = document.getElementById('catInner');
+        const searchInput = document.getElementById('searchInput');
+        const toggleBtn = document.getElementById('toggleCatsBtn');
+        const toggleBtnText = document.getElementById('toggleBtnText');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalChannelName = document.getElementById('modalChannelName');
+        const worldLink = document.getElementById('worldLink');
+        const indiaLink = document.getElementById('indiaLink');
+        const closeModal = document.getElementById('closeModalBtn');
+        const bookmarkHeaderBtn = document.getElementById('bookmarkHeaderBtn');
+        const bookmarkCount = document.getElementById('bookmarkCount');
+
+        // IP Detection function
+        async function detectUserCountry() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                isIndianUser = data.country === 'IN';
+                
+                // If Indian user, disable worldwide button in modal
+                if (isIndianUser) {
+                    worldLink.classList.add('disabled');
+                    worldLink.removeAttribute('href');
+                    worldLink.style.pointerEvents = 'none';
+                }
+            } catch (error) {
+                console.log('IP detection failed, assuming non-Indian');
+                isIndianUser = false;
+            }
+        }
+
+        // fetch json
+        async function loadJSON() {
+            try {
+                let data = null;
+                const endpoints = ['jstr4web.json', '../api/jstr4web.json', '/jstr4web.json', 'https://jjtvxweb.pages.dev/jstr4web.json'];
+                for (const url of endpoints) {
+                    try {
+                        const res = await fetch(url);
+                        if (res.ok) {
+                            data = await res.json();
+                            if (Array.isArray(data) && data.length > 0) break;
+                        }
+                    } catch (err) {}
+                }
+                if (!data) throw new Error('All data sources failed');
+                allChannels = data;
+                extractCategories();
+                updateBookmarkCount();
+                filterAndRender();
+                // Call IP detection after loading
+                detectUserCountry();
+            } catch (e) {
+                grid.innerHTML = `<div class="empty-box">⚠️ could not load channels. refresh.</div>`;
+            }
+        }
+
+        function extractCategories() {
+            const catSet = new Set();
+            allChannels.forEach(ch => { if (ch.category && ch.category.trim()) catSet.add(ch.category.trim()); });
+            categories = ['All', ...Array.from(catSet).sort()];
+        }
+
+        // render categories
+        function renderCategories() {
+            let catsToRender = categoriesExpanded ? categories : categories.slice(0, 1);
+            let html = '';
+            catsToRender.forEach(cat => {
+                html += `<span class="cat-chip ${activeCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</span>`;
+            });
+            catInner.innerHTML = html;
+
+            document.querySelectorAll('.cat-chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    const cat = e.target.dataset.cat;
+                    activeCategory = cat;
+                    showingBookmarksOnly = false;
+                    bookmarkHeaderBtn.classList.remove('active');
+                    renderCategories();
+                    filterAndRender();
+                });
+            });
+
+            toggleBtnText.innerText = categoriesExpanded ? 'Show less' : 'Expand';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            categoriesExpanded = !categoriesExpanded;
+            renderCategories();
+        });
+
+        // filter + search
+        function filterAndRender() {
+            let query = searchInput.value.trim().toLowerCase();
+            let temp = [...allChannels];
+
+            if (showingBookmarksOnly) {
+                temp = temp.filter(ch => {
+                    const chId = ch.id || ch.name;
+                    return bookmarks.includes(chId);
+                });
+            } else {
+                if (activeCategory !== 'All') {
+                    temp = temp.filter(ch => ch.category === activeCategory);
+                }
+            }
+            
+            if (query) {
+                temp = temp.filter(ch => ch.name?.toLowerCase().includes(query));
+            }
+
+            filtered = temp;
+            renderGrid(filtered);
+        }
+
+        // render grid
+        function renderGrid(channels) {
+            const telegramObj = allChannels.find(ch => ch.name?.toLowerCase().includes('join telegram') || ch.telegram) || null;
+
+            let html = '';
+
+            // show telegram only if not in bookmark-only mode OR if telegram is bookmarked
+            if (!showingBookmarksOnly || (telegramObj && bookmarks.includes(telegramObj.id || telegramObj.name))) {
+                if (telegramObj) {
+                    html += renderTelegramCard(telegramObj);
+                }
+            }
+
+            channels.forEach(ch => {
+                if (telegramObj && (ch === telegramObj || ch.telegram === telegramObj.telegram)) return;
+                html += renderCard(ch);
+            });
+
+            if (channels.length === 0 && !(telegramObj && !showingBookmarksOnly)) {
+                html = '<div class="empty-box">📭 no channels</div>';
+            }
+
+            grid.innerHTML = html;
+
+            // bookmark listeners
+            document.querySelectorAll('.channel-card .bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    toggleBookmark(id);
+                });
+            });
+
+            // Telegram card click
+            const telegramCard = document.querySelector('.telegram-card');
+            if (telegramCard && telegramObj) {
+                telegramCard.addEventListener('click', (e) => {
+                    if (e.target.closest('.bookmark-btn')) return;
+                    const telegramUrl = 'https://t.me/yogiprojects';
+                    window.open(telegramUrl, '_blank');
+                });
+            }
+
+            // regular card click
+            document.querySelectorAll('.channel-card:not(.telegram-card)').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.bookmark-btn')) return;
+                    const chId = card.dataset.channelId;
+                    const chName = card.dataset.channelName;
+                    openModal(chId, chName);
+                });
+            });
+        }
+
+        function toggleBookmark(id) {
+            const index = bookmarks.indexOf(id);
+            if (index === -1) {
+                bookmarks.push(id);
+            } else {
+                bookmarks.splice(index, 1);
+            }
+            localStorage.setItem('allinone_bookmarks_final', JSON.stringify(bookmarks));
+            
+            updateBookmarkCount();
+            
+            if (showingBookmarksOnly) {
+                filterAndRender();
+            } else {
+                document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                    if (btn.dataset.id === id) {
+                        btn.classList.toggle('active');
+                        const icon = btn.querySelector('i');
+                        if (icon) {
+                            icon.className = btn.classList.contains('active') ? 'fas fa-bookmark' : 'far fa-bookmark';
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderTelegramCard(ch) {
+            const channelId = ch.id || ch.name || 'telegram';
+            const bookmarked = bookmarks.includes(channelId);
+            const logo = ch.logo || 'https://i.ibb.co/N2yz4PkY/1738743366692.png';
+
+            return `
+                <div class="channel-card telegram-card" data-channel-id="${channelId}" data-channel-name="${ch.name || 'Telegram'}">
+                    <div class="bookmark-btn ${bookmarked ? 'active' : ''}" data-id="${channelId}"><i class="fa-${bookmarked ? 'solid' : 'regular'} fa-bookmark"></i></div>
+                    <div class="card-logo"><img src="${logo}" alt="telegram" loading="lazy"></div>
+                    <div class="card-name">${ch.name || 'Join Telegram'}</div>
+                    <div class="card-badge-row">
+                        <span class="cat-mini">🔗 Telegram</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCard(ch) {
+            const hasHD = ch.mpd && (ch.mpd.includes('HD') || ch.mpd.includes('hd') || ch.mpd.includes('1080') || ch.mpd.includes('720'));
+            const channelId = ch.id || ch.name || 'unknown';
+            const bookmarked = bookmarks.includes(channelId);
+            const logo = ch.logo || 'https://via.placeholder.com/100x100?text=📺';
+            const category = ch.category || '';
+
+            return `
+                <div class="channel-card" data-channel-id="${channelId}" data-channel-name="${ch.name || 'Channel'}">
+                    <div class="bookmark-btn ${bookmarked ? 'active' : ''}" data-id="${channelId}"><i class="fa-${bookmarked ? 'solid' : 'regular'} fa-bookmark"></i></div>
+                    <div class="card-logo"><img src="${logo}" alt="logo" loading="lazy"></div>
+                    <div class="card-name">${ch.name || 'channel'}</div>
+                    <div class="card-badge-row">
+                        ${hasHD ? '<span class="hd-badge">HD</span>' : ''}
+                        ${category ? '<span class="cat-mini">' + category.slice(0,12) + '</span>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateBookmarkCount() {
+            bookmarkCount.textContent = bookmarks.length;
+        }
+
+        // header bookmark button
+        bookmarkHeaderBtn.addEventListener('click', () => {
+            if (bookmarks.length === 0) {
+                alert('No bookmarks yet! Click the bookmark icon on any channel to add.');
+                return;
+            }
+            
+            showingBookmarksOnly = !showingBookmarksOnly;
+            
+            if (showingBookmarksOnly) {
+                bookmarkHeaderBtn.classList.add('active');
+                activeCategory = 'All';
+            } else {
+                bookmarkHeaderBtn.classList.remove('active');
+            }
+            
+            renderCategories();
+            filterAndRender();
+        });
+
+        // modal
+        function openModal(chId, chName) {
+            modalChannelName.innerText = chName;
+            const channel = allChannels.find(c => (c.id === chId) || (c.name === chId));
+            const idForPlayer = channel?.id || chId;
+
+            worldLink.href = `pworld.html?id=${encodeURIComponent(idForPlayer)}`;
+            indiaLink.href = `pind.html?id=${encodeURIComponent(idForPlayer)}`;
+
+            // Re-check IP and disable if Indian
+            if (isIndianUser) {
+                worldLink.classList.add('disabled');
+                worldLink.removeAttribute('href');
+                worldLink.style.pointerEvents = 'none';
+            } else {
+                worldLink.classList.remove('disabled');
+                worldLink.href = `pworld.html?id=${encodeURIComponent(idForPlayer)}`;
+                worldLink.style.pointerEvents = 'auto';
+            }
+
+            modalOverlay.classList.add('show');
+        }
+
+        closeModal.addEventListener('click', ()=> modalOverlay.classList.remove('show'));
+        modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) modalOverlay.classList.remove('show'); });
+
+        // search
+        let searchTimer;
+        searchInput.addEventListener('input', ()=> {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => filterAndRender(), 200);
+        });
+
+        // init
+        loadJSON();
+    })();
+</script>
+
+<script src="../assets/security.js"></script>
+</body>
+</html>

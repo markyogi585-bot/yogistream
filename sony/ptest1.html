@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SonyLiv Live Stream</title>
+<script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+#player {
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+}
+.player-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: auto;
+  z-index: 999999;
+  pointer-events: none;
+}
+.error-msg {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+<div id="player"></div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const channelId = urlParams.get('id');
+
+if (!channelId) {
+    document.body.innerHTML = '<h2 class="error-msg">Channel ID Missing (use ?id=sony-hd)</h2>';
+    throw new Error("Channel ID Missing");
+}
+
+async function loadChannel() {
+    let data = null;
+    const sources = ['sliv3.json', '../api/sliv3.json', 'https://allinonereborn2.online/sony/sliv3.json'];
+    for (const src of sources) {
+        try {
+            const res = await fetch(src);
+            if (res.ok) {
+                data = await res.json();
+                if (data && data[channelId]) break;
+            }
+        } catch (e) {}
+    }
+
+    if (!data || !data[channelId] || !data[channelId].m3u8) {
+        document.body.innerHTML = '<h2 class="error-msg">Channel or stream link not found for: ' + channelId + '</h2>';
+        return;
+    }
+
+    const channelData = data[channelId];
+    const originalM3u8 = channelData.m3u8;
+    const proxyUrl = "https://allinonereborn2.online/livtest3/stream_proxy.php?url=" + encodeURIComponent(originalM3u8);
+    
+    document.title = 'Live - ' + (channelData.title || 'SonyLiv');
+    initializePlayer(proxyUrl, originalM3u8);
+}
+
+function initializePlayer(videoUrl, rawUrl) {
+    const isPC = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && (window.innerWidth > 1024 || !('ontouchstart' in window));
+
+    try {
+        const player = jwplayer("player");
+        player.setup({
+            file: videoUrl,
+            width: "100%",
+            height: "100%",
+            autostart: true,
+            mute: false,
+            primary: "html5",
+            stretching: "uniform",
+            controls: true,
+            qualityLabels: false
+        });
+
+        player.on('error', function() {
+            // If proxy fails, try direct url
+            if (rawUrl && videoUrl !== rawUrl) {
+                player.load([{ file: rawUrl }]);
+                player.play();
+            }
+        });
+    } catch(err) {
+        console.error('JWPlayer error, fallback to HTML5 video/HLS', err);
+        const video = document.createElement('video');
+        video.controls = true;
+        video.autoplay = true;
+        video.style.width = '100%';
+        video.style.height = '100%';
+        document.getElementById('player').appendChild(video);
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoUrl);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoUrl;
+        }
+    }
+}
+
+loadChannel();
+</script>
+<script src="../assets/security.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "YogiStream Live TV & Sports",
+  "short_name": "YogiStream",
+  "description": "Watch 900+ Live Indian & Global TV channels, live cricket and sports powered by @yogiprojects on yogistream.xyz",
+  "start_url": "https://yogistream.xyz/",
+  "scope": "https://yogistream.xyz/",
+  "display": "standalone",
+  "background_color": "#090b10",
+  "theme_color": "#00c6ff",
+  "icons": [
+    {
+      "src": "assets/jiotv_plus.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

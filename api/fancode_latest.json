@@ -1,0 +1,943 @@
+{
+    "author": "Amit",
+    "api_name": "FanCode Live Matches API",
+    "source_last_updated": "07:21:29 PM 30-08-2026",
+    "generated_at": "2026-08-30 15:00:07",
+    "base_url": "https://allinonereborn2.online/fctest/",
+    "fallback_mode": false,
+    "total_matches": 42,
+    "live_matches_count": 8,
+    "upcoming_matches_count": 34,
+    "matches": [
+        {
+            "match_id": 4248358,
+            "title": "Lucknow Falcons Vs Gaur Gorakhpur Lions",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 03:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248358_53029_GOR_LCK_FC-Web_1786702851284.png",
+            "team": [
+                {
+                    "name": "Lucknow Falcons",
+                    "shortName": "LCK"
+                },
+                {
+                    "name": "Gaur Gorakhpur Lions",
+                    "shortName": "GOR"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "HINDI",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248358/hindi.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248358,
+            "title": "Lucknow Falcons Vs Gaur Gorakhpur Lions",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 03:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248358_53029_GOR_LCK_FC-Web_1786702851284.png",
+            "team": [
+                {
+                    "name": "Lucknow Falcons",
+                    "shortName": "LCK"
+                },
+                {
+                    "name": "Gaur Gorakhpur Lions",
+                    "shortName": "GOR"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "BHOJPURI",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248358/bhojpuri.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248351,
+            "title": "Noida Kings Vs Meerut Mavericks",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 07:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248351_53029_NOI_MER_FC-Web_1786702851643.png",
+            "team": [
+                {
+                    "name": "Noida Kings",
+                    "shortName": "NOI"
+                },
+                {
+                    "name": "Meerut Mavericks",
+                    "shortName": "MER"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "HINDI",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248351/hindi.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248351,
+            "title": "Noida Kings Vs Meerut Mavericks",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 07:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248351_53029_NOI_MER_FC-Web_1786702851643.png",
+            "team": [
+                {
+                    "name": "Noida Kings",
+                    "shortName": "NOI"
+                },
+                {
+                    "name": "Meerut Mavericks",
+                    "shortName": "MER"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "BHOJPURI",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248351/bhojpuri.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248666,
+            "title": "Majees Titans Vs Muscat Thunders",
+            "tournament": "Oman D50 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 04:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248666_53052_MAT_MUT_fc-Web.jpg",
+            "team": [
+                {
+                    "name": "Majees Titans",
+                    "shortName": "MAT"
+                },
+                {
+                    "name": "Muscat Thunders",
+                    "shortName": "MUT"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "ENGLISH",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248666/english.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248584,
+            "title": "Denmark Women Vs Germany Women",
+            "tournament": "Nordic Women's T20I Cup 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 04:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/Mini_.png",
+            "team": [
+                {
+                    "name": "Denmark Women",
+                    "shortName": "DEN-W"
+                },
+                {
+                    "name": "Germany Women",
+                    "shortName": "GER-W"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "ENGLISH",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248584/english.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248525,
+            "title": "Baragaddi Kings Vs Baukh Night Riders",
+            "tournament": "Uttarkashi T20 League 2026",
+            "category": "Cricket",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 06:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/FC_Sports_Default_cricket-old.jpg",
+            "team": [
+                {
+                    "name": "Baragaddi Kings",
+                    "shortName": "BK"
+                },
+                {
+                    "name": "Baukh Night Riders",
+                    "shortName": "BNR"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "ENGLISH",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248525/english.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248326,
+            "title": "Day 4",
+            "tournament": "KPMG Women\u2019s Irish Open 2026",
+            "category": "Golf",
+            "status": "LIVE",
+            "streamingStatus": "STARTED",
+            "startTime": "30 August 2026 06:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/KPMG_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Day 4",
+                    "shortName": "Day 4"
+                },
+                {
+                    "name": "The K Club",
+                    "shortName": "The K Club"
+                }
+            ],
+            "streams": [
+                {
+                    "language": "ENGLISH",
+                    "playlist_url": "https://allinonereborn2.online/fctest/playlists/match_4248326/english.m3u8"
+                }
+            ]
+        },
+        {
+            "match_id": 4248007,
+            "title": "South Delhi Superstarz Vs Central Delhi Kings",
+            "tournament": "Delhi Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 08:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248007_53005_SDS_CDK_FC-Web.png",
+            "team": [
+                {
+                    "name": "South Delhi Superstarz",
+                    "shortName": "SDS"
+                },
+                {
+                    "name": "Central Delhi Kings",
+                    "shortName": "CDK"
+                }
+            ]
+        },
+        {
+            "match_id": 4247591,
+            "title": "Real Madrid Vs M\u00e1laga",
+            "tournament": "LALIGA 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 08:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247591_53004_RM_MAG_FC-Web.png",
+            "team": [
+                {
+                    "name": "Real Madrid",
+                    "shortName": "RM"
+                },
+                {
+                    "name": "M\u00e1laga",
+                    "shortName": "MAG"
+                }
+            ]
+        },
+        {
+            "match_id": 4247594,
+            "title": "Deportivo De La Coruna Vs Valencia Cf",
+            "tournament": "LALIGA 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 11:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247594_53004_COR_VAL_FC-Web.png",
+            "team": [
+                {
+                    "name": "Deportivo de La Coruna",
+                    "shortName": "COR"
+                },
+                {
+                    "name": "Valencia CF",
+                    "shortName": "VAL"
+                }
+            ]
+        },
+        {
+            "match_id": 4248652,
+            "title": "Al Qadsiah Fc Vs Al Faisaly Saudi",
+            "tournament": "Roshn Saudi League 2026-2027",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 11:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248652_53025_ALQ_ALF_FC-Web.png",
+            "team": [
+                {
+                    "name": "Al-Qadsiah FC",
+                    "shortName": "ALQ"
+                },
+                {
+                    "name": "Al Faisaly Saudi",
+                    "shortName": "ALF"
+                }
+            ]
+        },
+        {
+            "match_id": 4247589,
+            "title": "Rc Celta Vs Athletic Club",
+            "tournament": "LALIGA 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 01:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247589_53004_CEV_ATH_FC-Web.png",
+            "team": [
+                {
+                    "name": "RC Celta",
+                    "shortName": "CEV"
+                },
+                {
+                    "name": "Athletic Club",
+                    "shortName": "ATH"
+                }
+            ]
+        },
+        {
+            "match_id": 4248611,
+            "title": "Nepal Vs Bahrain",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Nepal",
+                    "shortName": "NEP"
+                },
+                {
+                    "name": "Bahrain",
+                    "shortName": "BRN"
+                }
+            ]
+        },
+        {
+            "match_id": 4248612,
+            "title": "United Arab Emirates Vs Qatar",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "United Arab Emirates",
+                    "shortName": "UAE"
+                },
+                {
+                    "name": "Qatar",
+                    "shortName": "QAT"
+                }
+            ]
+        },
+        {
+            "match_id": 4248346,
+            "title": "Kanpur Superstars Vs Lucknow Falcons",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 07:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248346_53029_KAN_LCK_FC-Web_1786702852100.png",
+            "team": [
+                {
+                    "name": "Kanpur Superstars",
+                    "shortName": "KAN"
+                },
+                {
+                    "name": "Lucknow Falcons",
+                    "shortName": "LCK"
+                }
+            ]
+        },
+        {
+            "match_id": 4248397,
+            "title": "C\u00e1diz Vs Real Valladolid",
+            "tournament": "LALIGA Hypermotion 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 10:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248397_53017_CDZ_VLD_FC-Web.png",
+            "team": [
+                {
+                    "name": "C\u00e1diz",
+                    "shortName": "CDZ"
+                },
+                {
+                    "name": "Real Valladolid",
+                    "shortName": "VLD"
+                }
+            ]
+        },
+        {
+            "match_id": 4248667,
+            "title": "Mustafa Fragrance House Strikers Vs Royal Oman Stallions",
+            "tournament": "Oman D50 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 04:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248667_53052_MF_ROS_fc-Web.jpg",
+            "team": [
+                {
+                    "name": "Mustafa Fragrance House Strikers",
+                    "shortName": "MF"
+                },
+                {
+                    "name": "Royal Oman Stallions",
+                    "shortName": "ROS"
+                }
+            ]
+        },
+        {
+            "match_id": 4248526,
+            "title": "Tbc Vs Tbc",
+            "tournament": "Uttarkashi T20 League 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 06:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/FC_Sports_Default_cricket-old.jpg",
+            "team": [
+                {
+                    "name": "TBC",
+                    "shortName": "TBC"
+                },
+                {
+                    "name": "TBC",
+                    "shortName": "TBC"
+                }
+            ]
+        },
+        {
+            "match_id": 4248425,
+            "title": "Main Feed   Day 4",
+            "tournament": "TOUR Championship 2026",
+            "category": "Golf",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 08:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/IMG_5860_1787577451191.png",
+            "team": [
+                {
+                    "name": "Main Feed - Day 4",
+                    "shortName": "Main Feed - Day 4"
+                },
+                {
+                    "name": "East Lake Golf Club - Atlanta, Georgia",
+                    "shortName": "East Lake Golf Club - Atlanta, Georgia"
+                }
+            ]
+        },
+        {
+            "match_id": 4248421,
+            "title": "World Feed   Day 4",
+            "tournament": "TOUR Championship 2026",
+            "category": "Golf",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "30 August 2026 09:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/IMG_5860_1787577451191.png",
+            "team": [
+                {
+                    "name": "World Feed - Day 4",
+                    "shortName": "World Feed - Day 4"
+                },
+                {
+                    "name": "East Lake Golf Club - Atlanta, Georgia",
+                    "shortName": "East Lake Golf Club - Atlanta, Georgia"
+                }
+            ]
+        },
+        {
+            "match_id": 4248303,
+            "title": "St Kitts And Nevis Patriots Vs Antigua & Barbuda Falcons",
+            "tournament": "Caribbean Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 04:30 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248303_53026_SKN_ABF_FC-Web.png",
+            "team": [
+                {
+                    "name": "St Kitts and Nevis Patriots",
+                    "shortName": "SKN"
+                },
+                {
+                    "name": "Antigua & Barbuda Falcons",
+                    "shortName": "ABF"
+                }
+            ]
+        },
+        {
+            "match_id": 4247597,
+            "title": "Ca Osasuna Vs Getafe Cf",
+            "tournament": "LALIGA 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 11:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247597_53004_OSN_GEF_FC-Web.png",
+            "team": [
+                {
+                    "name": "CA Osasuna",
+                    "shortName": "OSN"
+                },
+                {
+                    "name": "Getafe CF",
+                    "shortName": "GEF"
+                }
+            ]
+        },
+        {
+            "match_id": 4248345,
+            "title": "Noida Kings Vs Kanpur Superstars",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "COMPLETED",
+            "streamingStatus": "COMPLETED",
+            "startTime": "29 August 2026 07:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248345_53029_KAN_NOI_FC-Web_1786702851692.png",
+            "team": [
+                {
+                    "name": "Noida Kings",
+                    "shortName": "NOI"
+                },
+                {
+                    "name": "Kanpur Superstars",
+                    "shortName": "KAN"
+                }
+            ]
+        },
+        {
+            "match_id": 4247590,
+            "title": "Fc Barcelona Vs Rayo Vallecano",
+            "tournament": "LALIGA 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 01:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/FC_Sports_Default_Football-old-copy.jpg",
+            "team": [
+                {
+                    "name": "FC Barcelona",
+                    "shortName": "BAR"
+                },
+                {
+                    "name": "Rayo Vallecano",
+                    "shortName": "RVL"
+                }
+            ]
+        },
+        {
+            "match_id": 4248456,
+            "title": "Namibia Vs Zimbabwe",
+            "tournament": "South Africa and Zimbabwe tour of Namibia, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "31 August 2026 05:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248456_53037_NAM_ZIM_FC-WEB.jpg",
+            "team": [
+                {
+                    "name": "Namibia",
+                    "shortName": "NAM"
+                },
+                {
+                    "name": "Zimbabwe",
+                    "shortName": "ZIM"
+                }
+            ]
+        },
+        {
+            "match_id": 4248398,
+            "title": "Rc Celta Fortuna Vs Castell\u00f3n",
+            "tournament": "LALIGA Hypermotion 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 01:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248398_53017_CF_CAS_FC-Web.png",
+            "team": [
+                {
+                    "name": "RC Celta Fortuna",
+                    "shortName": "CF"
+                },
+                {
+                    "name": "Castell\u00f3n",
+                    "shortName": "CAS"
+                }
+            ]
+        },
+        {
+            "match_id": 4248613,
+            "title": "Malaysia Vs Saudi Arabia",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Malaysia",
+                    "shortName": "MAS"
+                },
+                {
+                    "name": "Saudi Arabia",
+                    "shortName": "SDA"
+                }
+            ]
+        },
+        {
+            "match_id": 4248614,
+            "title": "Kuwait Vs Singapore",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Kuwait",
+                    "shortName": "KUW"
+                },
+                {
+                    "name": "Singapore",
+                    "shortName": "SIN"
+                }
+            ]
+        },
+        {
+            "match_id": 4248307,
+            "title": "Trinbago Knight Riders Vs Guyana Amazon Warriors",
+            "tournament": "Caribbean Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 02:30 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248307_53026_TKR_GUY_FC-Web.png",
+            "team": [
+                {
+                    "name": "Trinbago Knight Riders",
+                    "shortName": "TKR"
+                },
+                {
+                    "name": "Guyana Amazon Warriors",
+                    "shortName": "GUY"
+                }
+            ]
+        },
+        {
+            "match_id": 4248359,
+            "title": "Meerut Mavericks Vs Kashi Rudras",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 03:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248359_53029_MER_KAS_FC-Web_1786702852105.png",
+            "team": [
+                {
+                    "name": "Meerut Mavericks",
+                    "shortName": "MER"
+                },
+                {
+                    "name": "Kashi Rudras",
+                    "shortName": "KAS"
+                }
+            ]
+        },
+        {
+            "match_id": 4248668,
+            "title": "Ias Invincibles Vs Yalla Shabab Giants",
+            "tournament": "Oman D50 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 04:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248668_53052_IAI_YSG_fc-Web.jpg",
+            "team": [
+                {
+                    "name": "IAS Invincibles",
+                    "shortName": "IAI"
+                },
+                {
+                    "name": "Yalla Shabab Giants",
+                    "shortName": "YSG"
+                }
+            ]
+        },
+        {
+            "match_id": 4248360,
+            "title": "Kanpur Superstars Vs Gaur Gorakhpur Lions",
+            "tournament": "Uttar Pradesh T20 League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 07:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248360_53029_KAN_GOR_FC-Web_1786702851474.png",
+            "team": [
+                {
+                    "name": "Kanpur Superstars",
+                    "shortName": "KAN"
+                },
+                {
+                    "name": "Gaur Gorakhpur Lions",
+                    "shortName": "GOR"
+                }
+            ]
+        },
+        {
+            "match_id": 4247561,
+            "title": "North Delhi Strikers Women Vs South Delhi Superstarz Women",
+            "tournament": "Women's Delhi Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 01:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247561_53003_NDS-W_SDS-W_FC-Web_1787555684584.png",
+            "team": [
+                {
+                    "name": "North Delhi Strikers Women",
+                    "shortName": "NDS-W"
+                },
+                {
+                    "name": "South Delhi Superstarz Women",
+                    "shortName": "SDS-W"
+                }
+            ]
+        },
+        {
+            "match_id": 4248460,
+            "title": "Zimbabwe Vs South Africa",
+            "tournament": "South Africa and Zimbabwe tour of Namibia, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 05:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248460_53037_ZIM_SA_FC-WEB.jpg",
+            "team": [
+                {
+                    "name": "Zimbabwe",
+                    "shortName": "ZIM"
+                },
+                {
+                    "name": "South Africa",
+                    "shortName": "SA"
+                }
+            ]
+        },
+        {
+            "match_id": 4247564,
+            "title": "East Delhi Riders Women Vs Central Delhi Queens",
+            "tournament": "Women's Delhi Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 07:00 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4247564_53003_EDR-W_CDQ_FC-Web_1787555684582.png",
+            "team": [
+                {
+                    "name": "East Delhi Riders Women",
+                    "shortName": "EDR-W"
+                },
+                {
+                    "name": "Central Delhi Queens",
+                    "shortName": "CDQ"
+                }
+            ]
+        },
+        {
+            "match_id": 4248653,
+            "title": "Al Hilal Sfc Vs Al Ahli Saudi Fc",
+            "tournament": "Roshn Saudi League 2026-2027",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "01 September 2026 11:30 PM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248653_53025_AHS_AAS_FC-Web.png",
+            "team": [
+                {
+                    "name": "Al Hilal SFC",
+                    "shortName": "AHS"
+                },
+                {
+                    "name": "Al-Ahli Saudi FC",
+                    "shortName": "AAS"
+                }
+            ]
+        },
+        {
+            "match_id": 4248531,
+            "title": "Hebc Hamburg Vs Borussia Dortmund",
+            "tournament": "DFB Pokal 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "02 September 2026 12:15 AM",
+            "startDate": null,
+            "image": "https://images.fancode.com/aig/match/v1787136554687/4248531_CASACARDS_SPORTY_APP.png",
+            "team": [
+                {
+                    "name": "HEBC Hamburg",
+                    "shortName": "HEBC"
+                },
+                {
+                    "name": "Borussia Dortmund",
+                    "shortName": "DOR"
+                }
+            ]
+        },
+        {
+            "match_id": 4247479,
+            "title": "Stoke City F.c. Vs Norwich City F.c.",
+            "tournament": "EFL Championship 2026-27",
+            "category": "Football",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "02 September 2026 12:30 AM",
+            "startDate": null,
+            "image": "https://images.fancode.com/aig/match/v1784709183099/4247479_CASACARDS_SPORTY_APP.png",
+            "team": [
+                {
+                    "name": "Stoke City F.C.",
+                    "shortName": "STK"
+                },
+                {
+                    "name": "Norwich City F.C.",
+                    "shortName": "NOR"
+                }
+            ]
+        },
+        {
+            "match_id": 4248615,
+            "title": "Oman Vs Qatar",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "02 September 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Oman",
+                    "shortName": "OMA"
+                },
+                {
+                    "name": "Qatar",
+                    "shortName": "QAT"
+                }
+            ]
+        },
+        {
+            "match_id": 4248616,
+            "title": "Hong Kong, China Vs Bahrain",
+            "tournament": "ACC Men\u2019s Premier Cup 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "02 September 2026 07:00 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/ACC-Mens-Premier_Web-match-card.png",
+            "team": [
+                {
+                    "name": "Hong Kong, China",
+                    "shortName": "HK"
+                },
+                {
+                    "name": "Bahrain",
+                    "shortName": "BRN"
+                }
+            ]
+        },
+        {
+            "match_id": 4248294,
+            "title": "St Kitts And Nevis Patriots Vs Barbados Tridents",
+            "tournament": "Caribbean Premier League, 2026",
+            "category": "Cricket",
+            "status": "NOT_STARTED",
+            "streamingStatus": "NOT_STARTED",
+            "startTime": "02 September 2026 04:30 AM",
+            "startDate": null,
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/4248294_53026_SKN_BT_FC-Web.png",
+            "team": [
+                {
+                    "name": "St Kitts and Nevis Patriots",
+                    "shortName": "SKN"
+                },
+                {
+                    "name": "Barbados Tridents",
+                    "shortName": "BT"
+                }
+            ]
+        }
+    ]
+}

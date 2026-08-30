@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>YogiStream - Ultimate Live TV & Sports Hub | yogistream.xyz</title>
+  
+  <meta name="description" content="Watch 900+ Live Indian & Global TV channels, SonyLiv, JioTV+, Zee5, and FanCode Live Sports streams on yogistream.xyz powered by @yogiprojects.">
+  <meta name="keywords" content="YogiStream, yogistream.xyz, yogiprojects, Live TV, JioTV Plus, SonyLiv, Zee5, FanCode Live, Cricket Live Stream, ClearKey DRM">
+  <meta name="author" content="@yogiprojects">
+  <link rel="canonical" href="https://yogistream.xyz/">
+  
+  <!-- OpenGraph -->
+  <meta property="og:title" content="YogiStream - Live TV & Sports Hub (yogistream.xyz)">
+  <meta property="og:description" content="Watch 900+ Live Indian & Global TV channels, SonyLiv, Zee5, FanCode live sports with zero ads on yogistream.xyz.">
+  <meta property="og:url" content="https://yogistream.xyz/">
+  <meta property="og:image" content="assets/logo.jpg">
+  <meta property="og:type" content="website">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #00e5ff;
+      --secondary: #7000ff;
+      --accent: #ff007f;
+      --success: #00ff88;
+      --dark: #080a10;
+      --dark-surface: #0f1320;
+      --card-bg: rgba(18, 22, 38, 0.75);
+      --card-border: rgba(0, 229, 255, 0.18);
+      --footer-bg: #090c14;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* Ambient Background Glows */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -100px;
+      left: 20%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(112, 0, 255, 0.22), transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+      filter: blur(50px);
+    }
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -100px;
+      right: 15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.18), transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+      filter: blur(60px);
+    }
+
+    .content-wrapper {
+      flex: 1;
+      width: 100%;
+      padding-bottom: 60px;
+    }
+
+    /* Top Telegram Notice Ribbon */
+    .tg-notice-bar {
+      background: linear-gradient(90deg, #0088cc, #00c6ff, #7000ff);
+      color: #fff;
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0, 136, 204, 0.4);
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 10;
+      transition: filter 0.3s;
+    }
+    .tg-notice-bar:hover {
+      filter: brightness(1.15);
+    }
+    .tg-badge {
+      background: rgba(0,0,0,0.35);
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* Navbar / Header */
+    .header-container {
+      position: relative;
+      padding: 3rem 1.5rem 1.5rem;
+      width: 100%;
+      text-align: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .domain-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--primary);
+      padding: 6px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      text-align: center;
+      font-size: 3.4rem;
+      font-weight: 900;
+      margin: 0 auto;
+      background: linear-gradient(90deg, #00e5ff, #ff007f, #00ff88, #7000ff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rgbMove 6s linear infinite;
+      position: relative;
+      display: inline-block;
+      padding: 0 20px;
+      width: 100%;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+
+    .subheading {
+      color: #a4b3d8;
+      font-size: 1.1rem;
+      margin-top: 14px;
+      letter-spacing: 0.3px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    @keyframes rgbMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Live Stats Ribbon */
+    .stats-ribbon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px auto 10px;
+      padding: 10px 20px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(18, 22, 38, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #d1dcfa;
+    }
+
+    .stat-item i {
+      color: var(--primary);
+    }
+    .stat-item .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--success);
+      animation: pulseGreen 1.5s infinite;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    /* Search & Filter Bar */
+    .search-filter-section {
+      max-width: 750px;
+      margin: 15px auto 30px;
+      padding: 0 20px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      background: rgba(18, 22, 38, 0.8);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 50px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .search-input-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+      background: rgba(22, 28, 48, 0.95);
+    }
+
+    .search-input-wrapper i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7282a8;
+      font-size: 1.1rem;
+    }
+
+    /* Category Filter Pills */
+    .filter-pills {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      padding: 7px 18px;
+      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #b5c3e6;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pill-btn:hover, .pill-btn.active {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: #000;
+      border-color: transparent;
+      box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+      font-weight: 700;
+    }
+
+    /* Channel Cards Grid */
+    .channel-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 26px;
+      padding: 10px 20px 30px;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .channel-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border-radius: 26px;
+      padding: 26px 20px 20px;
+      width: 225px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 295px;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 0.8s forwards;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .channel-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(0, 229, 255, 0.12), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .channel-card:hover::before {
+      opacity: 1;
+    }
+
+    .channel-card:hover {
+      transform: translateY(-10px) scale(1.04);
+      border-color: var(--primary);
+      box-shadow: 0 20px 45px rgba(0, 229, 255, 0.35);
+      background: rgba(22, 28, 48, 0.9);
+    }
+
+    .card-logo-box {
+      width: 110px;
+      height: 110px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s;
+    }
+
+    .channel-card:hover .card-logo-box {
+      transform: scale(1.08);
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+
+    .channel-card img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.4));
+      border-radius: 12px;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .channel-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      color: #fff;
+      font-weight: 700;
+      margin: 10px 0 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-height: 42px;
+      line-height: 1.3;
+      width: 100%;
+    }
+
+    .explore-btn {
+      margin-top: auto;
+      padding: 10px 20px;
+      background: linear-gradient(45deg, #1c2236, #2d3654);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: 95%;
+      font-family: inherit;
+    }
+
+    .channel-card:hover .explore-btn {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: #000;
+      border-color: transparent;
+      box-shadow: 0 0 20px var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--footer-bg);
+      text-align: center;
+      padding: 40px 20px 35px;
+      width: 100%;
+      position: relative;
+      margin-top: auto;
+      border-top: 1px solid rgba(0, 229, 255, 0.12);
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .social-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #14192b;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-4px) scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
+    }
+
+    .social-icon.telegram { background: linear-gradient(135deg, #0088cc, #00c6ff); }
+    .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #e52d27); }
+    .social-icon.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+    .social-icon.facebook { background: linear-gradient(135deg, #3b5998, #4267B2); }
+    .social-icon.instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+
+    .footer-text {
+      margin-top: 16px;
+      color: #8c9cc2;
+      font-size: 14px;
+    }
+    .footer-text a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .domain-tag {
+      color: #ff007f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.3rem;
+        padding: 0 10px;
+      }
+      .channel-grid {
+        padding: 15px;
+        gap: 15px;
+      }
+      .channel-card {
+        width: calc(50% - 15px);
+        height: 260px;
+        padding: 18px 12px 14px;
+      }
+      .card-logo-box {
+        width: 85px;
+        height: 85px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.95rem;
+      }
+      .tg-notice-bar {
+        font-size: 0.78rem;
+        padding: 7px 10px;
+      }
+      .channel-card {
+        width: calc(50% - 8px);
+        height: 235px;
+        padding: 14px 10px 12px;
+      }
+      .card-logo-box {
+        width: 72px;
+        height: 72px;
+      }
+      .channel-card h3 {
+        font-size: 13px;
+        min-height: 34px;
+      }
+      .explore-btn {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+      .stat-item {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Ambient background lighting -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Top Telegram Announcement Bar -->
+  <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-notice-bar">
+    <span class="tg-badge"><i class="fab fa-telegram-plane"></i> OFFICIAL</span>
+    <span>Join <strong>@yogiprojects</strong> on Telegram for Daily Updated Live Streams & Matches!</span>
+  </a>
+
+  <div id="particles-js"></div>
+  
+  <div class="content-wrapper">
+    <div class="header-container">
+      <div class="domain-pill"><i class="fas fa-shield-alt"></i> YOGISTREAM.XYZ • OFFICIAL HUB</div>
+      <h1>YogiStream Live TV</h1>
+      <p class="subheading">Stream 900+ Live Indian & Global HD TV Channels, Cricket, Football & Live Sports Events powered by @yogiprojects</p>
+      
+      <!-- Live Stats -->
+      <div class="stats-ribbon">
+        <div class="stat-item">
+          <span class="pulse-dot"></span>
+          <span>900+ Live Channels</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-bolt"></i>
+          <span>ClearKey DRM Ready</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-tv"></i>
+          <span>Zero Ads & 100% Free</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-filter-section">
+      <div class="search-input-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="hubSearchInput" placeholder="Search platforms, channels, sports..." oninput="filterHubCards()">
+      </div>
+      <div class="filter-pills">
+        <button class="pill-btn active" onclick="filterCategory('all', this)">All Platforms</button>
+        <button class="pill-btn" onclick="filterCategory('sports', this)">🏏 Live Sports</button>
+        <button class="pill-btn" onclick="filterCategory('tv', this)">📺 Live TV</button>
+        <button class="pill-btn" onclick="filterCategory('drm', this)">🔐 ClearKey DRM</button>
+      </div>
+    </div>
+    
+    <!-- Channels Grid -->
+    <div class="channel-grid" id="hubGrid">
+        
+      <a href="jjtv/index.html" class="channel-card" data-category="tv drm" data-title="jiotv plus world wide live tv">
+        <span class="card-badge">900+ CH</span>
+        <div class="card-logo-box">
+          <img src="assets/jiotv_plus.png" onerror="this.src='https://widespread-plum-gffbkraoo7-deis8y3f44.edgeone.dev/31GngoiH5pL.png'" alt="JioTV Plus">
+        </div>
+        <h3>J-Tv-Plus (WORLD WIDE)</h3>
+        <button class="explore-btn">Watch Live</button>
+      </a>    
+      
+      <a href="sony/index.html" class="channel-card" data-category="tv sports" data-title="sonyliv worldwide entertainment sports ten">
+        <span class="card-badge">HD</span>
+        <div class="card-logo-box">
+          <img src="assets/sony_liv.avif" onerror="this.src='https://widespread-plum-gffbkraoo7-deis8y3f44.edgeone.dev/sony-liv-logo.avif'" alt="SonyLiv">
+        </div>
+        <h3>SonyLiv (Worldwide)</h3>
+        <button class="explore-btn">Watch Live</button>
+      </a>
+      
+      <a href="events/index.html" class="channel-card" data-category="sports" data-title="sonyliv events live matches cricket football">
+        <span class="card-badge">LIVE MATCH</span>
+        <div class="card-logo-box">
+          <img src="assets/sonyliv_events.png" onerror="this.src='https://widespread-plum-gffbkraoo7-deis8y3f44.edgeone.dev/Untitled-3.png'" alt="SonyLiv Events">
+        </div>
+        <h3>SonyLiv Events (Live Sports)</h3>
+        <button class="explore-btn">Watch Live</button>
+      </a>
+      
+      <a href="zee5/index.html" class="channel-card" data-category="tv drm" data-title="zee5 sd worldwide clearkey drm dash">
+        <span class="card-badge">CLEARKEY</span>
+        <div class="card-logo-box">
+          <img src="assets/zee5.jpg" onerror="this.src='https://widespread-plum-gffbkraoo7-deis8y3f44.edgeone.dev/51DI1Se1SQL._AC_UF894,1000_QL80_.jpg'" alt="Zee5 SD">
+        </div>
+        <h3>Zee5 SD (ClearKey DRM)</h3>
+        <button class="explore-btn">Watch Live</button>
+      </a>
+      
+      <a href="fcw/index.html" class="channel-card" data-category="sports" data-title="fancode worldwide cricket live sports tournaments">
+        <span class="card-badge">CRICKET</span>
+        <div class="card-logo-box">
+          <img src="assets/fancode.png" onerror="this.src='https://widespread-plum-gffbkraoo7-deis8y3f44.edgeone.dev/FanCode_logo.svg.png'" alt="Fancode">
+        </div>
+        <h3>Fancode (Live Sports)</h3>
+        <button class="explore-btn">Watch Live</button>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://t.me/yogiprojects" target="_blank" class="social-icon telegram" title="Join @yogiprojects on Telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </a>
+      <a href="https://t.me/yogiprojects" target="_blank" class="social-icon youtube" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="https://t.me/yogiprojects" target="_blank" class="social-icon instagram" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://t.me/yogiprojects" target="_blank" class="social-icon whatsapp" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="https://t.me/yogiprojects" target="_blank" class="social-icon facebook" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </div>
+    <div class="footer-text">
+      © 2026 <strong>YogiStream</strong> (<span class="domain-tag">yogistream.xyz</span>). Developed & Maintained by <a href="https://t.me/yogiprojects" target="_blank">@yogiprojects</a>.
+    </div>
+  </footer>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <!-- YogiStream Security & Telegram Suite -->
+  <script src="assets/security.js"></script>
+  
+  <script>
+    let activeCat = 'all';
+
+    function filterCategory(cat, btn) {
+      activeCat = cat;
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      filterHubCards();
+    }
+
+    function filterHubCards() {
+      const query = document.getElementById('hubSearchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('#hubGrid .channel-card');
+
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        const cat = card.getAttribute('data-category') || '';
+        const matchesQuery = title.includes(query);
+        const matchesCat = (activeCat === 'all') || cat.includes(activeCat);
+
+        if (matchesQuery && matchesCat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": ["#00e5ff", "#7000ff", "#ff007f", "#00ff88"] },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.45, "random": true },
+        "size": { "value": 3, "random": true },
+        "line_linked": {
+          "enable": true,
+          "distance": 140,
+          "color": "#00e5ff",
+          "opacity": 0.2,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 1.5,
+          "direction": "none",
+          "random": true,
+          "out_mode": "out"
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" },
+          "onclick": { "enable": true, "mode": "push" },
+          "resize": true
+        },
+        "modes": {
+          "grab": { "distance": 130, "line_linked": { "opacity": 0.4 } },
+          "push": { "particles_nb": 3 }
+        }
+      },
+      "retina_detect": true
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.channel-card');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.08}s`;
+      });
+    });
+  </script>
+
+</body>
+</html>

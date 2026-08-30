@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zee5 Player</title>
+    <!-- Shaka Player with ClearKey DRM support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000;
+            color: white;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .video-container {
+            width: 100vw;
+            height: 100dvh;
+            position: relative;
+            background: #000;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        .error-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.85);
+            color: #ff5555;
+            padding: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+        .error-overlay button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #333;
+            color: #fff;
+            border: 1px solid #666;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container" id="player-container" data-shaka-player-container>
+        <video id="video" autoplay playsinline data-shaka-player></video>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mpdUrl = urlParams.get('mpd');
+        const keyId = urlParams.get('keyid');
+        const key = urlParams.get('key');
+        const title = urlParams.get('title') || 'Zee5 Live Stream';
+
+        document.title = title;
+
+        async function initApp() {
+            if (!mpdUrl) {
+                showError("Stream URL Missing", "No DASH MPD stream specified in parameters.");
+                return;
+            }
+
+            shaka.polyfill.installAll();
+
+            if (!shaka.Player.isBrowserSupported()) {
+                showError("Unsupported Browser", "Your browser does not support Shaka Player.");
+                return;
+            }
+
+            const video = document.getElementById('video');
+            const container = document.getElementById('player-container');
+            const player = new shaka.Player();
+            await player.attach(video);
+
+            const ui = new shaka.ui.Overlay(player, container, video);
+            ui.configure({
+                controlPanelElements: [
+                    'play_pause',
+                    'time_and_duration',
+                    'mute',
+                    'volume',
+                    'spacer',
+                    'quality',
+                    'picture_in_picture',
+                    'fullscreen'
+                ]
+            });
+
+            // Configure ClearKey DRM
+            const drmConfig = {};
+            if (keyId && key) {
+                drmConfig.clearKeys = {};
+                drmConfig.clearKeys[keyId] = key;
+            }
+
+            player.configure({
+                drm: drmConfig,
+                streaming: {
+                    lowLatencyMode: true,
+                    bufferingGoal: 20,
+                    rebufferingGoal: 4
+                }
+            });
+
+            try {
+                await player.load(mpdUrl);
+                console.log('Stream loaded successfully');
+            } catch (e) {
+                console.error('Error loading stream', e);
+                showError("Stream Playback Error", e.message || "Failed to decode or play DASH ClearKey stream.");
+            }
+        }
+
+        function showError(title, msg) {
+            const container = document.getElementById('player-container');
+            container.innerHTML = `
+                <div class="error-overlay">
+                    <h2>⚠️ ${title}</h2>
+                    <p style="margin-top:8px; color:#ccc;">${msg}</p>
+                    <button onclick="window.history.back()">Go Back</button>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+    <script src="../assets/security.js"></script>
+</body>
+</html>

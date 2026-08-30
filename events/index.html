@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YogiStream - SonyLiv Live Events & Sports | @yogiprojects</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --accent:#ff2c55;
+  --bg1:#1b2340;
+  --bg2:#070a14;
+  --card:#121a34;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+
+body{
+  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+  background: radial-gradient(circle at top,var(--bg1),var(--bg2));
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1c2136;
+  color: #ff416c;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #323b63;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #ff416c;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 65, 108, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ---------- HEADER ---------- */
+.header{
+  text-align:center;
+  padding: 20px 16px 24px;
+}
+.header h1{
+  font-size:clamp(26px,5vw,42px);
+  margin:0;
+  background:linear-gradient(90deg,#ff416c,#ff4b2b);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.header p{
+  color:#aaa;
+  margin-top:10px;
+  font-size:14px;
+}
+
+/* ---------- TABS ---------- */
+.tabs{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:28px;
+  flex-wrap:wrap;
+  padding: 0 10px;
+}
+.tabs button{
+  background:#1c2547;
+  color:#fff;
+  border:none;
+  padding:10px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:600;
+  transition:.3s ease;
+}
+.tabs button:hover{transform:translateY(-2px)}
+.tabs button.active{
+  background:var(--accent);
+  box-shadow:0 8px 25px rgba(255,44,85,.45);
+}
+
+/* ---------- GRID ---------- */
+.container{
+  padding:0 20px 60px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:26px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---------- CARD ---------- */
+.card{
+  background:var(--card);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  cursor:pointer;
+  position:relative;
+  opacity:0;
+  transform:translateY(30px);
+  animation:cardIn .6s ease forwards;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 25px 50px rgba(255,44,85,.35);
+  border-color: rgba(255, 44, 85, 0.4);
+}
+.card.upcoming{
+  opacity:.7;
+  cursor:not-allowed;
+}
+.card img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+.card:hover img{transform:scale(1.05)}
+
+.card-body{padding:18px}
+
+/* ---------- BADGE ---------- */
+.badge{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  background:var(--accent);
+}
+.badge.up{background:#555}
+
+/* ---------- TEXT ---------- */
+.title{
+  font-size:16px;
+  font-weight: 600;
+  margin:12px 0 6px;
+  line-height: 1.3;
+}
+.meta{
+  color:#bbb;
+  font-size:13px;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:16px;
+}
+.watch{
+  background:var(--accent);
+  color:#fff;
+  padding:8px 18px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:13px;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes cardIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media(max-width:600px){
+  .card img{height:160px}
+  .container{gap:16px; padding: 0 12px 40px;}
+  .header-bar { padding: 1rem; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-bar">
+  <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+</div>
+
+<div class="header">
+  <h1>YogiStream Live Events</h1>
+  <p id="updated">Loading live matches powered by @yogiprojects…</p>
+</div>
+
+<div class="tabs">
+  <button class="active" onclick="filter('all')">All Events</button>
+  <button onclick="filter('live')">Live Now</button>
+  <button onclick="filter('upcoming')">Upcoming</button>
+</div>
+
+<div class="container" id="list"></div>
+
+<script>
+const JSON_SOURCES = [
+  "sonyliv.json",
+  "../api/sonyliv_events.json",
+  "https://raw.githubusercontent.com/drmlive/sliv-live-events/main/sonyliv.json"
+];
+
+const STREAM_PROXY = "https://mini.allinonereborn.site/events/stream_proxy.php?url=";
+
+let DATA=[];
+
+async function loadData() {
+  for (const src of JSON_SOURCES) {
+    try {
+      const res = await fetch(src);
+      if (res.ok) {
+        const j = await res.json();
+        if (j && j.matches) {
+          DATA = j.matches;
+          document.getElementById("updated").innerText = "Last updated: " + (j["last update time"] || "Live");
+          render(DATA);
+          return;
+        }
+      }
+    } catch(e) {}
+  }
+  showEmpty();
+}
+
+function render(arr){
+  const box=document.getElementById("list");
+  box.innerHTML="";
+  if(!arr.length){showEmpty();return;}
+
+  arr.forEach((m,i)=>{
+    const live=m.isLive===true;
+    const streamTarget = m.video_url || m.dai_url || m.pub_url || "";
+    const url=live && streamTarget
+      ? "player1.html?url="+encodeURIComponent(STREAM_PROXY + streamTarget)
+      : "";
+
+    box.innerHTML+=`
+      <div class="card ${live?'':'upcoming'}"
+           style="animation-delay:${i*0.06}s"
+           ${live?`onclick="window.open('${url}','_blank')"`:""}>
+        <img src="${m.src||''}" onerror="this.src='../assets/sonyliv_events.png'">
+        <div class="card-body">
+          <span class="badge ${live?'':'up'}">
+            ${live?'LIVE NOW':'UPCOMING'}
+          </span>
+
+          <div class="title">
+            ${m.match_name||m.event_name||'Live Event'}
+          </div>
+
+          <div class="meta">
+            ${m.broadcast_channel||''} • ${m.audioLanguageName||''}
+          </div>
+
+          <div class="footer">
+            <div class="meta">${m.event_category||''}</div>
+            ${live?`<div class="watch">Watch Live</div>`:""}
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+function filter(type){
+  document.querySelectorAll(".tabs button")
+    .forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+
+  if(type==="live") render(DATA.filter(x=>x.isLive));
+  else if(type==="upcoming") render(DATA.filter(x=>!x.isLive));
+  else render(DATA);
+}
+
+function showEmpty(){
+  document.getElementById("list").innerHTML =
+    "<div style='opacity:.6; text-align:center; grid-column: 1/-1;'>No events available at this moment.</div>";
+}
+
+loadData();
+</script>
+<script src="../assets/security.js"></script>
+</body>
+</html>
