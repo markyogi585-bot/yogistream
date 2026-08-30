@@ -1,320 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="referrer" content="no-referrer">
-<title>YogiStream - JioTV+ India Player | @yogiprojects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>YogiStream India Player | @yogiprojects</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  <!-- Shaka Player Core + UI -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html,body{
-  background:#000;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:system-ui,sans-serif;
-}
+    html, body {
+      background: #000;
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      color: #fff;
+    }
 
-.shaka-video-container{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    .shaka-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
 
-video{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  background:#000;
-}
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
+    }
 
-.error-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-}
+    /* Top Header */
+    .player-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
 
-.error-modal.hidden { display: none !important; }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
 
-.error-content {
-  background: #141828;
-  border-radius: 20px;
-  padding: 28px;
-  max-width: 500px;
-  width: 90%;
-  text-align: center;
-  color: #f0f4ff;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-  border: 1px solid rgba(0, 229, 255, 0.25);
-}
+    .back-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: #ff0055;
+      color: #fff;
+      transform: scale(1.05);
+    }
 
-.error-content h3 { 
-  color: #00e5ff; 
-  margin-bottom: 15px;
-  font-size: 1.4rem;
-}
+    .channel-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.error-content p {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  color: #b0c4de;
-}
+    .channel-logo-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.5);
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
 
-.close-btn {
-  background: linear-gradient(90deg, #00e5ff, #7000ff);
-  color: #000;
-  border: none;
-  padding: 10px 28px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-</style>
+    .channel-title-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .channel-badge {
+      background: linear-gradient(90deg, #ff0055, #ff7700);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 0, 85, 0.25);
+      border: 1px solid rgba(255, 0, 85, 0.5);
+      color: #ff3366;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #ff3366;
+      border-radius: 50%;
+      animation: pulseDot 1.2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.3); }
+    }
+
+    .shaka-spinner-container, .shaka-spinner, .shaka-spinner-svg {
+      display: none !important;
+    }
+
+    /* Error Modal */
+    .error-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .error-modal.hidden { display: none !important; }
+
+    .error-content {
+      background: #151624;
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      color: #f0f4ff;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255, 0, 85, 0.25);
+    }
+    .error-content h3 { 
+      color: #ff3366; 
+      margin-bottom: 14px;
+      font-size: 1.35rem;
+    }
+    .error-content p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      color: #b2c1e0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .modal-btn {
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+    .modal-btn.primary {
+      background: linear-gradient(90deg, #ff0055, #ff7700);
+      color: #fff;
+    }
+    .modal-btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .modal-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Custom Loading Indicator */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.7);
+      z-index: 15;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .loading-overlay.hidden { display: none; }
+    .loader-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(255, 0, 85, 0.2);
+      border-top-color: #ff0055;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      font-size: 0.85rem;
+      color: #a4b3d8;
+      font-weight: 600;
+    }
+  </style>
 </head>
 
 <body>
 
-<div id="errorModal" class="error-modal hidden">
-  <div class="error-content">
-    <h3 id="errorTitle">Stream Notice</h3>
-    <p id="errorMessage"></p>
-    <button class="close-btn" onclick="document.getElementById('errorModal').classList.add('hidden')">Close</button>
+  <div class="player-header" id="playerHeader">
+    <div class="header-left">
+      <a href="index.html" class="back-btn" title="Back to Channels">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="channel-meta">
+        <img id="channelLogo" class="channel-logo-img" src="../assets/jiotv_plus.png" onerror="this.src='../assets/jiotv_plus.png'" alt="Logo">
+        <div>
+          <div id="channelTitle" class="channel-title-text">YogiStream Live TV</div>
+          <span class="channel-badge" id="streamTypeBadge">FAST STREAM</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span>LIVE</span>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="shaka-video-container" id="player-container" data-shaka-player-container>
-  <video id="video" autoplay playsinline preload="metadata" data-shaka-player></video>
-</div>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader-spinner"></div>
+    <div class="loading-text" id="loadingText">Connecting to Live Stream…</div>
+  </div>
 
-<script>
-function showError(title, msg) {
-  const modal = document.getElementById('errorModal');
-  const titleEl = document.getElementById('errorTitle');
-  const msgEl = document.getElementById('errorMessage');
-  if (titleEl) titleEl.textContent = title;
-  if (msgEl) msgEl.innerHTML = msg;
-  if (modal) modal.classList.remove('hidden');
-}
+  <div id="errorModal" class="error-modal hidden">
+    <div class="error-content">
+      <h3 id="errorTitle">Stream Notice</h3>
+      <p id="errorMessage"></p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="window.location.href='index.html'">Back to Channels</button>
+        <button class="modal-btn primary" onclick="location.reload()">Retry Stream</button>
+      </div>
+    </div>
+  </div>
 
-/* ── CONFIGURATION & SOURCES ── */
-const CHANNELS_SOURCES = [
-  "jstr4web.json", 
-  "../api/jstr4web.json", 
-  "/api/jstr4web.json", 
-  "https://jjtvxweb.pages.dev/jstr4web.json"
-];
+  <div class="shaka-video-container" id="videoContainer" data-shaka-player data-shaka-controls>
+    <video autoplay muted playsinline preload="metadata"></video>
+  </div>
 
-const COOKIE_PRIMARY_SOURCES = [
-  "../api/cookies.json", 
-  "/api/cookies.json", 
-  "cookies.json", 
-  "https://allinonereborn2.online/jstrweb2/cookies.json"
-];
+  <script>
+  (function() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingText = document.getElementById('loadingText');
+    const channelTitleEl = document.getElementById('channelTitle');
+    const channelLogoEl = document.getElementById('channelLogo');
 
-const COOKIE_STAR_SOURCES = [
-  "../api/star_cookie.json", 
-  "/api/star_cookie.json", 
-  "star_cookie.json", 
-  "https://allinonereborn2.online/jtv-fetch/jstarcookie/cookie.json"
-];
+    function showLoading(msg) {
+      if (loadingText) loadingText.textContent = msg || 'Connecting to Live Stream…';
+      if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+    }
 
-/* ── FETCH CONFIG ── */
-async function fetchConfig(){
-  try{
-    let channelList = [];
-    for (const src of CHANNELS_SOURCES) {
+    function hideLoading() {
+      if (loadingOverlay) loadingOverlay.classList.add('hidden');
+    }
+
+    function showError(title, msg) {
+      hideLoading();
+      const modal = document.getElementById('errorModal');
+      const titleEl = document.getElementById('errorTitle');
+      const msgEl = document.getElementById('errorMessage');
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.innerHTML = msg;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    async function initApp() {
+      showLoading('Fetching Channel Stream Config…');
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const channelId = urlParams.get('id');
+
+      if (!channelId) {
+        showError('Channel ID Missing', 'Please select a valid channel from the channel list.');
+        return;
+      }
+
+      // Load both datasets
+      let jstrChannels = [];
+      let denChannels = [];
+
       try {
-        const channelRes = await fetch(src);
-        if (channelRes.ok) {
-          const channelText = await channelRes.text();
-          const cleanText = channelText.trim().startsWith('[') ? channelText : '[' + channelText + ']';
-          channelList = JSON.parse(cleanText);
-          if (Array.isArray(channelList) && channelList.length > 0) break;
-        }
-      } catch (err) {}
-    }
-
-    const channelId = new URLSearchParams(location.search).get("id");
-    if (!channelId) {
-      showError("Channel ID Missing", "Please select a channel from the list.");
-      return null;
-    }
-
-    const channelData = channelList.find(c => String(c.id) === String(channelId) || c.name === channelId);
-
-    if(!channelData){
-      showError("Channel Not Found", "No stream found for channel ID: " + channelId);
-      return null;
-    }
-
-    /* ── COOKIE SYSTEM ── */
-    let primaryCookie = "";
-
-    for (const starSrc of COOKIE_STAR_SOURCES) {
-      try{
-        const res = await fetch(starSrc);
-        if (res.ok) {
-          const data = await res.json();
-          if(data && data.failed_results){
-            for(const item of data.failed_results){
-              if(String(item.channel_id) === String(channelId)){
-                if(item.error_details && item.error_details.final_url){
-                  const match = item.error_details.final_url.match(/__hdnea__=([^&]+)/);
-                  if(match){
-                    primaryCookie = '__hdnea__=' + match[1];
-                    break;
-                  }
-                }
-              }
+        const jstrSources = ['jstr4web.json', '../api/jstr4web.json', '/api/jstr4web.json', 'https://jjtvxweb.pages.dev/jstr4web.json'];
+        for (const src of jstrSources) {
+          try {
+            const resp = await fetch(src);
+            if (resp.ok) {
+              jstrChannels = await resp.json();
+              if (Array.isArray(jstrChannels) && jstrChannels.length > 0) break;
             }
-          }
-          if (primaryCookie) break;
+          } catch (e) {}
         }
-      }catch(e){}
-    }
-    
-    if(!primaryCookie){
-      for (const pSrc of COOKIE_PRIMARY_SOURCES) {
-        try{
-          const res = await fetch(pSrc);
-          if (res.ok) {
-            const data = await res.json();
-            const entry = Array.isArray(data) ? data.find(i => i.cookie) : null;
-            if(entry?.cookie) {
-              primaryCookie = entry.cookie;
+      } catch (e) {}
+
+      try {
+        const denSources = ['den-ww.json', '../api/den-ww.json', '/api/den-ww.json', 'https://jjtvxweb.pages.dev/den-ww.json'];
+        for (const src of denSources) {
+          try {
+            const resp = await fetch(src);
+            if (resp.ok) {
+              denChannels = await resp.json();
+              if (Array.isArray(denChannels) && denChannels.length > 0) break;
+            }
+          } catch (e) {}
+        }
+      } catch (e) {}
+
+      // Find channel info
+      const jstrMatch = jstrChannels.find(ch => String(ch.id) === String(channelId) || ch.name === channelId);
+      const denMatch = denChannels.find(ch => String(ch.channel_id) === String(channelId));
+
+      const chName = jstrMatch?.name || denMatch?.name || 'Live Channel ' + channelId;
+      const chLogo = jstrMatch?.logo || denMatch?.logo || '../assets/jiotv_plus.png';
+
+      if (channelTitleEl) channelTitleEl.textContent = chName;
+      if (channelLogoEl) channelLogoEl.src = chLogo;
+      document.title = chName + ' - YogiStream Live';
+
+      // DRM Keys
+      let drmKeys = {};
+      if (jstrMatch?.keyId && jstrMatch?.key) {
+        drmKeys[jstrMatch.keyId] = jstrMatch.key;
+      }
+      if (denMatch?.drm && typeof denMatch.drm === 'object') {
+        drmKeys = { ...drmKeys, ...denMatch.drm };
+      }
+
+      // Fetch live token cookies
+      let liveCookie = "";
+      const cookieSources = ['../api/cookies.json', '/api/cookies.json', 'https://allinonereborn2.online/jstrweb2/cookies.json'];
+      for (const csrc of cookieSources) {
+        try {
+          const cresp = await fetch(csrc);
+          if (cresp.ok) {
+            const cdata = await cresp.json();
+            const centry = Array.isArray(cdata) ? cdata.find(i => i.cookie) : null;
+            if (centry?.cookie) {
+              liveCookie = centry.cookie;
               break;
             }
           }
-        }catch(e){}
+        } catch(e) {}
+      }
+
+      // Fallback star cookie if needed
+      let starCookie = "";
+      try {
+        const sresp = await fetch('../api/star_cookie.json');
+        if (sresp.ok) {
+          const sdata = await sresp.json();
+          starCookie = sdata?.cookie || sdata?.[0]?.cookie || "";
+        }
+      } catch(e) {}
+
+      // Candidate URLs with fallback hierarchy
+      const candidateUrls = [];
+
+      // 1. Direct JIO DASH Manifest
+      if (jstrMatch?.url) {
+        candidateUrls.push({
+          url: jstrMatch.url,
+          referer: "https://www.jiotv.com/",
+          userAgent: "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6",
+          token: liveCookie || starCookie
+        });
+      }
+
+      // 2. den-ww proxy manifest
+      if (denMatch?.mpd) {
+        candidateUrls.push({
+          url: denMatch.mpd,
+          referer: denMatch.referer || "https://www.jiotv.com/",
+          userAgent: denMatch.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6",
+          token: denMatch.token || liveCookie
+        });
+      }
+
+      // 3. alternate URLs from jstr4web
+      if (jstrMatch?.url1) candidateUrls.push({ url: jstrMatch.url1, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
+      if (jstrMatch?.url2) candidateUrls.push({ url: jstrMatch.url2, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
+      if (jstrMatch?.url3) candidateUrls.push({ url: jstrMatch.url3, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
+
+      if (candidateUrls.length === 0) {
+        showError('Stream Not Available', 'No stream sources found for ' + chName);
+        return;
+      }
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        showError('Browser Unsupported', 'Your browser does not support Shaka Player playback.');
+        return;
+      }
+
+      const video = document.querySelector('video');
+      video.muted = true;
+      video.autoplay = true;
+      video.playsInline = true;
+
+      const player = new shaka.Player();
+      await player.attach(video);
+
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      ui.configure({
+        controlPanelElements: [
+          'play_pause',
+          'time_and_duration',
+          'mute',
+          'volume',
+          'spacer',
+          'quality',
+          'language',
+          'picture_in_picture',
+          'fullscreen'
+        ],
+        addBigPlayButton: true,
+        seekBarColors: {
+          base: 'rgba(255,255,255,.2)',
+          buffered: 'rgba(255,255,255,.4)',
+          played: 'rgb(255,0,85)'
+        }
+      });
+
+      const drmConfig = (drmKeys && Object.keys(drmKeys).length > 0)
+        ? { clearKeys: drmKeys }
+        : {};
+
+      player.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 20,
+          rebufferingGoal: 4,
+          bufferBehind: 30,
+          ignoreTextStreamFailures: true,
+          alwaysStreamText: false
+        }
+      });
+
+      let currentReqConfig = candidateUrls[0];
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        if (currentReqConfig.referer) request.headers['Referer'] = currentReqConfig.referer;
+        request.headers['User-Agent'] = currentReqConfig.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+
+        if (currentReqConfig.token) {
+          const cookieVal = currentReqConfig.token.startsWith('__hdnea__=') ? currentReqConfig.token : '__hdnea__=' + currentReqConfig.token;
+          request.headers['Cookie'] = cookieVal;
+
+          if (
+            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+            request.uris[0] &&
+            !request.uris[0].includes('__hdnea__=')
+          ) {
+            const sep = request.uris[0].includes('?') ? '&' : '?';
+            request.uris[0] += sep + cookieVal;
+          }
+        }
+      });
+
+      let streamLoaded = false;
+      for (let i = 0; i < candidateUrls.length; i++) {
+        currentReqConfig = candidateUrls[i];
+        try {
+          showLoading('Connecting stream server (' + (i + 1) + '/' + candidateUrls.length + ')…');
+          await player.load(currentReqConfig.url);
+          video.play().catch(() => {});
+          streamLoaded = true;
+          hideLoading();
+          break;
+        } catch (err) {
+          console.warn('Candidate', i, 'failed:', err);
+        }
+      }
+
+      if (!streamLoaded) {
+        showError('Stream Error', 'Could not load video manifest for ' + chName + '. Please retry or switch channel.');
       }
     }
 
-    const streamUrls = [channelData.url, channelData.url1, channelData.url2, channelData.url3]
-      .filter(Boolean)
-      .map(u => u.replace('bpk-tv//','bpk-tv/'));
-
-    return {
-      channelData,
-      streamUrls,
-      primaryCookie
-    };
-
-  }catch(err){
-    console.error("fetchConfig error", err);
-    return null;
-  }
-}
-
-/* ── MAIN ── */
-document.addEventListener("DOMContentLoaded", async () => {
-  const cfg = await fetchConfig();
-  if(!cfg) return;
-
-  const { channelData, streamUrls, primaryCookie } = cfg;
-
-  shaka.polyfill.installAll();
-  if(!shaka.Player.isBrowserSupported()){
-    showError("Unsupported Browser", "Shaka Player is not supported in this browser.");
-    return;
-  }
-
-  const videoEl = document.getElementById("video");
-  const container = document.getElementById("player-container");
-
-  const player = new shaka.Player();
-  await player.attach(videoEl);
-
-  const ui = new shaka.ui.Overlay(player, container, videoEl);
-  ui.configure({
-    controlPanelElements: [
-      'play_pause',
-      'time_and_duration',
-      'mute',
-      'volume',
-      'spacer',
-      'quality',
-      'language',
-      'picture_in_picture',
-      'fullscreen'
-    ],
-    addBigPlayButton: true,
-    seekBarColors: {
-      base: 'rgba(255,255,255,.2)',
-      buffered: 'rgba(255,255,255,.4)',
-      played: 'rgb(0,229,255)'
-    }
-  });
-
-  // ClearKey DRM support
-  const drmConfig = {};
-  if (channelData.keyId && channelData.key) {
-    drmConfig.clearKeys = {
-      [channelData.keyId]: channelData.key
-    };
-  }
-
-  player.configure({
-    drm: drmConfig,
-    streaming: {
-      lowLatencyMode: true,
-      bufferingGoal: 20,
-      rebufferingGoal: 4
-    }
-  });
-
-  let activeCookie = primaryCookie || "";
-
-  player.getNetworkingEngine().registerRequestFilter((type, request) => {
-    request.headers["Referer"] = "https://www.jiotv.com/";
-    request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-
-    if(activeCookie &&
-      (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-       type === shaka.net.NetworkingEngine.RequestType.SEGMENT)){
-
-      const sep = request.uris[0].includes('?') ? '&' : '?';
-      if (!request.uris[0].includes('__hdnea__=')) {
-        request.uris[0] += sep + activeCookie;
-      }
-    }
-  });
-
-  let loaded = false;
-  for(let i = 0; i < streamUrls.length; i++){
-    try{
-      await player.load(streamUrls[i]);
-      videoEl.play().catch(() => {});
-      loaded = true;
-      break;
-    }catch(e){
-      console.warn("Failed URL:", streamUrls[i], e);
-    }
-  }
-
-  if (!loaded) {
-    showError("Stream Load Error", "Could not load video manifest. Stream might be offline.");
-  }
-
-  if (channelData.name) {
-    document.title = channelData.name + " - YogiStream";
-  }
-});
-</script>
-
-<script src="../assets/security.js"></script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp().catch((err) => {
+        showError('Playback Error', err.message || 'Unexpected player error.');
+      });
+    });
+  })();
+  </script>
+  
+  <script src="../assets/security.js"></script>
 </body>
 </html>

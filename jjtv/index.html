@@ -474,16 +474,22 @@
             transition: 0.2s;
         }
         .player-link.world {
-            background: #4a3c96;
-            border-color: #ab92ff;
+            background: linear-gradient(90deg, #00e5ff, #7000ff);
+            border-color: transparent;
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35);
         }
         .player-link.india {
-            background: #1e634f;
-            border-color: #3cb896;
+            background: linear-gradient(90deg, #ff0055, #ff7700);
+            border-color: transparent;
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.35);
         }
         .player-link:hover {
             filter: brightness(1.15);
-            transform: scale(1.02);
+            transform: scale(1.03);
         }
         .player-link.disabled {
             opacity: 0.5;
@@ -610,23 +616,10 @@
         const bookmarkHeaderBtn = document.getElementById('bookmarkHeaderBtn');
         const bookmarkCount = document.getElementById('bookmarkCount');
 
-        // IP Detection function
-        async function detectUserCountry() {
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                isIndianUser = data.country === 'IN';
-                
-                // If Indian user, disable worldwide button in modal
-                if (isIndianUser) {
-                    worldLink.classList.add('disabled');
-                    worldLink.removeAttribute('href');
-                    worldLink.style.pointerEvents = 'none';
-                }
-            } catch (error) {
-                console.log('IP detection failed, assuming non-Indian');
-                isIndianUser = false;
-            }
+        // IP Detection / No Geo-blocking restriction
+        function detectUserCountry() {
+            // Both worldwide & India stream routes remain enabled for all users
+            isIndianUser = false;
         }
 
         // fetch json

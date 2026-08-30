@@ -2,27 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zee5 Player</title>
-    <!-- Shaka Player with ClearKey DRM support -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>YogiStream - Zee5 Live TV | @yogiprojects</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #000;
-            color: white;
-            height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            background: #000;
             width: 100vw;
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            color: #fff;
         }
         .video-container {
             width: 100vw;
@@ -34,7 +31,91 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            background: #000;
+        }
+        /* Top Header */
+        .player-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: #800080;
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .channel-title-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .channel-badge {
+            background: linear-gradient(90deg, #9900ee, #ff0077);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            pointer-events: auto;
+        }
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(153, 0, 238, 0.25);
+            border: 1px solid rgba(153, 0, 238, 0.5);
+            color: #d170ff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #d170ff;
+            border-radius: 50%;
+            animation: pulseDot 1.2s infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.3); }
         }
         .error-overlay {
             position: absolute;
@@ -43,7 +124,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.88);
             color: #ff5555;
             padding: 20px;
             text-align: center;
@@ -51,16 +132,35 @@
         }
         .error-overlay button {
             margin-top: 15px;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 30px;
-            background: #333;
+            background: linear-gradient(90deg, #9900ee, #ff0077);
             color: #fff;
-            border: 1px solid #666;
+            font-weight: 700;
+            border: none;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+
+    <div class="player-header">
+      <div class="header-left">
+        <a href="index.html" class="back-btn" title="Back to Channels">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+          <div id="channelTitle" class="channel-title-text">Zee5 Live TV</div>
+          <span class="channel-badge">CLEARKEY DRM</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="live-indicator">
+          <div class="live-dot"></div>
+          <span>LIVE</span>
+        </div>
+      </div>
+    </div>
 
     <div class="video-container" id="player-container" data-shaka-player-container>
         <video id="video" autoplay playsinline data-shaka-player></video>
@@ -73,7 +173,8 @@
         const key = urlParams.get('key');
         const title = urlParams.get('title') || 'Zee5 Live Stream';
 
-        document.title = title;
+        document.getElementById('channelTitle').textContent = title;
+        document.title = title + ' - YogiStream Live';
 
         async function initApp() {
             if (!mpdUrl) {
@@ -104,10 +205,14 @@
                     'quality',
                     'picture_in_picture',
                     'fullscreen'
-                ]
+                ],
+                seekBarColors: {
+                    base: 'rgba(255,255,255,.2)',
+                    buffered: 'rgba(255,255,255,.4)',
+                    played: 'rgb(209,112,255)'
+                }
             });
 
-            // Configure ClearKey DRM
             const drmConfig = {};
             if (keyId && key) {
                 drmConfig.clearKeys = {};
@@ -125,7 +230,7 @@
 
             try {
                 await player.load(mpdUrl);
-                console.log('Stream loaded successfully');
+                video.play().catch(() => {});
             } catch (e) {
                 console.error('Error loading stream', e);
                 showError("Stream Playback Error", e.message || "Failed to decode or play DASH ClearKey stream.");
