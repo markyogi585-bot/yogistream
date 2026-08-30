@@ -39,7 +39,7 @@
     .ambient-glow {
       position: absolute;
       inset: -30px;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.2), transparent 70%);
+      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.25), transparent 70%);
       filter: blur(50px);
       z-index: 1;
       pointer-events: none;
@@ -63,7 +63,7 @@
       transition: object-fit 0.2s;
     }
 
-    /* Top Controls Bar */
+    /* Top Controls Bar with Auto-Hide */
     .player-header {
       position: absolute;
       top: 0;
@@ -76,7 +76,14 @@
       justify-content: space-between;
       z-index: 25;
       pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
+    .player-header.hidden {
+      opacity: 0;
+      transform: translateY(-15px);
+      pointer-events: none;
+    }
+
     .header-left {
       display: flex;
       align-items: center;
@@ -272,7 +279,7 @@
       flex-direction: column;
       gap: 4px;
       z-index: 50;
-      min-width: 130px;
+      min-width: 140px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
     .quality-menu.open { display: flex; }
@@ -319,10 +326,10 @@
   <div class="ambient-glow" id="ambientGlow"></div>
 
   <!-- Top Floating Header -->
-  <div class="player-header">
+  <div class="player-header" id="playerHeader">
     <div class="header-left">
-      <a href="index.html" class="back-btn" title="Back to Channels">
-        <i class="fas fa-arrow-left"></i>
+      <a href="index.html" class="back-btn" title="Back to Home">
+        <i class="fas fa-home"></i>
       </a>
       <img id="channelLogo" class="channel-logo-img" src="assets/logo.jpg" onerror="this.src='assets/logo.jpg'" alt="Logo">
       <div>
@@ -340,6 +347,11 @@
       <!-- Aspect Ratio -->
       <button class="player-tool-btn" onclick="cycleAspectRatio()" title="Aspect Ratio (Key: A)">
         <i class="fas fa-expand"></i> <span id="aspectLabel">FIT</span>
+      </button>
+
+      <!-- Fullscreen / Landscape -->
+      <button class="player-tool-btn" onclick="toggleLandscapeFullscreen()" title="Fullscreen Landscape (Key: F)">
+        <i class="fas fa-arrows-alt"></i> Fullscreen
       </button>
 
       <!-- PiP -->
@@ -392,6 +404,7 @@
   let globalVideo = document.getElementById('video');
   let globalPlayer = null;
   let drawerChannels = [];
+  let hideControlsTimer = null;
 
   const aspectRatios = ['contain', 'cover', 'fill', 'none'];
   const aspectLabels = ['FIT', 'COVER', 'FILL', 'STRETCH'];
@@ -401,6 +414,37 @@
     aspectIdx = (aspectIdx + 1) % aspectRatios.length;
     globalVideo.style.objectFit = aspectRatios[aspectIdx];
     document.getElementById('aspectLabel').textContent = aspectLabels[aspectIdx];
+  }
+
+  function resetHideTimer() {
+    const header = document.getElementById('playerHeader');
+    if (header) header.classList.remove('hidden');
+    clearTimeout(hideControlsTimer);
+    hideControlsTimer = setTimeout(() => {
+      if (!document.getElementById('channelDrawer').classList.contains('open') &&
+          !document.getElementById('qualityMenu').classList.contains('open')) {
+        if (header) header.classList.add('hidden');
+      }
+    }, 4000);
+  }
+
+  document.addEventListener('mousemove', resetHideTimer);
+  document.addEventListener('touchstart', resetHideTimer);
+
+  async function toggleLandscapeFullscreen() {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        if (screen.orientation && screen.orientation.lock) {
+          try { await screen.orientation.lock('landscape'); } catch(e) {}
+        }
+      } else {
+        await document.exitFullscreen();
+        if (screen.orientation && screen.orientation.unlock) {
+          try { screen.orientation.unlock(); } catch(e) {}
+        }
+      }
+    } catch (e) {}
   }
 
   async function togglePiP() {
@@ -502,6 +546,7 @@
 
   // Main Stream Initializer
   async function initPlayer() {
+    resetHideTimer();
     const p = new URLSearchParams(window.location.search);
     const type = p.get('type') || (p.get('mpd') ? 'dash' : 'hls');
     const mpdUrl = p.get('mpd') || p.get('url');
@@ -542,7 +587,8 @@
       streaming: {
         lowLatencyMode: true,
         bufferingGoal: 2,
-        rebufferingGoal: 0.5
+        rebufferingGoal: 0.5,
+        inaccurateManifestTolerance: 0
       }
     });
 
@@ -561,11 +607,12 @@
   // Keyboard Shortcuts
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT') return;
+    resetHideTimer();
     if (e.key === ' ' || e.key === 'k') {
       globalVideo.paused ? globalVideo.play() : globalVideo.pause();
       e.preventDefault();
     } else if (e.key === 'f' || e.key === 'F') {
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      toggleLandscapeFullscreen();
     } else if (e.key === 'm' || e.key === 'M') {
       globalVideo.muted = !globalVideo.muted;
     } else if (e.key === 'a' || e.key === 'A') {
