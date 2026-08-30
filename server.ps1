@@ -12,7 +12,6 @@ $listener.Prefixes.Add("http://127.0.0.1:$port/")
 try {
     $listener.Start()
 } catch {
-    # If 8080 is busy, fallback to 8888
     $port = 8888
     $listener = New-Object System.Net.HttpListener
     $listener.Prefixes.Add("http://localhost:$port/")
@@ -20,30 +19,30 @@ try {
     $listener.Start()
 }
 
-Write-Host "========================================================" -ForegroundColor Cyan
-Write-Host "   📺 YOGISTREAM LOCAL SERVER RUNNING" -ForegroundColor Green
-Write-Host "   URL: http://localhost:$port/" -ForegroundColor Yellow
-Write-Host "   Directory: $basePath" -ForegroundColor White
-Write-Host "   Official Domain: https://yogistream.xyz" -ForegroundColor Magenta
-Write-Host "   Telegram: https://t.me/yogiprojects" -ForegroundColor Cyan
-Write-Host "========================================================" -ForegroundColor Cyan
+Write-Host "========================================================"
+Write-Host "   YOGISTREAM LOCAL SERVER RUNNING"
+Write-Host "   URL: http://localhost:$port/"
+Write-Host "   Directory: $basePath"
+Write-Host "   Official Domain: https://yogistream.xyz"
+Write-Host "   Telegram: https://t.me/yogiprojects"
+Write-Host "========================================================"
 
 $mimeTypes = @{
-    ".html" = "text/html; charset=utf-8"
-    ".htm"  = "text/html; charset=utf-8"
-    ".css"  = "text/css; charset=utf-8"
-    ".js"   = "application/javascript; charset=utf-8"
-    ".json" = "application/json; charset=utf-8"
-    ".png"  = "image/png"
-    ".jpg"  = "image/jpeg"
-    ".jpeg" = "image/jpeg"
-    ".avif" = "image/avif"
-    ".svg"  = "image/svg+xml"
-    ".ico"  = "image/x-icon"
-    ".mpd"  = "application/dash+xml"
-    ".m3u8" = "application/vnd.apple.mpegurl"
-    ".xml"  = "application/xml; charset=utf-8"
-    ".txt"  = "text/plain; charset=utf-8"
+    '.html' = 'text/html; charset=utf-8'
+    '.htm'  = 'text/html; charset=utf-8'
+    '.css'  = 'text/css; charset=utf-8'
+    '.js'   = 'application/javascript; charset=utf-8'
+    '.json' = 'application/json; charset=utf-8'
+    '.png'  = 'image/png'
+    '.jpg'  = 'image/jpeg'
+    '.jpeg' = 'image/jpeg'
+    '.avif' = 'image/avif'
+    '.svg'  = 'image/svg+xml'
+    '.ico'  = 'image/x-icon'
+    '.mpd'  = 'application/dash+xml'
+    '.m3u8' = 'application/vnd.apple.mpegurl'
+    '.xml'  = 'application/xml; charset=utf-8'
+    '.txt'  = 'text/plain; charset=utf-8'
 }
 
 while ($listener.IsListening) {
@@ -52,27 +51,25 @@ while ($listener.IsListening) {
         $request = $context.Request
         $response = $context.Response
 
-        $urlPath = $request.Url.LocalPath.TrimStart('/')
-        if ([string]::IsNullOrWhiteSpace($urlPath)) {
-            $urlPath = "index.html"
+        $rawPath = $request.Url.LocalPath.TrimStart('/')
+        if ([string]::IsNullOrWhiteSpace($rawPath)) {
+            $rawPath = 'index.html'
         }
 
-        # Check clean routing (e.g. /jjtv -> /jjtv/index.html)
-        $localFile = Join-Path $basePath $urlPath
+        $localFile = Join-Path $basePath $rawPath
         if (Test-Path $localFile -PathType Container) {
-            $localFile = Join-Path $localFile "index.html"
-        } elseif (-not (Test-Path $localFile) -and (Test-Path "$localFile.html")) {
-            $localFile = "$localFile.html"
-        } elseif (-not (Test-Path $localFile) -and (Test-Path (Join-Path $basePath "$urlPath/index.html"))) {
-            $localFile = Join-Path $basePath "$urlPath/index.html"
+            $localFile = Join-Path $localFile 'index.html'
+        } elseif (-not (Test-Path $localFile) -and (Test-Path ($localFile + '.html'))) {
+            $localFile = $localFile + '.html'
+        } elseif (-not (Test-Path $localFile) -and (Test-Path (Join-Path $basePath ($rawPath + '/index.html')))) {
+            $localFile = Join-Path $basePath ($rawPath + '/index.html')
         }
 
-        # CORS Headers & Caching
-        $response.AddHeader("Access-Control-Allow-Origin", "*")
-        $response.AddHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        $response.AddHeader("Access-Control-Allow-Headers", "*")
+        $response.Headers.Add('Access-Control-Allow-Origin', '*')
+        $response.Headers.Add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        $response.Headers.Add('Access-Control-Allow-Headers', '*')
 
-        if ($request.HttpMethod -eq "OPTIONS") {
+        if ($request.HttpMethod -eq 'OPTIONS') {
             $response.StatusCode = 200
             $response.Close()
             continue
@@ -81,7 +78,7 @@ while ($listener.IsListening) {
         if (Test-Path $localFile -PathType Leaf) {
             $ext = [System.IO.Path]::GetExtension($localFile).ToLower()
             $mime = $mimeTypes[$ext]
-            if (-not $mime) { $mime = "application/octet-stream" }
+            if (-not $mime) { $mime = 'application/octet-stream' }
             $response.ContentType = $mime
 
             $bytes = [System.IO.File]::ReadAllBytes($localFile)
@@ -90,11 +87,12 @@ while ($listener.IsListening) {
             $response.StatusCode = 200
         } else {
             $response.StatusCode = 404
-            $errBytes = [System.Text.Encoding]::UTF8.GetBytes("404 Not Found: $urlPath")
+            $msg = '404 Not Found: ' + $rawPath
+            $errBytes = [System.Text.Encoding]::UTF8.GetBytes($msg)
             $response.OutputStream.Write($errBytes, 0, $errBytes.Length)
         }
         $response.Close()
     } catch {
-        # ignore transient connection aborts
+        # ignore client disconnects
     }
 }
