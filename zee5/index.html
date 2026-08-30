@@ -461,7 +461,7 @@
       container.innerHTML = filtered.map(ch => {
         const keyId = ch.clearkey?.keyId || '';
         const key = ch.clearkey?.key || '';
-        const playUrl = `player.html?mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}`;
+        const playUrl = `/player?type=dash&mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}&logo=${encodeURIComponent(ch.logo || '')}`;
         const genre = ch.genre || 'Live TV';
         const lang = ch.language || 'Hindi';
 

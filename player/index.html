@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
-  <title>YogiStream Ultra Pro Player | @yogiprojects</title>
+  <title>YogiStream Universal Master Player | @yogiprojects</title>
 
   <!-- Shaka Player Core + UI -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
@@ -487,8 +487,8 @@
   async function loadDrawerChannels() {
     try {
       const [r1, r2] = await Promise.allSettled([
-        fetch('/api/channels199.json').then(r => r.json()),
-        fetch('/api/jstr4web.json').then(r => r.json())
+        fetch('/api/channels199.json').then(r => r.json()).catch(() => fetch('api/channels199.json').then(r => r.json())),
+        fetch('/api/jstr4web.json').then(r => r.json()).catch(() => fetch('api/jstr4web.json').then(r => r.json()))
       ]);
 
       const list = [];
@@ -550,16 +550,55 @@
     const p = new URLSearchParams(window.location.search);
     const type = p.get('type') || (p.get('mpd') ? 'dash' : 'hls');
     let mpdUrl = p.get('mpd') || p.get('url');
-    const keyId = p.get('keyid');
-    const key = p.get('key');
-    const title = p.get('title') || 'YogiStream Live';
-    const logo = p.get('logo');
+    let keyId = p.get('keyid');
+    let key = p.get('key');
+    let title = p.get('title') || 'YogiStream Live';
+    let logo = p.get('logo');
+    const channelId = p.get('id');
+
+    // If ID is given instead of direct MPD URL, resolve it from datasets
+    if (channelId && !mpdUrl) {
+      try {
+        const [r1, r2] = await Promise.allSettled([
+          fetch('/api/channels199.json').then(r => r.json()).catch(() => fetch('api/channels199.json').then(r => r.json())),
+          fetch('/api/jstr4web.json').then(r => r.json()).catch(() => fetch('api/jstr4web.json').then(r => r.json()))
+        ]);
+
+        if (r1.status === 'fulfilled' && r1.value?.channels) {
+          const ch = r1.value.channels.find(c => c.name === channelId || String(c.id) === String(channelId));
+          if (ch) {
+            mpdUrl = ch.mpd;
+            keyId = ch.clearkey?.keyId;
+            key = ch.clearkey?.key;
+            title = ch.name;
+            logo = ch.logo;
+          }
+        }
+
+        if (!mpdUrl && r2.status === 'fulfilled' && Array.isArray(r2.value)) {
+          const ch = r2.value.find(c => String(c.id) === String(channelId) || c.name === channelId);
+          if (ch) {
+            mpdUrl = ch.url;
+            keyId = ch.keyId;
+            key = ch.key;
+            title = ch.name;
+            logo = ch.logo;
+          }
+        }
+      } catch(e) {}
+    }
+
+    // Default fallback if still no mpdUrl
+    if (!mpdUrl) {
+      mpdUrl = "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetv/default/manifest.mpd";
+      keyId = "ed068cf84f0640ccbc7c0e395c0a272e";
+      key = "bb722190f2bb446391020411a7d0828b";
+      title = "Zee TV HD";
+    }
 
     document.getElementById('channelTitle').textContent = title;
     if (logo) document.getElementById('channelLogo').src = logo;
     document.title = title + ' - YogiStream Live';
-
-    if (!mpdUrl) return;
 
     shaka.polyfill.installAll();
     const video = document.getElementById('video');
@@ -582,7 +621,6 @@
       drmConfig.clearKeys[keyId] = key;
     }
 
-    // True 0-Buffer Aggressive Low Latency Setup with 400k initial ABR
     player.configure({
       drm: drmConfig,
       abr: {
@@ -611,6 +649,7 @@
         document.getElementById('unmuteBanner')?.classList.remove('hidden');
       });
     } catch (e) {
+      console.warn('Direct stream error:', e);
       try {
         const proxyUrl = `/api/proxy?url=${encodeURIComponent(mpdUrl)}`;
         await player.load(proxyUrl);

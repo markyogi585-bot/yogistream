@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
-  <title>YogiStream Ultra Pro Player | @yogiprojects</title>
+  <title>YogiStream Universal Master Player | @yogiprojects</title>
 
   <!-- Shaka Player Core + UI -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
@@ -328,10 +328,10 @@
   <!-- Top Floating Header -->
   <div class="player-header" id="playerHeader">
     <div class="header-left">
-      <a href="index.html" class="back-btn" title="Back to Home">
+      <a href="/" class="back-btn" title="Back to Home">
         <i class="fas fa-home"></i>
       </a>
-      <img id="channelLogo" class="channel-logo-img" src="assets/logo.jpg" onerror="this.src='assets/logo.jpg'" alt="Logo">
+      <img id="channelLogo" class="channel-logo-img" src="/assets/logo.jpg" onerror="this.src='/assets/logo.jpg'" alt="Logo">
       <div>
         <div id="channelTitle" class="channel-title-text">YogiStream Live</div>
         <span class="channel-badge" id="playerBadge">1080P PRO</span>
@@ -487,8 +487,8 @@
   async function loadDrawerChannels() {
     try {
       const [r1, r2] = await Promise.allSettled([
-        fetch('api/channels199.json').then(r => r.json()),
-        fetch('api/jstr4web.json').then(r => r.json())
+        fetch('/api/channels199.json').then(r => r.json()).catch(() => fetch('api/channels199.json').then(r => r.json())),
+        fetch('/api/jstr4web.json').then(r => r.json()).catch(() => fetch('api/jstr4web.json').then(r => r.json()))
       ]);
 
       const list = [];
@@ -498,8 +498,8 @@
           const key = c.clearkey?.key || '';
           list.push({
             name: c.name,
-            logo: c.logo || 'assets/zee5.jpg',
-            url: `player.html?type=dash&mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}&logo=${encodeURIComponent(c.logo || '')}`
+            logo: c.logo || '/assets/zee5.jpg',
+            url: `/player?type=dash&mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}&logo=${encodeURIComponent(c.logo || '')}`
           });
         });
       }
@@ -508,8 +508,8 @@
         r2.value.slice(0, 100).forEach(c => {
           list.push({
             name: c.name,
-            logo: c.logo || 'assets/jiotv_plus.png',
-            url: `jjtv/pworld.html?id=${encodeURIComponent(c.id)}`
+            logo: c.logo || '/assets/jiotv_plus.png',
+            url: `/jjtv/pworld.html?id=${encodeURIComponent(c.id)}`
           });
         });
       }
@@ -523,7 +523,7 @@
     const c = document.getElementById('drawerList');
     c.innerHTML = list.map(ch => `
       <a href="${ch.url}" class="drawer-item">
-        <img src="${ch.logo}" onerror="this.src='assets/logo.jpg'" class="drawer-logo" alt="${ch.name}">
+        <img src="${ch.logo}" onerror="this.src='/assets/logo.jpg'" class="drawer-logo" alt="${ch.name}">
         <span>${ch.name}</span>
       </a>
     `).join('');
@@ -544,22 +544,61 @@
     if (banner) banner.classList.add('hidden');
   }
 
-  // Main Stream Initializer with Multi-Fallback
+  // Main Stream Initializer
   async function initPlayer() {
     resetHideTimer();
     const p = new URLSearchParams(window.location.search);
     const type = p.get('type') || (p.get('mpd') ? 'dash' : 'hls');
     let mpdUrl = p.get('mpd') || p.get('url');
-    const keyId = p.get('keyid');
-    const key = p.get('key');
-    const title = p.get('title') || 'YogiStream Live';
-    const logo = p.get('logo');
+    let keyId = p.get('keyid');
+    let key = p.get('key');
+    let title = p.get('title') || 'YogiStream Live';
+    let logo = p.get('logo');
+    const channelId = p.get('id');
+
+    // If ID is given instead of direct MPD URL, resolve it from datasets
+    if (channelId && !mpdUrl) {
+      try {
+        const [r1, r2] = await Promise.allSettled([
+          fetch('/api/channels199.json').then(r => r.json()).catch(() => fetch('api/channels199.json').then(r => r.json())),
+          fetch('/api/jstr4web.json').then(r => r.json()).catch(() => fetch('api/jstr4web.json').then(r => r.json()))
+        ]);
+
+        if (r1.status === 'fulfilled' && r1.value?.channels) {
+          const ch = r1.value.channels.find(c => c.name === channelId || String(c.id) === String(channelId));
+          if (ch) {
+            mpdUrl = ch.mpd;
+            keyId = ch.clearkey?.keyId;
+            key = ch.clearkey?.key;
+            title = ch.name;
+            logo = ch.logo;
+          }
+        }
+
+        if (!mpdUrl && r2.status === 'fulfilled' && Array.isArray(r2.value)) {
+          const ch = r2.value.find(c => String(c.id) === String(channelId) || c.name === channelId);
+          if (ch) {
+            mpdUrl = ch.url;
+            keyId = ch.keyId;
+            key = ch.key;
+            title = ch.name;
+            logo = ch.logo;
+          }
+        }
+      } catch(e) {}
+    }
+
+    // Default fallback if still no mpdUrl
+    if (!mpdUrl) {
+      mpdUrl = "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeetv/default/manifest.mpd";
+      keyId = "ed068cf84f0640ccbc7c0e395c0a272e";
+      key = "bb722190f2bb446391020411a7d0828b";
+      title = "Zee TV HD";
+    }
 
     document.getElementById('channelTitle').textContent = title;
     if (logo) document.getElementById('channelLogo').src = logo;
     document.title = title + ' - YogiStream Live';
-
-    if (!mpdUrl) return;
 
     shaka.polyfill.installAll();
     const video = document.getElementById('video');
@@ -582,17 +621,20 @@
       drmConfig.clearKeys[keyId] = key;
     }
 
-    // True 0-Buffer Aggressive Low Latency Setup
     player.configure({
       drm: drmConfig,
+      abr: {
+        enabled: true,
+        defaultBandwidthEstimate: 400000
+      },
       streaming: {
         lowLatencyMode: true,
-        bufferingGoal: 1.5,
-        rebufferingGoal: 0.3,
+        bufferingGoal: 1.0,
+        rebufferingGoal: 0.2,
         bufferBehind: 5,
         inaccurateManifestTolerance: 0,
         retryParameters: {
-          maxAttempts: 5,
+          maxAttempts: 4,
           baseDelay: 100,
           backoffFactor: 1.1
         }
@@ -607,14 +649,12 @@
         document.getElementById('unmuteBanner')?.classList.remove('hidden');
       });
     } catch (e) {
-      console.warn('Direct stream failed, trying proxy fallback...', e);
+      console.warn('Direct stream error:', e);
       try {
         const proxyUrl = `/api/proxy?url=${encodeURIComponent(mpdUrl)}`;
         await player.load(proxyUrl);
         video.play().catch(() => {});
-      } catch(err2) {
-        console.warn('Proxy fallback error:', err2);
-      }
+      } catch(err2) {}
     }
   }
 

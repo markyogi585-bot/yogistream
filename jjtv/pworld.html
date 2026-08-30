@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
   <meta name="referrer" content="no-referrer">
-  <title>YogiStream Fast Player | @yogiprojects</title>
+  <title>YogiStream Global Live TV | @yogiprojects</title>
 
   <!-- Shaka Player Core + UI -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
@@ -170,13 +170,13 @@
 
   <div class="player-header" id="playerHeader">
     <div class="header-left">
-      <a href="index.html" class="back-btn" title="Back to Channels">
+      <a href="/jjtv" class="back-btn" title="Back to Channels">
         <i class="fas fa-arrow-left"></i>
       </a>
       <img id="channelLogo" class="channel-logo-img" src="../assets/jiotv_plus.png" onerror="this.src='../assets/jiotv_plus.png'" alt="Logo">
       <div>
         <div id="channelTitle" class="channel-title-text">YogiStream Live</div>
-        <span class="channel-badge">LOW DATA / FAST PLAY</span>
+        <span class="channel-badge">1080P PRO</span>
       </div>
     </div>
     <div class="header-right">
@@ -221,7 +221,6 @@
     if (banner) banner.classList.add('hidden');
   }
 
-  // Fast fetch with 1.2s timeout so config NEVER hangs
   function fetchWithTimeout(url, ms = 1200) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), ms);
@@ -253,11 +252,10 @@
 
     new shaka.ui.Overlay(player, container, videoEl);
 
-    // Aggressive Low-Bandwidth / 2G-3G-4G / Instant Start Config
     player.configure({
       abr: {
         enabled: true,
-        defaultBandwidthEstimate: 500000 // 500kbps initial estimate for low net
+        defaultBandwidthEstimate: 400000
       },
       streaming: {
         lowLatencyMode: true,
@@ -273,11 +271,11 @@
       }
     });
 
-    // Fast parallel fetch (Max 1.2s)
+    // Parallel fetch channel dataset + cookies
     const [jstrData, starData, cookieData] = await Promise.all([
-      fetchWithTimeout('jstr4web.json').then(d => d || fetchWithTimeout('../api/jstr4web.json')),
+      fetchWithTimeout('jstr4web.json').then(d => d || fetchWithTimeout('/api/jstr4web.json')).then(d => d || fetchWithTimeout('../api/jstr4web.json')),
       fetchWithTimeout('https://allinonereborn2.online/jtv-fetch/jstarcookie/cookie.json'),
-      fetchWithTimeout('https://allinonereborn2.online/jstrweb2/cookies.json').then(d => d || fetchWithTimeout('../api/cookies.json'))
+      fetchWithTimeout('https://allinonereborn2.online/jstrweb2/cookies.json').then(d => d || fetchWithTimeout('/api/cookies.json'))
     ]);
 
     let primaryCookie = "";
@@ -325,15 +323,15 @@
     let activeCookie = primaryCookie;
 
     player.getNetworkingEngine().registerRequestFilter((type, request) => {
-      request.headers["Referer"] = "https://www.jiotv.com/";
-      request.headers["User-Agent"] = "plaYtv/7.1.5";
-
       if (
         activeCookie &&
         (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
          type === shaka.net.NetworkingEngine.RequestType.SEGMENT)
       ) {
-        request.uris[0] = request.uris[0].split("?")[0] + "?" + activeCookie;
+        if (request.uris[0] && !request.uris[0].includes('__hdnea__=')) {
+          const sep = request.uris[0].includes('?') ? '&' : '?';
+          request.uris[0] += sep + activeCookie;
+        }
       }
     });
 
