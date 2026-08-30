@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>YogiStream - SonyLiv Live TV | @yogiprojects</title>
-<!-- Hls.js & Shaka Player -->
+
+<!-- Hls.js & Shaka Player Core + UI -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
@@ -210,6 +212,13 @@ video {
   background: rgba(255,255,255,0.1);
   color: #fff;
 }
+
+.shaka-video-container {
+  width: 100vw;
+  height: 100dvh;
+  position: absolute;
+  inset: 0;
+}
 </style>
 </head>
 <body>
@@ -221,7 +230,7 @@ video {
     </a>
     <div>
       <div id="channelTitle" class="channel-title-text">SonyLiv Live</div>
-      <span class="channel-badge">HD STREAM</span>
+      <span class="channel-badge" id="playerBadge">HD LIVE</span>
     </div>
   </div>
   <div class="header-right">
@@ -248,11 +257,36 @@ video {
   </div>
 </div>
 
-<div class="player-container">
+<div class="player-container" id="playerWrapper">
   <video id="videoPlayer" controls autoplay playsinline preload="auto"></video>
 </div>
 
 <script>
+const SONY_JTV_MAPPING = {
+  "sony-hd": { id: "291", altName: "SET HD" },
+  "sab-hd": { id: "471", altName: "Sony SAB HD" },
+  "sony-marathi": { id: "1146", altName: "Sony Marathi SD" },
+  "sony-pal": { id: "474", altName: "Sony Pal" },
+  "sony-aath": { id: "697", altName: "Sony aath" },
+  "sony-yay": { id: "872", altName: "Sony Yay Hindi" },
+  "sony-max-hd": { id: "476", altName: "Sony Max HD" },
+  "sony-max": { id: "3418", altName: "Sony MAX1" },
+  "sony-wah": { id: "1393", altName: "Sony Wah" },
+  "sony-max2": { id: "483", altName: "Sony MAX2" },
+  "sony-pix-hd": { id: "762", altName: "Sony Pix HD" },
+  "sony-ten-1-hd": { id: "3372", altName: "Sony LIV Sports 1" },
+  "sony-ten-1": { id: "3372", altName: "Sony LIV Sports 1" },
+  "sony-ten-2-hd": { id: "3373", altName: "Sony LIV Sports 2" },
+  "sony-ten-2": { id: "3373", altName: "Sony LIV Sports 2" },
+  "sony-ten-3-hd": { id: "3374", altName: "Sony LIV Sports 3" },
+  "sony-ten-3": { id: "3374", altName: "Sony LIV Sports 3" },
+  "sony-ten-4-hd": { id: "3397", altName: "Sony LIV Sports 4 Tamil" },
+  "sony-ten-4": { id: "3397", altName: "Sony LIV Sports 4 Tamil" },
+  "sony-ten-5-hd": { id: "3399", altName: "Sony LIV Sports 5" },
+  "sony-ten-5": { id: "3399", altName: "Sony LIV Sports 5" },
+  "bbc-earth": { id: "821", altName: "Sony BBC Earth HD" }
+};
+
 const urlParams = new URLSearchParams(window.location.search);
 const channelId = urlParams.get('id');
 
@@ -285,7 +319,9 @@ if (!channelId) {
 }
 
 async function loadChannel() {
-    showLoading('Loading channel metadata…');
+    showLoading('Loading channel data…');
+    
+    // 1. Fetch sliv3.json
     let data = null;
     const sources = ['sliv3.json', '../api/sliv3.json', '/api/sliv3.json', 'https://allinonereborn2.online/sony/sliv3.json'];
     for (const src of sources) {
@@ -298,69 +334,144 @@ async function loadChannel() {
         } catch (e) {}
     }
 
-    if (!data || !data[channelId] || !data[channelId].m3u8) {
-        showError("Channel Not Found", "Stream link not available for channel: <b>" + channelId + "</b>");
-        return;
-    }
-
-    const channelData = data[channelId];
-    const chTitle = channelData.title || channelData.name || 'SonyLiv Channel';
+    const channelData = data ? data[channelId] : null;
+    const chTitle = channelData?.title || channelData?.name || channelId.toUpperCase().replace(/-/g, ' ');
     document.getElementById('channelTitle').textContent = chTitle;
     document.title = chTitle + ' - YogiStream Live';
 
-    const originalM3u8 = channelData.m3u8;
-    const proxyUrl = "https://allinonereborn2.online/livtest3/stream_proxy.php?url=" + encodeURIComponent(originalM3u8);
-    const miniProxyUrl = "https://mini.allinonereborn.site/events/stream_proxy.php?url=" + encodeURIComponent(originalM3u8);
+    // 2. Fetch cookie & JIO channels dataset
+    let jstrChannels = [];
+    let denChannels = [];
+    let liveCookie = "";
 
-    const candidates = [proxyUrl, originalM3u8, miniProxyUrl];
-    playStreamWithFallback(candidates, 0);
+    try {
+      const cookieRes = await fetch('../api/cookies.json');
+      if (cookieRes.ok) {
+        const cdata = await cookieRes.json();
+        const centry = Array.isArray(cdata) ? cdata.find(i => i.cookie) : null;
+        if (centry?.cookie) liveCookie = centry.cookie;
+      }
+    } catch (e) {}
+
+    try {
+      const jstrRes = await fetch('../api/jstr4web.json');
+      if (jstrRes.ok) jstrChannels = await jstrRes.json();
+    } catch(e) {}
+
+    try {
+      const denRes = await fetch('../api/den-ww.json');
+      if (denRes.ok) denChannels = await denRes.json();
+    } catch(e) {}
+
+    const mapping = SONY_JTV_MAPPING[channelId] || {};
+    const jtvMatch = jstrChannels.find(ch => String(ch.id) === String(mapping.id) || (mapping.altName && ch.name === mapping.altName));
+    const denMatch = denChannels.find(ch => String(ch.channel_id) === String(mapping.id) || (mapping.altName && ch.name === mapping.altName));
+
+    const candidates = [];
+
+    // Candidate 1: JIO DASH stream with ClearKey DRM
+    if (jtvMatch?.url && (jtvMatch.keyId || denMatch?.drm)) {
+      const drmMap = {};
+      if (jtvMatch.keyId && jtvMatch.key) drmMap[jtvMatch.keyId] = jtvMatch.key;
+      if (denMatch?.drm) Object.assign(drmMap, denMatch.drm);
+      candidates.push({
+        type: 'shaka',
+        url: jtvMatch.url,
+        drm: drmMap,
+        token: liveCookie
+      });
+    }
+
+    // Candidate 2: den-ww proxy MPD
+    if (denMatch?.mpd) {
+      candidates.push({
+        type: 'shaka',
+        url: denMatch.mpd,
+        drm: denMatch.drm || {},
+        token: denMatch.token || liveCookie
+      });
+    }
+
+    // Candidate 3: direct HLS m3u8
+    if (channelData?.m3u8) {
+      const proxyUrl = "https://allinonereborn2.online/livtest3/stream_proxy.php?url=" + encodeURIComponent(channelData.m3u8);
+      candidates.push({ type: 'hls', url: channelData.m3u8 });
+      candidates.push({ type: 'hls', url: proxyUrl });
+    }
+
+    if (candidates.length === 0) {
+      showError("Stream Unavailable", "No active stream available for " + chTitle);
+      return;
+    }
+
+    tryPlayCandidates(candidates, 0, chTitle);
 }
 
-function playStreamWithFallback(urls, index) {
-    if (index >= urls.length) {
-        showError("Stream Offline", "Unable to load live stream from available sources. Stream may be temporarily offline.");
-        return;
-    }
+async function tryPlayCandidates(candidates, index, chTitle) {
+  if (index >= candidates.length) {
+    showError("Stream Offline", "Unable to load stream for " + chTitle + ". Please retry or select another channel.");
+    return;
+  }
 
-    const currentUrl = urls[index];
-    showLoading('Connecting stream (' + (index + 1) + '/' + urls.length + ')…');
+  const cand = candidates[index];
+  showLoading('Connecting stream server (' + (index + 1) + '/' + candidates.length + ')…');
 
-    if (Hls.isSupported()) {
-        const hls = new Hls({
-            enableWorker: true,
-            lowLatencyMode: true,
-            manifestLoadingTimeOut: 10000,
-            levelLoadingTimeOut: 10000
-        });
+  if (cand.type === 'shaka') {
+    try {
+      shaka.polyfill.installAll();
+      if (shaka.Player.isBrowserSupported()) {
+        const player = new shaka.Player();
+        await player.attach(video);
 
-        hls.loadSource(currentUrl);
-        hls.attachMedia(video);
+        if (cand.drm && Object.keys(cand.drm).length > 0) {
+          player.configure({ drm: { clearKeys: cand.drm } });
+        }
 
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            hideLoading();
-            video.play().catch(() => {});
-        });
-
-        hls.on(Hls.Events.ERROR, function(event, errData) {
-            if (errData.fatal) {
-                hls.destroy();
-                playStreamWithFallback(urls, index + 1);
+        if (cand.token) {
+          player.getNetworkingEngine().registerRequestFilter((type, request) => {
+            request.headers['Referer'] = "https://www.jiotv.com/";
+            request.headers['User-Agent'] = "plaYtv/7.1.5";
+            if (cand.token && (type === shaka.net.NetworkingEngine.RequestType.MANIFEST || type === shaka.net.NetworkingEngine.RequestType.SEGMENT)) {
+              if (request.uris[0] && !request.uris[0].includes('__hdnea__=')) {
+                const sep = request.uris[0].includes('?') ? '&' : '?';
+                request.uris[0] += sep + (cand.token.startsWith('__hdnea__=') ? cand.token : '__hdnea__=' + cand.token);
+              }
             }
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = currentUrl;
-        video.onloadedmetadata = function() {
-            hideLoading();
-            video.play().catch(() => {});
-        };
-        video.onerror = function() {
-            playStreamWithFallback(urls, index + 1);
-        };
-    } else {
-        video.src = currentUrl;
+          });
+        }
+
+        await player.load(cand.url);
         video.play().catch(() => {});
         hideLoading();
+        return;
+      }
+    } catch(err) {
+      console.warn('Shaka candidate failed:', err);
     }
+  }
+
+  // Fallback to Hls.js
+  if (Hls.isSupported()) {
+    const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+    hls.loadSource(cand.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      hideLoading();
+      video.play().catch(() => {});
+    });
+    hls.on(Hls.Events.ERROR, function(event, data) {
+      if (data.fatal) {
+        hls.destroy();
+        tryPlayCandidates(candidates, index + 1, chTitle);
+      }
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = cand.url;
+    video.onloadedmetadata = () => { hideLoading(); video.play().catch(() => {}); };
+    video.onerror = () => tryPlayCandidates(candidates, index + 1, chTitle);
+  } else {
+    tryPlayCandidates(candidates, index + 1, chTitle);
+  }
 }
 
 loadChannel();
