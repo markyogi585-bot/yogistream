@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/api/(.*)",
@@ -29,6 +30,13 @@
     { "source": "/zee5", "destination": "/zee5/index.html" },
     { "source": "/zee5/", "destination": "/zee5/index.html" },
     { "source": "/fcw", "destination": "/fcw/index.html" },
-    { "source": "/fcw/", "destination": "/fcw/index.html" }
+    { "source": "/fcw/", "destination": "/fcw/index.html" },
+    { "source": "/tv", "destination": "/tv/index.html" },
+    { "source": "/tv/", "destination": "/tv/index.html" },
+    { "source": "/playlist", "destination": "/playlist/index.html" },
+    { "source": "/playlist/", "destination": "/playlist/index.html" },
+    { "source": "/player", "destination": "/player/index.html" },
+    { "source": "/player/", "destination": "/player/index.html" },
+    { "source": "/api/playlist", "destination": "/api/playlist.js" }
   ]
 }

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YogiStream M3U Playlist & EPG Generator | @yogiprojects</title>
+  
+  <meta name="description" content="Generate and download 100% working live M3U playlists with ClearKey DRM tags for IPTV Smarters, TiviMate, OTT Navigator, Kodi, and VLC.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --primary-glow: rgba(0, 240, 255, 0.35);
+      --secondary: #ff0055;
+      --bg-dark: #070913;
+      --bg-card: rgba(16, 20, 36, 0.7);
+      --text-main: #f0f4ff;
+      --text-muted: #8a99ad;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(0, 240, 255, 0.4);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.05), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 85, 0.05), transparent 40%);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 75px;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 9, 19, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .brand-title span { color: var(--primary); }
+
+    .tg-pill {
+      background: linear-gradient(90deg, #0088cc, #00c6ff);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Header Banner */
+    .header-banner {
+      padding: 40px 24px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .banner-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .banner-title span {
+      background: linear-gradient(90deg, #00f0ff, #ff0055);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .banner-sub {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Playlist Box */
+    .playlist-card {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+    }
+    .playlist-label {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .url-box-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .url-input {
+      flex: 1;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 14px 18px;
+      border-radius: 14px;
+      color: #00f0ff;
+      font-family: monospace;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .copy-btn {
+      background: linear-gradient(90deg, #00f0ff, #7928ca);
+      color: #000;
+      border: none;
+      padding: 0 24px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+    .action-btn-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .action-btn-card:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .action-btn-card i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .action-btn-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .action-btn-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Live Channel Table */
+    .table-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .table-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .table-badge {
+      font-size: 0.8rem;
+      background: rgba(255, 0, 85, 0.2);
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .playlist-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      background: rgba(255,255,255,0.03);
+      padding: 14px 18px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+    .ch-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+    .ch-logo-mini {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.5);
+      padding: 2px;
+    }
+    .tag-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+    }
+    .tag-pill.drm {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--primary);
+    }
+    .table-play-btn {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .table-play-btn:hover {
+      background: var(--primary);
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 18px; }
+      .banner-title { font-size: 1.75rem; }
+      .actions-grid { grid-template-columns: 1fr; }
+      .mobile-bottom-nav { display: flex; }
+      body { padding-bottom: 75px; }
+    }
+
+    /* Mobile Bottom Sticky Navigation */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(8, 10, 18, 0.94);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 9999;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .mob-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .mob-nav-item i { font-size: 1.2rem; }
+    .mob-nav-item.active, .mob-nav-item:hover { color: var(--primary); }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="brand-title">Yogi<span>Stream</span> Playlist</div>
+    </div>
+    <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-pill">
+      <i class="fab fa-telegram-plane"></i> @yogiprojects
+    </a>
+  </header>
+
+  <!-- Banner -->
+  <section class="header-banner">
+    <div class="banner-badge"><i class="fas fa-list-ul"></i> M3U PLAYLIST & EPG GENERATOR</div>
+    <h1 class="banner-title">Universal <span>Live Stream Playlist</span></h1>
+    <p class="banner-sub">One-click live M3U generator for IPTV apps, TiviMate, OTT Navigator, Kodi, and VLC player with ClearKey DRM.</p>
+  </section>
+
+  <!-- Playlist URL Card -->
+  <div class="playlist-card">
+    <div class="playlist-label"><i class="fas fa-link"></i> Live M3U Endpoint URL</div>
+    <div class="url-box-wrap">
+      <input type="text" id="m3uUrlInput" class="url-input" readonly>
+      <button class="copy-btn" onclick="copyPlaylistUrl()">
+        <i class="fas fa-copy"></i> Copy Link
+      </button>
+    </div>
+
+    <div class="actions-grid">
+      <div class="action-btn-card" onclick="downloadM3uFile()">
+        <i class="fas fa-download"></i>
+        <div class="action-btn-title">Download .M3U</div>
+        <div class="action-btn-sub">Offline IPTV playlist file</div>
+      </div>
+      <a href="/jjtv" class="action-btn-card">
+        <i class="fas fa-tv"></i>
+        <div class="action-btn-title">JioTV+ Hub</div>
+        <div class="action-btn-sub">900+ Live Channels</div>
+      </a>
+      <a href="/zee5" class="action-btn-card">
+        <i class="fas fa-film"></i>
+        <div class="action-btn-title">Zee5 Hub</div>
+        <div class="action-btn-sub">ClearKey Decoded Stream</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Channel Preview Table -->
+  <section class="table-section">
+    <div class="table-title">
+      <span>Included Channels</span>
+      <span class="table-badge" id="chCountBadge">Loading...</span>
+    </div>
+
+    <div class="playlist-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Category</th>
+            <th>DRM Type</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="playlistTableBody">
+          <tr><td colspan="4" style="text-align:center; padding:30px; color:#8a99ad;">Loading playlist channels...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    const origin = window.location.origin;
+    const playlistApiUrl = origin + '/api/playlist';
+    document.getElementById('m3uUrlInput').value = playlistApiUrl;
+
+    let playlistChannels = [];
+
+    async function loadPlaylistData() {
+      try {
+        const res = await fetch('/api/channels199.json');
+        const data = await res.json();
+        if (data && data.channels) {
+          playlistChannels = data.channels.map(c => {
+            const keyId = c.clearkey?.keyId || '';
+            const key = c.clearkey?.key || '';
+            return {
+              name: c.name,
+              logo: c.logo || '/assets/zee5.jpg',
+              category: c.genre || 'Entertainment',
+              playUrl: `/player?type=dash&mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}&logo=${encodeURIComponent(c.logo || '')}`
+            };
+          });
+
+          renderTable(playlistChannels);
+          document.getElementById('chCountBadge').textContent = `${playlistChannels.length} Streams Active`;
+        }
+      } catch (e) {}
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('playlistTableBody');
+      tbody.innerHTML = list.map(c => `
+        <tr>
+          <td>
+            <div class="ch-cell">
+              <img src="${c.logo}" onerror="this.src='/assets/logo.jpg'" class="ch-logo-mini" alt="${c.name}">
+              <span>${c.name}</span>
+            </div>
+          </td>
+          <td><span class="tag-pill">${c.category}</span></td>
+          <td><span class="tag-pill drm">ClearKey WDV</span></td>
+          <td>
+            <a href="${c.playUrl}" class="table-play-btn">
+              <i class="fas fa-play"></i> Watch
+            </a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function copyPlaylistUrl() {
+      const input = document.getElementById('m3uUrlInput');
+      input.select();
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy"></i> Copy Link';
+        }, 2000);
+      });
+    }
+
+    function downloadM3uFile() {
+      window.location.href = '/api/playlist';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPlaylistData);
+  </script>
+
+  <!-- Mobile Bottom Sticky Navigation -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="mob-nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="/jjtv" class="mob-nav-item">
+      <i class="fas fa-tv"></i>
+      <span>JioTV+</span>
+    </a>
+    <a href="/zee5" class="mob-nav-item">
+      <i class="fas fa-film"></i>
+      <span>Zee5</span>
+    </a>
+    <a href="/events" class="mob-nav-item">
+      <i class="fas fa-baseball-ball"></i>
+      <span>Sports</span>
+    </a>
+    <a href="/playlist" class="mob-nav-item active">
+      <i class="fas fa-list-ul"></i>
+      <span>M3U</span>
+    </a>
+  </nav>
+
+  <script src="/assets/security.js"></script>
+</body>
+</html>
