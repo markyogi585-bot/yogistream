@@ -749,13 +749,12 @@
                 });
             }
 
-            // regular card click
+            // direct instant card click
             document.querySelectorAll('.channel-card:not(.telegram-card)').forEach(card => {
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('.bookmark-btn')) return;
                     const chId = card.dataset.channelId;
-                    const chName = card.dataset.channelName;
-                    openModal(chId, chName);
+                    window.location.href = `pworld.html?id=${encodeURIComponent(chId)}`;
                 });
             });
         }

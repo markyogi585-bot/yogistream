@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>YogiStream Universal Master Player | @yogiprojects</title>
+
+  <!-- Shaka Player Core + UI -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
+  
+  <!-- HLS.js for HLS streams -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --accent: #ff005a;
+      --glow: rgba(0, 240, 255, 0.4);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      background: #000;
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: #fff;
+    }
+
+    /* Ambient Glow Behind Video */
+    .ambient-glow {
+      position: absolute;
+      inset: -30px;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.2), transparent 70%);
+      filter: blur(50px);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .shaka-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 5;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
+      transition: object-fit 0.2s;
+    }
+
+    /* Top Controls Bar */
+    .player-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 25;
+      pointer-events: none;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+      color: #000;
+      transform: scale(1.08);
+    }
+    .channel-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.6);
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .channel-title-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+    }
+    .channel-badge {
+      background: linear-gradient(90deg, #00f0ff, #7928ca);
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+    .player-tool-btn {
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .player-tool-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 0, 90, 0.25);
+      border: 1px solid rgba(255, 0, 90, 0.5);
+      color: #ff005a;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #ff005a;
+      border-radius: 50%;
+      animation: pulseDot 1.2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* In-Player Channel Drawer Modal */
+    .channel-drawer {
+      position: fixed;
+      top: 0;
+      right: -360px;
+      width: 340px;
+      height: 100vh;
+      background: rgba(10, 13, 24, 0.96);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -15px 0 40px rgba(0,0,0,0.8);
+    }
+    .channel-drawer.open { right: 0; }
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .drawer-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; }
+    .drawer-close {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .drawer-search {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+      margin-bottom: 14px;
+    }
+    .drawer-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drawer-list::-webkit-scrollbar { width: 4px; }
+    .drawer-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .drawer-item:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-left: 3px solid var(--primary);
+      padding-left: 12px;
+    }
+    .drawer-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.5);
+      padding: 2px;
+    }
+
+    /* Quality Dropdown Menu */
+    .quality-menu {
+      position: absolute;
+      top: 60px;
+      right: 120px;
+      background: rgba(14, 18, 32, 0.95);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 50;
+      min-width: 130px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .quality-menu.open { display: flex; }
+    .quality-item {
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quality-item:hover, .quality-item.active {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .unmute-banner {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 25;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .unmute-banner.hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+  <div class="ambient-glow" id="ambientGlow"></div>
+
+  <!-- Top Floating Header -->
+  <div class="player-header">
+    <div class="header-left">
+      <a href="index.html" class="back-btn" title="Back to Channels">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <img id="channelLogo" class="channel-logo-img" src="assets/logo.jpg" onerror="this.src='assets/logo.jpg'" alt="Logo">
+      <div>
+        <div id="channelTitle" class="channel-title-text">YogiStream Live</div>
+        <span class="channel-badge" id="playerBadge">1080P PRO</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- Quality Selector -->
+      <button class="player-tool-btn" onclick="toggleQualityMenu()" title="Stream Quality">
+        <i class="fas fa-cog"></i> <span id="qualityLabel">Auto</span>
+      </button>
+
+      <!-- Aspect Ratio -->
+      <button class="player-tool-btn" onclick="cycleAspectRatio()" title="Aspect Ratio (Key: A)">
+        <i class="fas fa-expand"></i> <span id="aspectLabel">FIT</span>
+      </button>
+
+      <!-- PiP -->
+      <button class="player-tool-btn" onclick="togglePiP()" title="Picture-in-Picture (Key: P)">
+        <i class="fas fa-clone"></i> PiP
+      </button>
+
+      <!-- In-player channel drawer -->
+      <button class="player-tool-btn" onclick="toggleChannelDrawer()" title="All Channels (Key: C)">
+        <i class="fas fa-list"></i> Channels
+      </button>
+
+      <!-- Live badge -->
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span>LIVE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quality Dropdown -->
+  <div class="quality-menu" id="qualityMenu">
+    <div class="quality-item active" onclick="setQuality('auto')">Auto (Recommended)</div>
+    <div class="quality-item" onclick="setQuality('1080')">1080p Full HD</div>
+    <div class="quality-item" onclick="setQuality('720')">720p HD</div>
+    <div class="quality-item" onclick="setQuality('480')">480p SD</div>
+    <div class="quality-item" onclick="setQuality('360')">360p Low Data</div>
+  </div>
+
+  <!-- Quick In-Player Channel Drawer -->
+  <div class="channel-drawer" id="channelDrawer">
+    <div class="drawer-head">
+      <div class="drawer-title"><i class="fas fa-tv" style="color:var(--primary);"></i> Live Channels</div>
+      <button class="drawer-close" onclick="toggleChannelDrawer()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="text" class="drawer-search" id="drawerSearch" placeholder="Search channels..." oninput="filterDrawerChannels()">
+    <div class="drawer-list" id="drawerList"></div>
+  </div>
+
+  <div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
+    <i class="fas fa-volume-up"></i>
+    <span>Click anywhere to Unmute Audio</span>
+  </div>
+
+  <div class="shaka-video-container" id="player-container" data-shaka-player data-shaka-controls>
+    <video id="video" autoplay playsinline preload="auto"></video>
+  </div>
+
+  <script>
+  let globalVideo = document.getElementById('video');
+  let globalPlayer = null;
+  let drawerChannels = [];
+
+  const aspectRatios = ['contain', 'cover', 'fill', 'none'];
+  const aspectLabels = ['FIT', 'COVER', 'FILL', 'STRETCH'];
+  let aspectIdx = 0;
+
+  function cycleAspectRatio() {
+    aspectIdx = (aspectIdx + 1) % aspectRatios.length;
+    globalVideo.style.objectFit = aspectRatios[aspectIdx];
+    document.getElementById('aspectLabel').textContent = aspectLabels[aspectIdx];
+  }
+
+  async function togglePiP() {
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+      } else if (document.pictureInPictureEnabled) {
+        await globalVideo.requestPictureInPicture();
+      }
+    } catch (e) {}
+  }
+
+  function toggleQualityMenu() {
+    document.getElementById('qualityMenu').classList.toggle('open');
+  }
+
+  function setQuality(height) {
+    document.getElementById('qualityLabel').textContent = height === 'auto' ? 'Auto' : height + 'p';
+    document.getElementById('qualityMenu').classList.remove('open');
+    if (!globalPlayer) return;
+
+    if (height === 'auto') {
+      globalPlayer.configure({ abr: { enabled: true } });
+    } else {
+      globalPlayer.configure({ abr: { enabled: false } });
+      const tracks = globalPlayer.getVariantTracks();
+      const target = tracks.find(t => t.height === parseInt(height));
+      if (target) globalPlayer.selectVariantTrack(target, true);
+    }
+  }
+
+  function toggleChannelDrawer() {
+    const d = document.getElementById('channelDrawer');
+    d.classList.toggle('open');
+    if (d.classList.contains('open') && drawerChannels.length === 0) {
+      loadDrawerChannels();
+    }
+  }
+
+  async function loadDrawerChannels() {
+    try {
+      const [r1, r2] = await Promise.allSettled([
+        fetch('api/channels199.json').then(r => r.json()),
+        fetch('api/jstr4web.json').then(r => r.json())
+      ]);
+
+      const list = [];
+      if (r1.status === 'fulfilled' && r1.value?.channels) {
+        r1.value.channels.forEach(c => {
+          const keyId = c.clearkey?.keyId || '';
+          const key = c.clearkey?.key || '';
+          list.push({
+            name: c.name,
+            logo: c.logo || 'assets/zee5.jpg',
+            url: `player.html?type=dash&mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}&logo=${encodeURIComponent(c.logo || '')}`
+          });
+        });
+      }
+
+      if (r2.status === 'fulfilled' && Array.isArray(r2.value)) {
+        r2.value.slice(0, 100).forEach(c => {
+          list.push({
+            name: c.name,
+            logo: c.logo || 'assets/jiotv_plus.png',
+            url: `jjtv/pworld.html?id=${encodeURIComponent(c.id)}`
+          });
+        });
+      }
+
+      drawerChannels = list;
+      renderDrawerList(drawerChannels);
+    } catch(e) {}
+  }
+
+  function renderDrawerList(list) {
+    const c = document.getElementById('drawerList');
+    c.innerHTML = list.map(ch => `
+      <a href="${ch.url}" class="drawer-item">
+        <img src="${ch.logo}" onerror="this.src='assets/logo.jpg'" class="drawer-logo" alt="${ch.name}">
+        <span>${ch.name}</span>
+      </a>
+    `).join('');
+  }
+
+  function filterDrawerChannels() {
+    const q = (document.getElementById('drawerSearch')?.value || '').toLowerCase().trim();
+    const filtered = drawerChannels.filter(c => c.name.toLowerCase().includes(q));
+    renderDrawerList(filtered);
+  }
+
+  function enableAudio() {
+    if (globalVideo) {
+      globalVideo.muted = false;
+      globalVideo.volume = 1.0;
+    }
+    const banner = document.getElementById('unmuteBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+
+  // Main Stream Initializer
+  async function initPlayer() {
+    const p = new URLSearchParams(window.location.search);
+    const type = p.get('type') || (p.get('mpd') ? 'dash' : 'hls');
+    const mpdUrl = p.get('mpd') || p.get('url');
+    const keyId = p.get('keyid');
+    const key = p.get('key');
+    const title = p.get('title') || 'YogiStream Live';
+    const logo = p.get('logo');
+
+    document.getElementById('channelTitle').textContent = title;
+    if (logo) document.getElementById('channelLogo').src = logo;
+    document.title = title + ' - YogiStream Live';
+
+    if (!mpdUrl) return;
+
+    shaka.polyfill.installAll();
+    const video = document.getElementById('video');
+    globalVideo = video;
+
+    // Default Volume 100% Unmuted
+    video.muted = false;
+    video.volume = 1.0;
+
+    const container = document.getElementById('player-container');
+    const player = new shaka.Player();
+    globalPlayer = player;
+    await player.attach(video);
+
+    new shaka.ui.Overlay(player, container, video);
+
+    const drmConfig = {};
+    if (keyId && key) {
+      drmConfig.clearKeys = {};
+      drmConfig.clearKeys[keyId] = key;
+    }
+
+    player.configure({
+      drm: drmConfig,
+      streaming: {
+        lowLatencyMode: true,
+        bufferingGoal: 2,
+        rebufferingGoal: 0.5
+      }
+    });
+
+    try {
+      await player.load(mpdUrl);
+      video.play().catch(() => {
+        video.muted = true;
+        video.play().catch(() => {});
+        document.getElementById('unmuteBanner')?.classList.remove('hidden');
+      });
+    } catch (e) {
+      console.warn('Stream play error:', e);
+    }
+  }
+
+  // Keyboard Shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === ' ' || e.key === 'k') {
+      globalVideo.paused ? globalVideo.play() : globalVideo.pause();
+      e.preventDefault();
+    } else if (e.key === 'f' || e.key === 'F') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    } else if (e.key === 'm' || e.key === 'M') {
+      globalVideo.muted = !globalVideo.muted;
+    } else if (e.key === 'a' || e.key === 'A') {
+      cycleAspectRatio();
+    } else if (e.key === 'p' || e.key === 'P') {
+      togglePiP();
+    } else if (e.key === 'c' || e.key === 'C') {
+      toggleChannelDrawer();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', initPlayer);
+  document.addEventListener('click', () => { enableAudio(); }, { once: true });
+  </script>
+</body>
+</html>

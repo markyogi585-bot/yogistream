@@ -543,16 +543,16 @@
     }
 
     function copyM3uUrl() {
-      const url = window.location.origin + '/api/channels199.json';
+      const url = window.location.origin + '/api/playlist';
       navigator.clipboard.writeText(url).then(() => {
-        alert('Playlist URL copied to clipboard!');
+        alert('Live M3U Playlist URL copied to clipboard!\n\n' + url);
       });
     }
 
     function copyEpgUrl() {
       const url = window.location.origin + '/sitemap.xml';
       navigator.clipboard.writeText(url).then(() => {
-        alert('EPG Guide URL copied to clipboard!');
+        alert('EPG Guide XML URL copied to clipboard!\n\n' + url);
       });
     }
 

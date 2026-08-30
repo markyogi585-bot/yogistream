@@ -99,6 +99,42 @@ while ($listener.IsListening) {
             }
         }
 
+        # Handle /api/playlist endpoint
+        if ($rawPath -eq 'api/playlist' -or $rawPath -eq 'api/playlist.m3u' -or $rawPath -eq 'playlist.m3u') {
+            try {
+                $chFile = Join-Path $basePath 'api\channels199.json'
+                $m3uText = "#EXTM3U`n#PLAYLIST:YogiStream Live TV Hub (@yogiprojects)`n`n"
+                if (Test-Path $chFile) {
+                    $jsonObj = Get-Content $chFile -Raw | ConvertFrom-Json
+                    foreach ($ch in $jsonObj.channels) {
+                        $name = $ch.name
+                        $genre = if ($ch.genre) { $ch.genre } else { 'Entertainment' }
+                        $logo = if ($ch.logo) { $ch.logo } else { "http://localhost:$port/assets/logo.jpg" }
+                        $keyId = if ($ch.clearkey) { $ch.clearkey.keyId } else { '' }
+                        $key = if ($ch.clearkey) { $ch.clearkey.key } else { '' }
+                        $playUrl = "http://localhost:$port/player.html?type=dash&mpd=" + [System.Uri]::EscapeDataString($ch.mpd) + "&keyid=" + [System.Uri]::EscapeDataString($keyId) + "&key=" + [System.Uri]::EscapeDataString($key) + "&title=" + [System.Uri]::EscapeDataString($name)
+
+                        $m3uText += "#EXTINF:-1 tvg-id=`"$name`" tvg-name=`"$name`" tvg-logo=`"$logo`" group-title=`"$genre`",$name`n"
+                        if ($keyId -and $key) {
+                            $m3uText += "#KODIPROP:inputstream.adaptive.license_type=clearkey`n"
+                            $m3uText += "#KODIPROP:inputstream.adaptive.license_key=${keyId}:${key}`n"
+                        }
+                        $m3uText += "$playUrl`n`n"
+                    }
+                }
+                $bytes = [System.Text.Encoding]::UTF8.GetBytes($m3uText)
+                $response.ContentType = 'audio/x-mpegurl; charset=utf-8'
+                $response.Headers.Add('Content-Disposition', 'attachment; filename="yogistream_playlist.m3u"')
+                $response.ContentLength64 = $bytes.Length
+                $response.StatusCode = 200
+                $response.OutputStream.Write($bytes, 0, $bytes.Length)
+            } catch {
+                $response.StatusCode = 500
+            }
+            $response.Close()
+            continue
+        }
+
         if ([string]::IsNullOrWhiteSpace($rawPath)) {
             $rawPath = 'index.html'
         }
