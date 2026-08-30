@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>YogiStream - Zee5 Live TV | @yogiprojects</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     
@@ -18,13 +18,14 @@
             height: 100vh;
             height: 100dvh;
             overflow: hidden;
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             color: #fff;
         }
-        .video-container {
+        .shaka-video-container {
             width: 100vw;
             height: 100dvh;
-            position: relative;
+            position: absolute;
+            inset: 0;
             background: #000;
         }
         video {
@@ -38,7 +39,7 @@
             top: 0;
             left: 0;
             right: 0;
-            padding: 16px 20px;
+            padding: 18px 24px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
             display: flex;
             align-items: center;
@@ -50,34 +51,34 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             pointer-events: auto;
         }
         .back-btn {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            font-size: 1rem;
-            backdrop-filter: blur(8px);
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
             transition: all 0.2s;
         }
         .back-btn:hover {
-            background: #800080;
-            color: #fff;
-            transform: scale(1.05);
+            background: #d170ff;
+            color: #000;
+            transform: scale(1.08);
         }
         .channel-title-text {
-            font-size: 1.05rem;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 800;
             color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
         }
         .channel-badge {
             background: linear-gradient(90deg, #9900ee, #ff0077);
@@ -101,14 +102,14 @@
             background: rgba(153, 0, 238, 0.25);
             border: 1px solid rgba(153, 0, 238, 0.5);
             color: #d170ff;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 800;
         }
         .live-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             background: #d170ff;
             border-radius: 50%;
             animation: pulseDot 1.2s infinite;
@@ -117,6 +118,34 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(1.3); }
         }
+
+        .unmute-banner {
+          position: absolute;
+          bottom: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0,0,0,0.85);
+          border: 1px solid rgba(209, 112, 255, 0.4);
+          color: #fff;
+          padding: 10px 22px;
+          border-radius: 30px;
+          font-size: 0.9rem;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          z-index: 25;
+          cursor: pointer;
+          backdrop-filter: blur(8px);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+          animation: bounce 2s infinite;
+        }
+        .unmute-banner.hidden { display: none; }
+        @keyframes bounce {
+          0%, 100% { transform: translate(-50%, 0); }
+          50% { transform: translate(-50%, -6px); }
+        }
+
         .error-overlay {
             position: absolute;
             inset: 0;
@@ -124,7 +153,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.88);
+            background: rgba(0,0,0,0.9);
             color: #ff5555;
             padding: 20px;
             text-align: center;
@@ -132,13 +161,14 @@
         }
         .error-overlay button {
             margin-top: 15px;
-            padding: 10px 24px;
+            padding: 11px 26px;
             border-radius: 30px;
             background: linear-gradient(90deg, #9900ee, #ff0077);
             color: #fff;
-            font-weight: 700;
+            font-weight: 800;
             border: none;
             cursor: pointer;
+            transition: 0.2s;
         }
     </style>
 </head>
@@ -151,7 +181,7 @@
         </a>
         <div>
           <div id="channelTitle" class="channel-title-text">Zee5 Live TV</div>
-          <span class="channel-badge">CLEARKEY DRM</span>
+          <span class="channel-badge">CLEARKEY 1080P</span>
         </div>
       </div>
       <div class="header-right">
@@ -162,11 +192,27 @@
       </div>
     </div>
 
-    <div class="video-container" id="player-container" data-shaka-player-container>
-        <video id="video" autoplay playsinline data-shaka-player></video>
+    <div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
+      <i class="fas fa-volume-up"></i>
+      <span>Click to Unmute Audio</span>
+    </div>
+
+    <div class="shaka-video-container" id="player-container" data-shaka-player data-shaka-controls>
+        <video id="video" autoplay playsinline preload="auto"></video>
     </div>
 
     <script>
+        let globalVideo = document.getElementById('video');
+
+        function enableAudio() {
+          if (globalVideo) {
+            globalVideo.muted = false;
+            globalVideo.volume = 1.0;
+          }
+          const banner = document.getElementById('unmuteBanner');
+          if (banner) banner.classList.add('hidden');
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const mpdUrl = urlParams.get('mpd');
         const keyId = urlParams.get('keyid');
@@ -190,6 +236,12 @@
             }
 
             const video = document.getElementById('video');
+            globalVideo = video;
+            
+            // Default Volume ON
+            video.muted = false;
+            video.volume = 1.0;
+
             const container = document.getElementById('player-container');
             const player = new shaka.Player();
             await player.attach(video);
@@ -199,11 +251,9 @@
                 controlPanelElements: [
                     'play_pause',
                     'time_and_duration',
-                    'mute',
                     'volume',
                     'spacer',
                     'quality',
-                    'picture_in_picture',
                     'fullscreen'
                 ],
                 seekBarColors: {
@@ -230,9 +280,13 @@
 
             try {
                 await player.load(mpdUrl);
-                video.play().catch(() => {});
+                video.play().catch(() => {
+                  video.muted = true;
+                  video.play().catch(() => {});
+                  const banner = document.getElementById('unmuteBanner');
+                  if (banner) banner.classList.remove('hidden');
+                });
             } catch (e) {
-                console.error('Error loading stream', e);
                 showError("Stream Playback Error", e.message || "Failed to decode or play DASH ClearKey stream.");
             }
         }
@@ -249,6 +303,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
+        document.addEventListener('click', () => { enableAudio(); }, { once: true });
     </script>
     <script src="../assets/security.js"></script>
 </body>

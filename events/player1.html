@@ -2,116 +2,289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>YogiStream - Live Event Player | @yogiprojects</title>
-<script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>YogiStream - Live Match Player | @yogiprojects</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
-  margin: 0;
-  padding: 0;
   background: #000;
   width: 100vw;
+  height: 100vh;
   height: 100dvh;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #fff;
 }
-#player {
+.player-container {
   width: 100vw;
   height: 100dvh;
-  max-width: 100%;
-  max-height: 100%;
   position: relative;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.error-msg {
-  color: #ff4757;
-  text-align: center;
-  padding: 20px;
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
 }
+/* Top Header */
+.player-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 24px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+}
+.back-btn {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.1rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+.back-btn:hover {
+  background: #ff0055;
+  color: #fff;
+  transform: scale(1.08);
+}
+.channel-title-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+}
+.channel-badge {
+  background: linear-gradient(90deg, #ff0055, #ff7700);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 0, 85, 0.25);
+  border: 1px solid rgba(255, 0, 85, 0.5);
+  color: #ff0055;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: #ff0055;
+  border-radius: 50%;
+  animation: pulseDot 1.2s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.3); }
+}
+
+.unmute-banner {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  border: 1px solid rgba(255, 0, 85, 0.4);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 25;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  animation: bounce 2s infinite;
+}
+.unmute-banner.hidden { display: none; }
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -6px); }
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 15;
+  gap: 14px;
+  pointer-events: none;
+}
+.loading-overlay.hidden { display: none; }
+.loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3.5px solid rgba(255, 0, 85, 0.2);
+  border-top-color: #ff0055;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 0.9rem; color: #a4b3d8; font-weight: 700; }
 </style>
 </head>
 <body>
-<div id="player"></div>
+
+<div class="player-header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn" title="Back to Events">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+    <div>
+      <div id="eventTitle" class="channel-title-text">Live Match Feed</div>
+      <span class="channel-badge">LIVE EVENT</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-indicator">
+      <div class="live-dot"></div>
+      <span>LIVE</span>
+    </div>
+  </div>
+</div>
+
+<div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
+  <i class="fas fa-volume-up"></i>
+  <span>Click to Unmute Audio</span>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loader-spinner"></div>
+  <div class="loading-text" id="loadingText">Connecting to Live Stream…</div>
+</div>
+
+<div class="player-container">
+  <video id="videoPlayer" controls autoplay playsinline preload="auto"></video>
+</div>
 
 <script>
+let globalVideo = document.getElementById('videoPlayer');
+
+function enableAudio() {
+  if (globalVideo) {
+    globalVideo.muted = false;
+    globalVideo.volume = 1.0;
+  }
+  const banner = document.getElementById('unmuteBanner');
+  if (banner) banner.classList.add('hidden');
+}
+
 const urlParams = new URLSearchParams(window.location.search);
 let videoUrl = urlParams.get('url');
+const matchName = urlParams.get('name');
+
+if (matchName) {
+  document.getElementById('eventTitle').textContent = matchName;
+  document.title = matchName + ' - YogiStream Live';
+}
 
 if (!videoUrl) {
-    document.body.innerHTML = '<h2 class="error-msg">Stream URL Missing in query params (?url=...)</h2>';
-    throw new Error("No stream URL");
+  document.body.innerHTML = '<h2 style="color:#ff4757; text-align:center; padding:40px;">Stream URL Missing in parameters (?url=...)</h2>';
+  throw new Error("No stream URL");
 }
 
 let rawUrl = videoUrl;
 if (videoUrl.includes('stream_proxy.php?url=')) {
-    try {
-        rawUrl = decodeURIComponent(videoUrl.split('stream_proxy.php?url=')[1]);
-    } catch(e) {}
+  try {
+    rawUrl = decodeURIComponent(videoUrl.split('stream_proxy.php?url=')[1]);
+  } catch(e) {}
 }
 
-function initPlayer(streamUrl) {
-    try {
-        const player = jwplayer("player");
-        player.setup({
-            file: streamUrl,
-            width: "100%",
-            height: "100%",
-            autostart: true,
-            mute: false,
-            primary: "html5",
-            stretching: "uniform",
-            controls: true,
-            qualityLabels: false
-        });
+const loadingOverlay = document.getElementById('loadingOverlay');
+const unmuteBanner = document.getElementById('unmuteBanner');
 
-        player.on('error', function() {
-            if (rawUrl && streamUrl !== rawUrl) {
-                initPlayer(rawUrl);
-            } else {
-                fallbackHLS(streamUrl);
-            }
-        });
-    } catch(err) {
-        fallbackHLS(streamUrl);
-    }
+function initHlsPlayer(streamUrl) {
+  globalVideo.muted = false;
+  globalVideo.volume = 1.0;
+
+  if (Hls.isSupported()) {
+    const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+    hls.loadSource(streamUrl);
+    hls.attachMedia(globalVideo);
+
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      if (loadingOverlay) loadingOverlay.classList.add('hidden');
+      globalVideo.play().catch(() => {
+        globalVideo.muted = true;
+        globalVideo.play().catch(() => {});
+        if (unmuteBanner) unmuteBanner.classList.remove('hidden');
+      });
+    });
+
+    hls.on(Hls.Events.ERROR, function(event, data) {
+      if (data.fatal && rawUrl && streamUrl !== rawUrl) {
+        hls.loadSource(rawUrl);
+      }
+    });
+  } else if (globalVideo.canPlayType('application/vnd.apple.mpegurl')) {
+    globalVideo.src = streamUrl;
+    globalVideo.onloadedmetadata = () => {
+      if (loadingOverlay) loadingOverlay.classList.add('hidden');
+      globalVideo.play().catch(() => {
+        globalVideo.muted = true;
+        globalVideo.play().catch(() => {});
+        if (unmuteBanner) unmuteBanner.classList.remove('hidden');
+      });
+    };
+  }
 }
 
-function fallbackHLS(streamUrl) {
-    const playerContainer = document.getElementById('player');
-    playerContainer.innerHTML = '';
-    const video = document.createElement('video');
-    video.controls = true;
-    video.autoplay = true;
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.objectFit = 'contain';
-    playerContainer.appendChild(video);
+initHlsPlayer(videoUrl);
 
-    if (Hls.isSupported()) {
-        const hls = new Hls({
-            enableWorker: true,
-            lowLatencyMode: true
-        });
-        hls.loadSource(streamUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.ERROR, function(event, data) {
-            if (data.fatal && rawUrl && streamUrl !== rawUrl) {
-                hls.loadSource(rawUrl);
-            }
-        });
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            video.play().catch(() => {});
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.play().catch(() => {});
-    }
-}
-
-initPlayer(videoUrl);
+document.addEventListener('click', () => {
+  enableAudio();
+}, { once: true });
 </script>
 <script src="../assets/security.js"></script>
 </body>

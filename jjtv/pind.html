@@ -20,7 +20,7 @@
       height: 100dvh;
       width: 100vw;
       overflow: hidden;
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       color: #fff;
     }
 
@@ -39,13 +39,13 @@
       object-fit: contain;
     }
 
-    /* Top Header */
+    /* Floating Clean Top Bar */
     .player-header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      padding: 16px 20px;
+      padding: 18px 24px;
       background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
       display: flex;
       align-items: center;
@@ -54,94 +54,78 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
-
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       pointer-events: auto;
     }
-
     .back-btn {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
       color: #fff;
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      font-size: 1rem;
-      backdrop-filter: blur(8px);
+      font-size: 1.1rem;
+      backdrop-filter: blur(10px);
       transition: all 0.2s;
     }
     .back-btn:hover {
-      background: #ff0055;
+      background: #ff005a;
       color: #fff;
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
-
-    .channel-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
     .channel-logo-img {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       object-fit: contain;
-      background: rgba(0,0,0,0.5);
-      padding: 2px;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.6);
+      padding: 3px;
+      border: 1px solid rgba(255,255,255,0.15);
     }
-
     .channel-title-text {
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 800;
       color: #fff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
     }
-
     .channel-badge {
-      background: linear-gradient(90deg, #ff0055, #ff7700);
+      background: linear-gradient(90deg, #ff005a, #ff7700);
       color: #fff;
       font-size: 10px;
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 20px;
-      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
     .header-right {
       display: flex;
       align-items: center;
       gap: 10px;
       pointer-events: auto;
     }
-
     .live-indicator {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 0, 85, 0.25);
-      border: 1px solid rgba(255, 0, 85, 0.5);
-      color: #ff3366;
-      padding: 4px 10px;
+      background: rgba(255, 0, 90, 0.25);
+      border: 1px solid rgba(255, 0, 90, 0.5);
+      color: #ff005a;
+      padding: 5px 12px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.5px;
     }
-
     .live-dot {
-      width: 6px;
-      height: 6px;
-      background: #ff3366;
+      width: 7px;
+      height: 7px;
+      background: #ff005a;
       border-radius: 50%;
       animation: pulseDot 1.2s infinite;
     }
@@ -150,71 +134,33 @@
       50% { opacity: 0.3; transform: scale(1.3); }
     }
 
-    .shaka-spinner-container, .shaka-spinner, .shaka-spinner-svg {
-      display: none !important;
-    }
-
-    /* Error Modal */
-    .error-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-    }
-    .error-modal.hidden { display: none !important; }
-
-    .error-content {
-      background: #151624;
-      border-radius: 24px;
-      padding: 30px;
-      max-width: 480px;
-      width: 90%;
-      text-align: center;
-      color: #f0f4ff;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-      border: 1px solid rgba(255, 0, 85, 0.25);
-    }
-    .error-content h3 { 
-      color: #ff3366; 
-      margin-bottom: 14px;
-      font-size: 1.35rem;
-    }
-    .error-content p {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-      color: #b2c1e0;
-    }
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .modal-btn {
-      padding: 10px 24px;
-      border-radius: 40px;
-      font-weight: 700;
+    .unmute-banner {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      border: 1px solid rgba(255, 0, 90, 0.4);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
       font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 25;
       cursor: pointer;
-      border: none;
-      transition: 0.2s;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      animation: bounce 2s infinite;
     }
-    .modal-btn.primary {
-      background: linear-gradient(90deg, #ff0055, #ff7700);
-      color: #fff;
-    }
-    .modal-btn.secondary {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
-    .modal-btn:hover {
-      transform: scale(1.05);
+    .unmute-banner.hidden { display: none; }
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -6px); }
     }
 
-    /* Custom Loading Indicator */
     .loading-overlay {
       position: absolute;
       inset: 0;
@@ -222,44 +168,73 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.85);
       z-index: 15;
-      gap: 12px;
+      gap: 14px;
       pointer-events: none;
     }
     .loading-overlay.hidden { display: none; }
     .loader-spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid rgba(255, 0, 85, 0.2);
-      border-top-color: #ff0055;
+      width: 48px;
+      height: 48px;
+      border: 3.5px solid rgba(255, 0, 90, 0.2);
+      border-top-color: #ff005a;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 0.9rem; color: #a4b3d8; font-weight: 700; }
+
+    .error-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
     }
-    .loading-text {
-      font-size: 0.85rem;
-      color: #a4b3d8;
-      font-weight: 600;
+    .error-modal.hidden { display: none !important; }
+    .error-content {
+      background: #151624;
+      border-radius: 24px;
+      padding: 32px 28px;
+      max-width: 460px;
+      width: 90%;
+      text-align: center;
+      color: #f0f4ff;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255, 0, 90, 0.3);
     }
+    .error-content h3 { color: #ff005a; margin-bottom: 12px; font-size: 1.35rem; }
+    .error-content p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.6rem; color: #a0b0d0; }
+    .modal-actions { display: flex; gap: 12px; justify-content: center; }
+    .modal-btn {
+      padding: 11px 24px;
+      border-radius: 40px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+    .modal-btn.primary { background: linear-gradient(90deg, #ff005a, #ff7700); color: #fff; }
+    .modal-btn.secondary { background: rgba(255,255,255,0.12); color: #fff; }
+    .modal-btn:hover { transform: scale(1.05); }
   </style>
 </head>
 
 <body>
 
-  <div class="player-header" id="playerHeader">
+  <div class="player-header">
     <div class="header-left">
       <a href="index.html" class="back-btn" title="Back to Channels">
         <i class="fas fa-arrow-left"></i>
       </a>
-      <div class="channel-meta">
-        <img id="channelLogo" class="channel-logo-img" src="../assets/jiotv_plus.png" onerror="this.src='../assets/jiotv_plus.png'" alt="Logo">
-        <div>
-          <div id="channelTitle" class="channel-title-text">YogiStream Live TV</div>
-          <span class="channel-badge" id="streamTypeBadge">FAST STREAM</span>
-        </div>
+      <img id="channelLogo" class="channel-logo-img" src="../assets/jiotv_plus.png" onerror="this.src='../assets/jiotv_plus.png'" alt="Logo">
+      <div>
+        <div id="channelTitle" class="channel-title-text">YogiStream Live TV</div>
+        <span class="channel-badge" id="streamTypeBadge">FAST STREAM</span>
       </div>
     </div>
     <div class="header-right">
@@ -268,6 +243,11 @@
         <span>LIVE</span>
       </div>
     </div>
+  </div>
+
+  <div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
+    <i class="fas fa-volume-up"></i>
+    <span>Click anywhere to Unmute Audio</span>
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
@@ -287,15 +267,27 @@
   </div>
 
   <div class="shaka-video-container" id="videoContainer" data-shaka-player data-shaka-controls>
-    <video autoplay muted playsinline preload="metadata"></video>
+    <video autoplay playsinline preload="auto"></video>
   </div>
 
   <script>
+  let globalVideo = null;
+
+  function enableAudio() {
+    if (globalVideo) {
+      globalVideo.muted = false;
+      globalVideo.volume = 1.0;
+    }
+    const banner = document.getElementById('unmuteBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+
   (function() {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const loadingText = document.getElementById('loadingText');
     const channelTitleEl = document.getElementById('channelTitle');
     const channelLogoEl = document.getElementById('channelLogo');
+    const unmuteBanner = document.getElementById('unmuteBanner');
 
     function showLoading(msg) {
       if (loadingText) loadingText.textContent = msg || 'Connecting to Live Stream…';
@@ -323,11 +315,10 @@
       const channelId = urlParams.get('id');
 
       if (!channelId) {
-        showError('Channel ID Missing', 'Please select a valid channel from the channel list.');
+        showError('Channel ID Missing', 'Please select a valid channel from the list.');
         return;
       }
 
-      // Load both datasets
       let jstrChannels = [];
       let denChannels = [];
 
@@ -357,18 +348,16 @@
         }
       } catch (e) {}
 
-      // Find channel info
       const jstrMatch = jstrChannels.find(ch => String(ch.id) === String(channelId) || ch.name === channelId);
       const denMatch = denChannels.find(ch => String(ch.channel_id) === String(channelId));
 
-      const chName = jstrMatch?.name || denMatch?.name || 'Live Channel ' + channelId;
+      const chName = jstrMatch?.name || denMatch?.name || 'Channel ' + channelId;
       const chLogo = jstrMatch?.logo || denMatch?.logo || '../assets/jiotv_plus.png';
 
       if (channelTitleEl) channelTitleEl.textContent = chName;
       if (channelLogoEl) channelLogoEl.src = chLogo;
       document.title = chName + ' - YogiStream Live';
 
-      // DRM Keys
       let drmKeys = {};
       if (jstrMatch?.keyId && jstrMatch?.key) {
         drmKeys[jstrMatch.keyId] = jstrMatch.key;
@@ -377,60 +366,24 @@
         drmKeys = { ...drmKeys, ...denMatch.drm };
       }
 
-      // Fetch live token cookies
       let liveCookie = "";
-      const cookieSources = ['../api/cookies.json', '/api/cookies.json', 'https://allinonereborn2.online/jstrweb2/cookies.json'];
-      for (const csrc of cookieSources) {
-        try {
-          const cresp = await fetch(csrc);
-          if (cresp.ok) {
-            const cdata = await cresp.json();
-            const centry = Array.isArray(cdata) ? cdata.find(i => i.cookie) : null;
-            if (centry?.cookie) {
-              liveCookie = centry.cookie;
-              break;
-            }
-          }
-        } catch(e) {}
-      }
-
-      // Fallback star cookie if needed
-      let starCookie = "";
       try {
-        const sresp = await fetch('../api/star_cookie.json');
-        if (sresp.ok) {
-          const sdata = await sresp.json();
-          starCookie = sdata?.cookie || sdata?.[0]?.cookie || "";
+        const cresp = await fetch('../api/cookies.json');
+        if (cresp.ok) {
+          const cdata = await cresp.json();
+          const centry = Array.isArray(cdata) ? cdata.find(i => i.cookie) : null;
+          if (centry?.cookie) liveCookie = centry.cookie;
         }
       } catch(e) {}
 
-      // Candidate URLs with fallback hierarchy
       const candidateUrls = [];
-
-      // 1. Direct JIO DASH Manifest
       if (jstrMatch?.url) {
-        candidateUrls.push({
-          url: jstrMatch.url,
-          referer: "https://www.jiotv.com/",
-          userAgent: "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6",
-          token: liveCookie || starCookie
-        });
+        candidateUrls.push({ url: jstrMatch.url, token: liveCookie });
       }
-
-      // 2. den-ww proxy manifest
       if (denMatch?.mpd) {
-        candidateUrls.push({
-          url: denMatch.mpd,
-          referer: denMatch.referer || "https://www.jiotv.com/",
-          userAgent: denMatch.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6",
-          token: denMatch.token || liveCookie
-        });
+        candidateUrls.push({ url: denMatch.mpd, token: denMatch.token || liveCookie });
       }
-
-      // 3. alternate URLs from jstr4web
-      if (jstrMatch?.url1) candidateUrls.push({ url: jstrMatch.url1, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
-      if (jstrMatch?.url2) candidateUrls.push({ url: jstrMatch.url2, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
-      if (jstrMatch?.url3) candidateUrls.push({ url: jstrMatch.url3, referer: "https://www.jiotv.com/", userAgent: "plaYtv/7.1.5", token: liveCookie });
+      if (jstrMatch?.url1) candidateUrls.push({ url: jstrMatch.url1, token: liveCookie });
 
       if (candidateUrls.length === 0) {
         showError('Stream Not Available', 'No stream sources found for ' + chName);
@@ -440,12 +393,16 @@
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
-        showError('Browser Unsupported', 'Your browser does not support Shaka Player playback.');
+        showError('Browser Unsupported', 'Your browser does not support Shaka Player.');
         return;
       }
 
       const video = document.querySelector('video');
-      video.muted = true;
+      globalVideo = video;
+
+      // Default Volume ON
+      video.muted = false;
+      video.volume = 1.0;
       video.autoplay = true;
       video.playsInline = true;
 
@@ -459,19 +416,16 @@
         controlPanelElements: [
           'play_pause',
           'time_and_duration',
-          'mute',
           'volume',
           'spacer',
           'quality',
-          'language',
-          'picture_in_picture',
           'fullscreen'
         ],
         addBigPlayButton: true,
         seekBarColors: {
           base: 'rgba(255,255,255,.2)',
           buffered: 'rgba(255,255,255,.4)',
-          played: 'rgb(255,0,85)'
+          played: 'rgb(255, 0, 90)'
         }
       });
 
@@ -484,23 +438,17 @@
         streaming: {
           lowLatencyMode: true,
           bufferingGoal: 20,
-          rebufferingGoal: 4,
-          bufferBehind: 30,
-          ignoreTextStreamFailures: true,
-          alwaysStreamText: false
+          rebufferingGoal: 4
         }
       });
 
       let currentReqConfig = candidateUrls[0];
-
       player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        if (currentReqConfig.referer) request.headers['Referer'] = currentReqConfig.referer;
-        request.headers['User-Agent'] = currentReqConfig.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+        request.headers['Referer'] = "https://www.jiotv.com/";
+        request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
 
         if (currentReqConfig.token) {
           const cookieVal = currentReqConfig.token.startsWith('__hdnea__=') ? currentReqConfig.token : '__hdnea__=' + currentReqConfig.token;
-          request.headers['Cookie'] = cookieVal;
-
           if (
             (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
              type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
@@ -519,17 +467,25 @@
         try {
           showLoading('Connecting stream server (' + (i + 1) + '/' + candidateUrls.length + ')…');
           await player.load(currentReqConfig.url);
-          video.play().catch(() => {});
+
+          video.play().then(() => {
+            hideLoading();
+          }).catch(err => {
+            video.muted = true;
+            video.play().catch(() => {});
+            hideLoading();
+            if (unmuteBanner) unmuteBanner.classList.remove('hidden');
+          });
+
           streamLoaded = true;
-          hideLoading();
           break;
         } catch (err) {
-          console.warn('Candidate', i, 'failed:', err);
+          console.warn('Candidate failed:', err);
         }
       }
 
       if (!streamLoaded) {
-        showError('Stream Error', 'Could not load video manifest for ' + chName + '. Please retry or switch channel.');
+        showError('Stream Offline', 'Could not load video manifest for ' + chName + '. Please retry or switch channel.');
       }
     }
 
@@ -538,6 +494,11 @@
         showError('Playback Error', err.message || 'Unexpected player error.');
       });
     });
+
+    document.addEventListener('click', () => {
+      enableAudio();
+    }, { once: true });
+
   })();
   </script>
   
