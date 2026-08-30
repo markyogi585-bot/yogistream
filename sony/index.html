@@ -322,10 +322,41 @@
         gap: 12px;
         padding: 0 14px;
       }
-      .card-logo-wrap { width: 68px; height: 68px; }
       .card-name { font-size: 0.94rem; }
       .card-meta { display: none; }
+      .mobile-bottom-nav { display: flex; }
+      body { padding-bottom: 75px; }
     }
+
+    /* Mobile Bottom Sticky Navigation */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(8, 10, 18, 0.94);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 9999;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .mob-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .mob-nav-item i { font-size: 1.2rem; }
+    .mob-nav-item.active, .mob-nav-item:hover { color: #ff7700; }
   </style>
 </head>
 
@@ -453,6 +484,31 @@
 
     document.addEventListener('DOMContentLoaded', loadChannelList);
   </script>
+
+  <!-- Mobile Bottom Sticky Navigation -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="mob-nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="../jjtv/index.html" class="mob-nav-item">
+      <i class="fas fa-tv"></i>
+      <span>JioTV+</span>
+    </a>
+    <a href="../zee5/index.html" class="mob-nav-item">
+      <i class="fas fa-film"></i>
+      <span>Zee5</span>
+    </a>
+    <a href="index.html" class="mob-nav-item active">
+      <i class="fas fa-play-circle"></i>
+      <span>SonyLiv</span>
+    </a>
+    <a href="../playlist.html" class="mob-nav-item">
+      <i class="fas fa-list-ul"></i>
+      <span>M3U</span>
+    </a>
+  </nav>
+
   <script src="../assets/security.js"></script>
 </body>
 </html>
