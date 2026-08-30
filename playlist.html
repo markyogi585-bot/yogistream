@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>YogiStream - M3U Playlist & EPG Generator | @yogiprojects</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --glow-cyan: rgba(0, 240, 255, 0.4);
+      --secondary: #7928ca;
+      --accent: #ff007a;
+      --dark-bg: #06070a;
+      --card-bg: rgba(14, 18, 30, 0.85);
+      --text-muted: #8a9bb5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #111728 0%, #06070a 65%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Bar */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+      color: #000;
+      transform: translateY(-2px);
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .brand-title span {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tg-pill {
+      background: linear-gradient(90deg, #0088cc, #00c6ff);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(0, 136, 204, 0.35);
+      transition: transform 0.2s;
+    }
+    .tg-pill:hover { transform: scale(1.04); }
+
+    /* Header Banner */
+    .header-banner {
+      max-width: 1400px;
+      margin: 10px auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--primary);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .banner-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .banner-title span {
+      background: linear-gradient(90deg, #00f0ff, #ff007a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .banner-sub {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Playlist Actions Cards */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto 35px;
+      padding: 0 20px;
+      width: 100%;
+    }
+    .action-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 22px;
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .action-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .action-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .action-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .url-box {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--primary);
+      word-break: break-all;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .card-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.86rem;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .card-btn.primary {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: #000;
+    }
+    .card-btn.primary:hover {
+      box-shadow: 0 0 15px var(--glow-cyan);
+      transform: translateY(-2px);
+    }
+    .card-btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .card-btn.secondary:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Live Channel Table */
+    .table-section {
+      max-width: 1400px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      width: 100%;
+    }
+    .table-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .table-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+    .table-search-box {
+      background: rgba(19, 23, 40, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 30px;
+      padding: 9px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 280px;
+    }
+    .table-search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .playlist-table-wrap {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      background: rgba(255,255,255,0.04);
+      color: var(--primary);
+      padding: 14px 18px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+      color: #d1d8e6;
+    }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .table-ch-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .table-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: rgba(0,0,0,0.5);
+      padding: 2px;
+    }
+    .table-play-btn {
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .table-play-btn:hover {
+      background: var(--primary);
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 18px; }
+      .banner-title { font-size: 1.75rem; }
+      .actions-grid { grid-template-columns: 1fr; }
+      .playlist-table-wrap { overflow-x: auto; }
+      table { min-width: 600px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="brand-title">Yogi<span>Stream</span> Playlist</div>
+    </div>
+    <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-pill">
+      <i class="fab fa-telegram-plane"></i> @yogiprojects
+    </a>
+  </header>
+
+  <!-- Banner -->
+  <section class="header-banner">
+    <div class="banner-badge"><i class="fas fa-list-ul"></i> M3U PLAYLIST & EPG GENERATOR</div>
+    <h1 class="banner-title">Live TV <span>M3U & EPG Hub</span></h1>
+    <p class="banner-sub">Use these playlists in IPTV Smarters, TiviMate, OTT Navigator, Kodi, VLC, or smart TVs for seamless 24/7 streaming.</p>
+  </section>
+
+  <!-- Action Cards -->
+  <section class="actions-grid">
+    
+    <!-- All Channels M3U -->
+    <div class="action-card">
+      <div class="card-top">
+        <div class="action-icon"><i class="fas fa-file-audio"></i></div>
+        <div>
+          <div class="action-title">Complete M3U Playlist</div>
+          <div class="action-desc">900+ JioTV+, SonyLiv, Zee5 channels</div>
+        </div>
+      </div>
+      <div class="url-box" id="m3uUrlBox">https://yogistream.xyz/api/playlist.m3u</div>
+      <div class="btn-row">
+        <button class="card-btn primary" onclick="copyM3uUrl()"><i class="fas fa-copy"></i> Copy M3U URL</button>
+        <button class="card-btn secondary" onclick="downloadM3u()"><i class="fas fa-download"></i> Download .m3u</button>
+      </div>
+    </div>
+
+    <!-- EPG XML -->
+    <div class="action-card">
+      <div class="card-top">
+        <div class="action-icon" style="color:var(--accent); background:rgba(255,0,122,0.15);"><i class="fas fa-calendar-alt"></i></div>
+        <div>
+          <div class="action-title">Live EPG Guide (XMLTV)</div>
+          <div class="action-desc">Program guide schedule for all channels</div>
+        </div>
+      </div>
+      <div class="url-box" id="epgUrlBox">https://yogistream.xyz/api/epg.xml</div>
+      <div class="btn-row">
+        <button class="card-btn primary" style="background:linear-gradient(90deg, #ff007a, #ff7700);" onclick="copyEpgUrl()"><i class="fas fa-copy"></i> Copy EPG URL</button>
+      </div>
+    </div>
+
+    <!-- ClearKey DRM Decoded -->
+    <div class="action-card">
+      <div class="card-top">
+        <div class="action-icon" style="color:#00ff88; background:rgba(0,255,136,0.15);"><i class="fas fa-key"></i></div>
+        <div>
+          <div class="action-title">ClearKey DRM M3U</div>
+          <div class="action-desc">Pre-configured with KODIPROP license keys</div>
+        </div>
+      </div>
+      <div class="url-box">#KODIPROP:inputstream.adaptive.license_type=clearkey</div>
+      <div class="btn-row">
+        <a href="zee5/index.html" class="card-btn primary" style="background:linear-gradient(90deg, #00ff88, #00c6ff);"><i class="fas fa-play"></i> Open ClearKey Hub</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Live Playlist Table -->
+  <section class="table-section">
+    <div class="table-header-row">
+      <div class="table-title">Live Channels Index (<span id="totalCount">0</span> Channels)</div>
+      <div class="table-search-box">
+        <i class="fas fa-search" style="color:var(--primary);"></i>
+        <input type="text" id="tableSearch" placeholder="Search playlist channels..." oninput="renderTable()">
+      </div>
+    </div>
+
+    <div class="playlist-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Category</th>
+            <th>Platform</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="playlistTableBody">
+          <tr>
+            <td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">
+              <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary); margin-bottom:10px;"></i>
+              <div>Loading channel playlist…</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    let playlistChannels = [];
+
+    async function loadPlaylistData() {
+      const sources = ['api/channels199.json', 'api/jstr4web.json', 'zee5/channels199.json'];
+      let channels199 = [];
+      let jstr = [];
+
+      try {
+        const r1 = await fetch('api/channels199.json');
+        if (r1.ok) {
+          const d = await r1.json();
+          channels199 = d.channels || [];
+        }
+      } catch(e) {}
+
+      try {
+        const r2 = await fetch('api/jstr4web.json');
+        if (r2.ok) {
+          jstr = await r2.json();
+        }
+      } catch(e) {}
+
+      const combined = [];
+
+      channels199.forEach(c => {
+        const keyId = c.clearkey?.keyId || '';
+        const key = c.clearkey?.key || '';
+        combined.push({
+          name: c.name,
+          category: c.genre || 'Entertainment',
+          platform: 'Zee5 ClearKey',
+          logo: c.logo || 'assets/zee5.jpg',
+          playUrl: `zee5/player.html?mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}`
+        });
+      });
+
+      if (Array.isArray(jstr)) {
+        jstr.slice(0, 150).forEach(c => {
+          combined.push({
+            name: c.name,
+            category: c.category || 'Live TV',
+            platform: 'JioTV+ HD',
+            logo: c.logo || 'assets/jiotv_plus.png',
+            playUrl: `jjtv/pworld.html?id=${encodeURIComponent(c.id)}`
+          });
+        });
+      }
+
+      playlistChannels = combined;
+      document.getElementById('totalCount').textContent = playlistChannels.length;
+      renderTable();
+    }
+
+    function renderTable() {
+      const q = (document.getElementById('tableSearch')?.value || '').toLowerCase().trim();
+      const tbody = document.getElementById('playlistTableBody');
+      if (!tbody) return;
+
+      const filtered = playlistChannels.filter(c => {
+        return !q || c.name.toLowerCase().includes(q) || c.category.toLowerCase().includes(q) || c.platform.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:25px; color:#888;">No channels found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(c => `
+        <tr>
+          <td>
+            <div class="table-ch-info">
+              <img src="${c.logo}" onerror="this.src='assets/logo.jpg'" class="table-logo" alt="${c.name}">
+              <span>${c.name}</span>
+            </div>
+          </td>
+          <td><span style="background:rgba(255,255,255,0.06); padding:3px 8px; border-radius:10px; font-size:11px;">${c.category}</span></td>
+          <td><span style="color:var(--primary); font-weight:700;">${c.platform}</span></td>
+          <td><span style="color:#00ff88; font-weight:800; font-size:11px;">● 1080P ACTIVE</span></td>
+          <td>
+            <a href="${c.playUrl}" class="table-play-btn"><i class="fas fa-play"></i> Watch</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function copyM3uUrl() {
+      const url = window.location.origin + '/api/channels199.json';
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Playlist URL copied to clipboard!');
+      });
+    }
+
+    function copyEpgUrl() {
+      const url = window.location.origin + '/sitemap.xml';
+      navigator.clipboard.writeText(url).then(() => {
+        alert('EPG Guide URL copied to clipboard!');
+      });
+    }
+
+    function downloadM3u() {
+      let m3uContent = '#EXTM3U\n';
+      playlistChannels.forEach(c => {
+        m3uContent += `#EXTINF:-1 tvg-logo="${c.logo}" group-title="${c.category}",${c.name}\n${window.location.origin}/${c.playUrl}\n`;
+      });
+      const blob = new Blob([m3uContent], { type: 'audio/x-mpegurl' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'yogistream_all_channels.m3u';
+      a.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPlaylistData);
+  </script>
+  <script src="assets/security.js"></script>
+</body>
+</html>
