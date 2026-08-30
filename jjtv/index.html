@@ -860,19 +860,13 @@
             const channel = allChannels.find(c => (c.id === chId) || (c.name === chId));
             const idForPlayer = channel?.id || chId;
 
+            worldLink.classList.remove('disabled');
             worldLink.href = `pworld.html?id=${encodeURIComponent(idForPlayer)}`;
-            indiaLink.href = `pind.html?id=${encodeURIComponent(idForPlayer)}`;
+            worldLink.style.pointerEvents = 'auto';
 
-            // Re-check IP and disable if Indian
-            if (isIndianUser) {
-                worldLink.classList.add('disabled');
-                worldLink.removeAttribute('href');
-                worldLink.style.pointerEvents = 'none';
-            } else {
-                worldLink.classList.remove('disabled');
-                worldLink.href = `pworld.html?id=${encodeURIComponent(idForPlayer)}`;
-                worldLink.style.pointerEvents = 'auto';
-            }
+            indiaLink.classList.remove('disabled');
+            indiaLink.href = `pind.html?id=${encodeURIComponent(idForPlayer)}`;
+            indiaLink.style.pointerEvents = 'auto';
 
             modalOverlay.classList.add('show');
         }

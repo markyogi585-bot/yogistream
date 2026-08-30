@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SonyLiv Live Event Player</title>
+<title>YogiStream - Live Event Player | @yogiprojects</title>
 <script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
@@ -45,6 +45,13 @@ if (!videoUrl) {
     throw new Error("No stream URL");
 }
 
+let rawUrl = videoUrl;
+if (videoUrl.includes('stream_proxy.php?url=')) {
+    try {
+        rawUrl = decodeURIComponent(videoUrl.split('stream_proxy.php?url=')[1]);
+    } catch(e) {}
+}
+
 function initPlayer(streamUrl) {
     try {
         const player = jwplayer("player");
@@ -61,7 +68,11 @@ function initPlayer(streamUrl) {
         });
 
         player.on('error', function() {
-            fallbackHLS(streamUrl);
+            if (rawUrl && streamUrl !== rawUrl) {
+                initPlayer(rawUrl);
+            } else {
+                fallbackHLS(streamUrl);
+            }
         });
     } catch(err) {
         fallbackHLS(streamUrl);
@@ -86,6 +97,11 @@ function fallbackHLS(streamUrl) {
         });
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
+        hls.on(Hls.Events.ERROR, function(event, data) {
+            if (data.fatal && rawUrl && streamUrl !== rawUrl) {
+                hls.loadSource(rawUrl);
+            }
+        });
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
             video.play().catch(() => {});
         });

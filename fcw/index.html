@@ -687,13 +687,11 @@ function handleCardClick(match) {
 function openPopup(match) {
   selectedMatch = match;
   
-  if (isIndian) {
-    worldwideBtn.disabled = true;
-    worldwideBtn.title = 'Not available in India';
-  } else {
-    worldwideBtn.disabled = false;
-    worldwideBtn.title = '';
-  }
+  worldwideBtn.disabled = false;
+  worldwideBtn.title = 'Worldwide Player';
+  
+  indiaBtn.disabled = false;
+  indiaBtn.title = 'India Player';
   
   matchInfo.innerHTML = `
     <div class="font-bold text-base md:text-lg">${match.title}</div>
@@ -724,7 +722,7 @@ indiaBtn.onclick = () => {
     return;
   }
   const streamUrl = selectedMatch.streams[0].playlist_url;
-  window.open(`https://mini.allinonereborn.site/fcw/player_india.html?url=${encodeURIComponent(streamUrl)}`, "_blank");
+  window.open(`player_india.html?stream=${encodeURIComponent(streamUrl)}`, "_blank");
   closePopup();
 };
 

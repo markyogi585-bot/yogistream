@@ -45,7 +45,7 @@
     .error-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.88);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -55,65 +55,45 @@
     .error-modal.hidden { display: none !important; }
 
     .error-content {
-      background: #1e1e2f;
+      background: #141828;
       border-radius: 20px;
       padding: 28px;
-      max-width: 520px;
+      max-width: 500px;
       width: 90%;
       text-align: center;
-      color: #f0f0f0;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
+      color: #f0f4ff;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+      border: 1px solid rgba(0, 229, 255, 0.25);
     }
 
     .error-content h3 { 
-      color: #ff6b6b; 
+      color: #00e5ff; 
       margin-bottom: 15px;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       letter-spacing: -0.3px;
     }
     
     .error-content p {
-      font-size: 1rem;
-      line-height: 1.4;
+      font-size: 0.95rem;
+      line-height: 1.5;
       margin-bottom: 1.5rem;
+      color: #b0c4de;
     }
 
     .close-btn {
-      background: #ff4444;
-      color: white;
+      background: linear-gradient(90deg, #00e5ff, #7000ff);
+      color: #000;
       border: none;
-      padding: 10px 26px;
+      padding: 10px 28px;
       border-radius: 40px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
-    .close-btn:hover { background: #cc0000; }
-
-    .geo-notice-overlay {
-      position: fixed;
-      bottom: 25px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      pointer-events: none;
-      z-index: 9999;
-    }
-    .geo-notice-text {
-      display: inline-block;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
-      color: #ffaa55;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 8px 18px;
-      border-radius: 60px;
-      font-family: monospace;
-      letter-spacing: 0.3px;
-      border: 1px solid rgba(255,170,85,0.4);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    .close-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
     }
   </style>
 </head>
@@ -122,7 +102,7 @@
 
   <div id="errorModal" class="error-modal hidden">
     <div class="error-content">
-      <h3 id="errorTitle">@yogiprojects</h3>
+      <h3 id="errorTitle">YogiStream Notice</h3>
       <p id="errorMessage"></p>
       <button class="close-btn" onclick="document.getElementById('errorModal').classList.add('hidden')">Close</button>
     </div>
@@ -131,8 +111,6 @@
   <div class="shaka-video-container" data-shaka-player data-shaka-controls>
     <video autoplay muted playsinline preload="metadata"></video>
   </div>
-
-  <div id="geoNoticeContainer" class="geo-notice-overlay"></div>
 
   <script>
   (function() {
@@ -145,59 +123,24 @@
       if (modal) modal.classList.remove('hidden');
     }
 
-    function showGeoBlockNotice() {
-      const container = document.getElementById('geoNoticeContainer');
-      if (container) {
-        container.innerHTML = `<div class="geo-notice-text">⚠️ ACCESS BLOCKED • Indian IP detected. Please use Indian Stream.</div>`;
-      }
-    }
-
-    function clearGeoNotice() {
-      const container = document.getElementById('geoNoticeContainer');
-      if (container) container.innerHTML = '';
-    }
-
     async function initApp() {
-      let isIndianIP = false;
-      try {
-        const ipResponse = await fetch('https://ipapi.co/json/');
-        if (ipResponse.ok) {
-          const ipData = await ipResponse.json();
-          if (ipData && ipData.country_code === 'IN') {
-            isIndianIP = true;
-          }
-        }
-      } catch (err) {
-        isIndianIP = false;
-      }
-
-      if (isIndianIP) {
-        showGeoBlockNotice();
-        const videoEl = document.querySelector('video');
-        if (videoEl) {
-          videoEl.style.display = 'none';
-          videoEl.removeAttribute('src');
-          videoEl.load();
-        }
-        showError(
-          '⛔ Geo-Restricted', 
-          'Your IP address appears to be from India. Please use the <strong>Only India Stream</strong> option.<br><br>'
-        );
-        return;
-      }
-
-      clearGeoNotice();
-
       const urlParams = new URLSearchParams(window.location.search);
       const channelId = urlParams.get('id');
 
       if (!channelId) {
-        showError('Channel ID Missing', 'Example: pworld.html?id=144');
+        showError('Channel ID Missing', 'Please select a channel from the channel list.');
         return;
       }
 
+      // Step 1: Fetch channel dataset (local first, then remote fallback)
       let channels = [];
-      const sources = ['den-ww.json', '../api/den-ww.json', '/den-ww.json', 'https://jjtvxweb.pages.dev/den-ww.json'];
+      const sources = [
+        'den-ww.json', 
+        '../api/den-ww.json', 
+        '/api/den-ww.json', 
+        'https://jjtvxweb.pages.dev/den-ww.json'
+      ];
+      
       for (const src of sources) {
         try {
           const resp = await fetch(src);
@@ -207,27 +150,50 @@
           }
         } catch (e) {}
       }
-      if (!channels || channels.length === 0) {
-        showError('Connection Error', 'Unable to fetch channel list. Please check network.');
-        return;
+
+      let channel = channels.find(ch => String(ch.channel_id) === String(channelId));
+
+      // Fallback to jstr4web.json if not in den-ww.json
+      if (!channel) {
+        const jstrSources = ['jstr4web.json', '../api/jstr4web.json', '/api/jstr4web.json', 'https://jjtvxweb.pages.dev/jstr4web.json'];
+        for (const jsrc of jstrSources) {
+          try {
+            const jresp = await fetch(jsrc);
+            if (jresp.ok) {
+              const jdata = await jresp.json();
+              if (Array.isArray(jdata)) {
+                const found = jdata.find(c => String(c.id) === String(channelId) || c.name === channelId);
+                if (found) {
+                  channel = {
+                    name: found.name,
+                    channel_id: found.id,
+                    mpd: found.url,
+                    drm: (found.keyId && found.key) ? { [found.keyId]: found.key } : null,
+                    referer: "https://www.jiotv.com/",
+                    userAgent: "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6"
+                  };
+                  break;
+                }
+              }
+            }
+          } catch(e) {}
+        }
       }
 
-      const channel = channels.find(ch => ch.channel_id === channelId);
-
       if (!channel) {
-        showError('Channel Not Found', `No channel found for ID: ${channelId}`);
+        showError('Channel Not Found', `No stream data found for channel ID: ${channelId}`);
         return;
       }
 
       if (!channel.mpd || channel.mpd.trim() === '') {
-        showError('Info Channel', `${channel.name}<br>This is not a streaming channel.`);
+        showError('Stream Notice', `${channel.name || 'Channel'}<br>Live stream manifest is currently not available.`);
         return;
       }
 
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
-        showError('Browser Not Supported', 'Shaka Player not supported.');
+        showError('Browser Not Supported', 'Your browser does not support Shaka Player.');
         return;
       }
 
@@ -257,7 +223,7 @@
         seekBarColors: {
           base: 'rgba(255,255,255,.2)',
           buffered: 'rgba(255,255,255,.4)',
-          played: 'rgb(0,198,255)'
+          played: 'rgb(0,229,255)'
         }
       });
 
@@ -269,36 +235,17 @@
         drm: drmConfig,
         streaming: {
           lowLatencyMode: true,
-          bufferingGoal: 25,
-          rebufferingGoal: 5,
+          bufferingGoal: 20,
+          rebufferingGoal: 4,
           bufferBehind: 30,
           ignoreTextStreamFailures: true,
-          alwaysStreamText: false,
-          retryParameters: {
-            timeout: 15000,
-            maxAttempts: 3,
-            baseDelay: 500,
-            backoffFactor: 1.5,
-            fuzzFactor: 0.5
-          }
-        },
-        manifest: {
-          retryParameters: {
-            timeout: 10000,
-            maxAttempts: 2
-          }
-        },
-        abr: {
-          enabled: true,
-          defaultBandwidthEstimate: 3_000_000,
-          switchInterval: 8
+          alwaysStreamText: false
         }
       });
 
       player.getNetworkingEngine().registerRequestFilter((type, request) => {
         if (channel.referer) request.headers['Referer'] = channel.referer;
-        request.headers['User-Agent'] =
-          channel.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+        request.headers['User-Agent'] = channel.userAgent || "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
 
         if (channel.token) {
           request.headers['Cookie'] = channel.token;
@@ -316,16 +263,16 @@
 
       try {
         await player.load(channel.mpd);
-        document.title = channel.name + ' - YogiStream';
+        document.title = (channel.name || 'Live TV') + ' - YogiStream';
       } catch (err) {
-        showError('Stream Error', err.message || 'Unable to load stream.');
+        console.error('Shaka player load error', err);
+        showError('Stream Playback Error', err.message || 'Unable to play stream.');
       }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       initApp().catch((err) => {
-        if (!document.getElementById('errorModal')?.classList?.contains('hidden')) return;
-        showError('Launch Error', err.message || 'Unexpected player error.');
+        showError('Playback Error', err.message || 'Unexpected player error.');
       });
     });
   })();

@@ -18,9 +18,9 @@
         domain: "yogistream.xyz",
         telegramChannel: "yogiprojects",
         telegramUrl: "https://t.me/yogiprojects",
-        allowedHosts: ["yogistream.xyz", "www.yogistream.xyz", "localhost", "127.0.0.1"],
+        allowedHosts: ["yogistream.xyz", "www.yogistream.xyz", "vercel.app", "pages.dev", "github.io", "localhost", "127.0.0.1"],
         popupCooldownHours: 2, // Re-prompt join after 2 hours
-        appVersion: "4.0.0-yogistream"
+        appVersion: "4.1.0-yogistream"
     };
 
     // ── 1. CRYPTO & TOKEN HANDSHAKE SYSTEM ──

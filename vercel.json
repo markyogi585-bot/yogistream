@@ -1,16 +1,12 @@
 {
   "version": 2,
-  "name": "yogistream-live-tv",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,POST" },
+        { "key": "Access-Control-Allow-Headers", "value": "*" },
         { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=120, stale-while-revalidate=300" }
       ]
     },
@@ -25,9 +21,14 @@
   ],
   "rewrites": [
     { "source": "/jjtv", "destination": "/jjtv/index.html" },
+    { "source": "/jjtv/", "destination": "/jjtv/index.html" },
     { "source": "/sony", "destination": "/sony/index.html" },
+    { "source": "/sony/", "destination": "/sony/index.html" },
     { "source": "/events", "destination": "/events/index.html" },
+    { "source": "/events/", "destination": "/events/index.html" },
     { "source": "/zee5", "destination": "/zee5/index.html" },
-    { "source": "/fcw", "destination": "/fcw/index.html" }
+    { "source": "/zee5/", "destination": "/zee5/index.html" },
+    { "source": "/fcw", "destination": "/fcw/index.html" },
+    { "source": "/fcw/", "destination": "/fcw/index.html" }
   ]
 }
