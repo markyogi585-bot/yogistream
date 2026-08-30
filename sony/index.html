@@ -1,279 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>YogiStream - SonyLiv Live Channels | @yogiprojects</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>YogiStream - SonyLiv HD Live Channels | @yogiprojects</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #0b0d14;
-            color: #fff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+  <style>
+    :root {
+      --primary-orange: #ff7700;
+      --glow-orange: rgba(255, 119, 0, 0.4);
+      --accent-pink: #ff0055;
+      --dark-bg: #06070a;
+      --card-bg: rgba(18, 20, 36, 0.8);
+      --text-muted: #8b9bb4;
+    }
 
-        .header-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #1c2136;
-            color: #00ffff;
-            text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid #2d3558;
-            transition: all 0.3s ease;
-        }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #22141a 0%, #06070a 65%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-        .back-btn:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
+    /* Top Bar */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--primary-orange);
+      color: #000;
+      transform: translateY(-2px);
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .brand-title span {
+      background: linear-gradient(90deg, #ff7700, #ff0055);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .fade-in {
-            opacity: 0;
-            transform: translateY(-30px);
-            animation: fadeInDown 0.8s ease-out forwards;
-            flex: 1;
-        }
+    .tg-pill {
+      background: linear-gradient(90deg, #0088cc, #00c6ff);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(0, 136, 204, 0.35);
+      transition: transform 0.2s;
+    }
+    .tg-pill:hover { transform: scale(1.04); }
 
-        @keyframes fadeInDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    /* Header Banner */
+    .header-banner {
+      max-width: 1400px;
+      margin: 10px auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 119, 0, 0.15);
+      border: 1px solid rgba(255, 119, 0, 0.35);
+      color: #ffaa44;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .banner-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .banner-title span {
+      background: linear-gradient(90deg, #ff7700, #ff0055);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .banner-sub {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        h2 {
-            text-align: center;
-            padding: 15px 15px 5px;
-            font-size: 2.2em;
-            background: linear-gradient(270deg, #ff00cc, #00ffff, #00ff00, #ffcc00, #ff00cc);
-            background-size: 1000% 1000%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: animateTitle 6s linear infinite;
-            font-weight: 700;
-        }
+    /* Search & Filter Bar */
+    .controls-wrapper {
+      max-width: 1400px;
+      margin: 0 auto 25px;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .search-box {
+      background: rgba(19, 23, 40, 0.85);
+      border: 1px solid rgba(255, 119, 0, 0.25);
+      border-radius: 40px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    .search-box i { color: var(--primary-orange); font-size: 1.1rem; }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.96rem;
+      font-family: inherit;
+      width: 100%;
+    }
+    .search-box input::placeholder { color: #627290; }
 
-        .subtext {
-            text-align: center;
-            color: #8fa0dd;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .category-pills::-webkit-scrollbar { display: none; }
+    .pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .pill.active, .pill:hover {
+      background: linear-gradient(90deg, #ff7700, #ff0055);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 15px var(--glow-orange);
+    }
 
-        @keyframes animateTitle {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+    /* Channel Grid */
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      max-width: 1400px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      width: 100%;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: auto;
-        }
+    .channel-card {
+      background: linear-gradient(180deg, rgba(25, 22, 38, 0.85), rgba(12, 14, 26, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .channel-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 36px var(--glow-orange);
+      border-color: rgba(255, 119, 0, 0.45);
+    }
 
-        .card {
-            background: #141724;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            border: 1px solid #232a42;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px;
-        }
+    .card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(90deg, #ff7700, #ff0055);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
 
-        .card:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.25);
-            background-color: #1c2238;
-            border-color: #00ffff;
-        }
+    .card-logo-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s;
+    }
+    .channel-card:hover .card-logo-wrap {
+      transform: scale(1.08);
+      border-color: var(--primary-orange);
+    }
+    .card-logo-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
 
-        .card img {
-            width: 100%;
-            height: 110px;
-            object-fit: contain;
-            padding: 8px;
-            background: #090c14;
-            border-radius: 12px;
-            transition: transform 0.3s;
-        }
+    .card-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      min-height: 26px;
+    }
 
-        .card:hover img {
-            transform: scale(1.08);
-        }
+    .card-meta {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .meta-tag {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
 
-        .card .title {
-            font-size: 14px;
-            padding: 12px 6px 4px;
-            font-weight: 600;
-            color: #00e8d9;
-            text-shadow: 0 0 2px #00e8d9;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
-        }
+    .play-action-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 8px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .channel-card:hover .play-action-btn {
+      background: linear-gradient(90deg, #ff7700, #ff0055);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 15px var(--glow-orange);
+    }
 
-        @media (max-width: 600px) {
-            .header-bar {
-                padding: 1rem;
-            }
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 12px;
-            }
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
 
-            h2 {
-                font-size: 1.6em;
-            }
-
-            .card img {
-                height: 90px;
-            }
-
-            .card .title {
-                font-size: 12px;
-                padding: 8px 0 2px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 18px; }
+      .banner-title { font-size: 1.7rem; }
+      .channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 14px;
+      }
+      .card-logo-wrap { width: 68px; height: 68px; }
+      .card-name { font-size: 0.94rem; }
+      .card-meta { display: none; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="header-bar">
-        <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="brand-title">SonyLiv <span>Live TV</span></div>
+    </div>
+    <a href="https://t.me/yogiprojects" target="_blank" rel="noopener noreferrer" class="tg-pill">
+      <i class="fab fa-telegram-plane"></i> @yogiprojects
+    </a>
+  </header>
+
+  <!-- Banner -->
+  <section class="header-banner">
+    <div class="banner-badge"><i class="fas fa-tv"></i> SONY NETWORK HD CHANNELS</div>
+    <h1 class="banner-title">Live <span>SonyLiv HD Channels</span></h1>
+    <p class="banner-sub">Watch Sony HD, SAB HD, Sony MAX, Sony Pal, Sony Ten Sports 1-5, and BBC Earth in 1080p Full HD.</p>
+  </section>
+
+  <!-- Search & Filters -->
+  <section class="controls-wrapper">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="channelSearch" placeholder="Search Sony channels (e.g. Ten, Max, SAB, Pal, Marathi)..." oninput="renderChannels()">
     </div>
 
-    <div class="fade-in">
-        <h2>SonyLiv Live - YogiStream</h2>
-        <p class="subtext">Watch High-Definition Live Sony Entertainment & Sports Channels Powered by @yogiprojects</p>
-        
-        <div class="grid">
-            <a class="card" href="ptest1.html?id=sony-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_HD.png" alt="SONY HD">
-                <div class="title">SONY HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sab-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_SAB_HD.png" alt="SAB HD">
-                <div class="title">SAB HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-marathi">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Marathi_SD.png" alt="SONY MARATHI">
-                <div class="title">SONY MARATHI</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-pal">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Pal.png" alt="SONY PAL">
-                <div class="title">SONY PAL</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-aath">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_aath.png" alt="SONY AATH">
-                <div class="title">SONY AATH</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-yay">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Yay_Hindi.png" alt="SONY YAY">
-                <div class="title">SONY YAY</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-max-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Max_HD.png" alt="SONY MAX HD">
-                <div class="title">SONY MAX HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-max">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Max_SD.png" alt="SONY MAX">
-                <div class="title">SONY MAX</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-wah">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Wah.png" alt="SONY WAH">
-                <div class="title">SONY WAH</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-max2">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_MAX2.png" alt="SONY MAX2">
-                <div class="title">SONY MAX2</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-pix-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_Pix_HD.png" alt="SONY PIX HD">
-                <div class="title">SONY PIX HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-1-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten_HD.png" alt="SONY TEN 1 HD">
-                <div class="title">SONY TEN 1 HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-1">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten_1.png" alt="SONY TEN 1">
-                <div class="title">SONY TEN 1</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-2-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten2_HD.png" alt="SONY TEN 2 HD">
-                <div class="title">SONY TEN 2 HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-2">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten2_HD.png" alt="SONY TEN 2">
-                <div class="title">SONY TEN 2</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-3-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten3_HD.png" alt="SONY TEN 3 HD">
-                <div class="title">SONY TEN 3 HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-3">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten3_HD.png" alt="SONY TEN 3">
-                <div class="title">SONY TEN 3</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-4-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten_4_HD_Telugu.png" alt="SONY TEN 4 HD">
-                <div class="title">SONY TEN 4 HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-4">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Ten_4_Telugu.png" alt="SONY TEN 4">
-                <div class="title">SONY TEN 4</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-5-hd">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Six_HD.png" alt="SONY TEN 5 HD">
-                <div class="title">SONY TEN 5 HD</div>
-            </a>
-            <a class="card" href="ptest1.html?id=sony-ten-5">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Six_HD.png" alt="SONY TEN 5">
-                <div class="title">SONY TEN 5</div>
-            </a>
-            <a class="card" href="ptest1.html?id=bbc-earth">
-                <img src="https://jiotvimages.cdn.jio.com/dare_images/images/Sony_BBC_Earth_HD.png" alt="BBC EARTH">
-                <div class="title">BBC EARTH</div>
-            </a>
-        </div>
+    <div class="category-pills">
+      <button class="pill active" onclick="setFilter('all', this)">All Channels</button>
+      <button class="pill" onclick="setFilter('Entertainment', this)">🎭 Entertainment</button>
+      <button class="pill" onclick="setFilter('Sports', this)">🏏 Sports</button>
+      <button class="pill" onclick="setFilter('Movies', this)">🎬 Movies</button>
+      <button class="pill" onclick="setFilter('Regional', this)">🌍 Regional</button>
     </div>
-    <script src="../assets/security.js"></script>
+  </section>
+
+  <!-- Channel Container -->
+  <main class="channels-grid" id="channelsContainer">
+    <div class="loading-state">
+      <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary-orange); margin-bottom:12px;"></i>
+      <div>Loading Sony channels…</div>
+    </div>
+  </main>
+
+  <script>
+    let allChannels = [];
+    let selectedCategory = 'all';
+
+    async function loadChannelList() {
+      const sources = ['sliv3.json', '../api/sliv3.json', '/api/sliv3.json'];
+      let data = null;
+
+      for (const src of sources) {
+        try {
+          const res = await fetch(src);
+          if (res.ok) {
+            data = await res.json();
+            if (data && typeof data === 'object') break;
+          }
+        } catch (e) {}
+      }
+
+      if (data) {
+        allChannels = Object.keys(data).map(k => {
+          const item = data[k];
+          return {
+            id: k,
+            name: item.title || item.name || k,
+            logo: item.logo || 'assets/sony_liv.avif',
+            genre: item.genre || 'Entertainment',
+            language: item.language || 'Hindi'
+          };
+        });
+        renderChannels();
+      } else {
+        document.getElementById('channelsContainer').innerHTML = '<div class="loading-state" style="color:#ff5555;">Could not load Sony channels. Please retry.</div>';
+      }
+    }
+
+    function setFilter(cat, btn) {
+      selectedCategory = cat;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderChannels();
+    }
+
+    function renderChannels() {
+      const q = (document.getElementById('channelSearch')?.value || '').toLowerCase().trim();
+      const container = document.getElementById('channelsContainer');
+      if (!container) return;
+
+      const filtered = allChannels.filter(ch => {
+        const nameMatch = !q || ch.name.toLowerCase().includes(q) || ch.id.toLowerCase().includes(q);
+        const catMatch = (selectedCategory === 'all') || (ch.genre.toLowerCase() === selectedCategory.toLowerCase());
+        return nameMatch && catMatch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="loading-state">No channels match your search.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(ch => {
+        const playUrl = `ptest1.html?id=${encodeURIComponent(ch.id)}`;
+
+        return `
+          <a href="${playUrl}" class="channel-card">
+            <span class="card-badge">HD LIVE</span>
+            <div class="card-logo-wrap">
+              <img src="${ch.logo}" onerror="this.src='../assets/sony_liv.avif'" alt="${ch.name}" loading="lazy">
+            </div>
+            <div class="card-name">${ch.name}</div>
+            <div class="card-meta">
+              <span class="meta-tag">${ch.genre}</span>
+              <span class="meta-tag">${ch.language}</span>
+            </div>
+            <div class="play-action-btn"><i class="fas fa-play"></i> Watch Now</div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadChannelList);
+  </script>
+  <script src="../assets/security.js"></script>
 </body>
 </html>
