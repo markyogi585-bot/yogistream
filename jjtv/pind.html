@@ -86,29 +86,6 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     }
     .unmute-banner.hidden { display: none; }
-
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.85);
-      z-index: 15;
-      gap: 12px;
-      pointer-events: none;
-    }
-    .loading-overlay.hidden { display: none; }
-    .loader-spinner {
-      width: 44px;
-      height: 44px;
-      border: 3.5px solid rgba(255, 0, 90, 0.2);
-      border-top-color: #ff005a;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 
@@ -121,10 +98,6 @@
   <div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
     <i class="fas fa-volume-up"></i>
     <span>Tap anywhere to Unmute Audio</span>
-  </div>
-
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loader-spinner"></div>
   </div>
 
   <div class="shaka-video-container" id="player-container" data-shaka-player data-shaka-controls>
@@ -200,7 +173,7 @@
       key: "7e8f500cef51595f3d43acafab1a8fb4"
     };
 
-    document.title = (channelData.name || 'Colors HD') + ' - YogiStream Live';
+    document.title = (channelData.name || 'Live Channel') + ' - YogiStream Live';
 
     const drmMap = {};
     if (channelData.keyId && channelData.key) {
@@ -211,9 +184,14 @@
       drm: { clearKeys: drmMap },
       streaming: {
         lowLatencyMode: true,
-        bufferingGoal: 2,
-        rebufferingGoal: 0.5,
-        inaccurateManifestTolerance: 0
+        bufferingGoal: 1.5,
+        rebufferingGoal: 0.3,
+        inaccurateManifestTolerance: 0,
+        retryParameters: {
+          maxAttempts: 4,
+          baseDelay: 100,
+          backoffFactor: 1.1
+        }
       }
     });
 
@@ -237,17 +215,20 @@
     for (let i = 0; i < streamUrls.length; i++) {
       try {
         await player.load(streamUrls[i]);
-        videoEl.play().then(() => {
-          document.getElementById('loadingOverlay')?.classList.add('hidden');
-        }).catch(() => {
+        videoEl.play().catch(() => {
           videoEl.muted = true;
           videoEl.play().catch(() => {});
-          document.getElementById('loadingOverlay')?.classList.add('hidden');
           document.getElementById('unmuteBanner')?.classList.remove('hidden');
         });
         break;
       } catch (err) {
-        console.warn('Playback retry:', err);
+        console.warn('Direct stream retry:', err);
+        try {
+          const proxyUrl = `/api/proxy?url=${encodeURIComponent(streamUrls[i])}`;
+          await player.load(proxyUrl);
+          videoEl.play().catch(() => {});
+          break;
+        } catch(err2) {}
       }
     }
   }

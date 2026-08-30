@@ -40,7 +40,7 @@
       object-fit: contain;
     }
 
-    /* Floating Clean Top Bar */
+    /* Floating Clean Top Bar with Auto-Hide */
     .player-header {
       position: absolute;
       top: 0;
@@ -55,6 +55,8 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
+    .player-header.hidden { opacity: 0; pointer-events: none; }
+
     .header-left {
       display: flex;
       align-items: center;
@@ -162,30 +164,6 @@
       50% { transform: translate(-50%, -6px); }
     }
 
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.85);
-      z-index: 15;
-      gap: 14px;
-      pointer-events: none;
-    }
-    .loading-overlay.hidden { display: none; }
-    .loader-spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid rgba(0, 240, 255, 0.2);
-      border-top-color: #00f0ff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { font-size: 0.88rem; color: #a4b3d8; font-weight: 700; }
-
     .error-modal {
       position: fixed;
       inset: 0;
@@ -226,7 +204,7 @@
 
 <body>
 
-  <div class="player-header">
+  <div class="player-header" id="playerHeader">
     <div class="header-left">
       <a href="index.html" class="back-btn" title="Back to Channels">
         <i class="fas fa-arrow-left"></i>
@@ -250,11 +228,6 @@
     <span>Click anywhere to Unmute Audio</span>
   </div>
 
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loader-spinner"></div>
-    <div class="loading-text" id="loadingText">Connecting to Live Stream…</div>
-  </div>
-
   <div id="errorModal" class="error-modal hidden">
     <div class="error-content">
       <h3 id="errorTitle">Stream Notice</h3>
@@ -267,11 +240,24 @@
   </div>
 
   <div class="shaka-video-container" id="player-container" data-shaka-player data-shaka-controls>
-    <video id="video" autoplay playsinline preload="metadata"></video>
+    <video id="video" autoplay playsinline preload="auto"></video>
   </div>
 
   <script>
   let globalVideo = document.getElementById('video');
+  let hideTimer = null;
+
+  function resetHideTimer() {
+    const h = document.getElementById('playerHeader');
+    if (h) h.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      if (h) h.classList.add('hidden');
+    }, 4000);
+  }
+
+  document.addEventListener('mousemove', resetHideTimer);
+  document.addEventListener('touchstart', resetHideTimer);
 
   function enableAudio() {
     if (globalVideo) {
@@ -287,23 +273,11 @@
   const COOKIE_PRIMARY = "https://allinonereborn2.online/jstrweb2/cookies.json";
   const COOKIE_STAR_SPORTS = "https://allinonereborn2.online/jtv-fetch/jstarcookie/cookie.json";
 
-  const loadingOverlay = document.getElementById('loadingOverlay');
-  const loadingText = document.getElementById('loadingText');
   const channelTitleEl = document.getElementById('channelTitle');
   const channelLogoEl = document.getElementById('channelLogo');
   const unmuteBanner = document.getElementById('unmuteBanner');
 
-  function showLoading(msg) {
-    if (loadingText) loadingText.textContent = msg || 'Connecting…';
-    if (loadingOverlay) loadingOverlay.classList.remove('hidden');
-  }
-
-  function hideLoading() {
-    if (loadingOverlay) loadingOverlay.classList.add('hidden');
-  }
-
   function showError(title, msg) {
-    hideLoading();
     const modal = document.getElementById('errorModal');
     const titleEl = document.getElementById('errorTitle');
     const msgEl = document.getElementById('errorMessage');
@@ -322,33 +296,19 @@
     let denChannels = [];
     let jstrChannels = [];
 
-    for (const src of DEN_SOURCES) {
-      try {
-        const res = await fetch(src);
-        if (res.ok) {
-          denChannels = await res.json();
-          if (Array.isArray(denChannels) && denChannels.length > 0) break;
-        }
-      } catch (e) {}
-    }
+    // Parallel fetch
+    const [denRes, jstrRes, starRes, primRes] = await Promise.allSettled([
+      fetch('den-ww.json').then(r => r.json()).catch(() => fetch('../api/den-ww.json').then(r => r.json())),
+      fetch('jstr4web.json').then(r => r.json()).catch(() => fetch('../api/jstr4web.json').then(r => r.json())),
+      fetch(COOKIE_STAR_SPORTS).then(r => r.json()).catch(() => null),
+      fetch(COOKIE_PRIMARY).then(r => r.json()).catch(() => null)
+    ]);
 
-    for (const src of JSTR_SOURCES) {
-      try {
-        const res = await fetch(src);
-        if (res.ok) {
-          jstrChannels = await res.json();
-          if (Array.isArray(jstrChannels) && jstrChannels.length > 0) break;
-        }
-      } catch (e) {}
-    }
+    if (denRes.status === 'fulfilled' && Array.isArray(denRes.value)) denChannels = denRes.value;
+    if (jstrRes.status === 'fulfilled' && Array.isArray(jstrRes.value)) jstrChannels = jstrRes.value;
 
     const denMatch = denChannels.find(ch => String(ch.channel_id) === String(channelId));
     const jstrMatch = jstrChannels.find(ch => String(ch.id) === String(channelId) || ch.name === channelId);
-
-    if (!denMatch && !jstrMatch) {
-      showError("Channel Not Found", "Channel not found for ID: " + channelId);
-      return null;
-    }
 
     const chName = denMatch?.name || jstrMatch?.name || 'Channel ' + channelId;
     const chLogo = denMatch?.logo || jstrMatch?.logo || '../assets/jiotv_plus.png';
@@ -359,35 +319,23 @@
 
     let primaryCookie = "";
 
-    try {
-      const res = await fetch(COOKIE_STAR_SPORTS);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.failed_results) {
-          for (const item of data.failed_results) {
-            if (String(item.channel_id) === String(channelId)) {
-              if (item.error_details && item.error_details.final_url) {
-                const match = item.error_details.final_url.match(/__hdnea__=([^&]+)/);
-                if (match) {
-                  primaryCookie = '__hdnea__=' + match[1];
-                  break;
-                }
-              }
+    if (starRes.status === 'fulfilled' && starRes.value?.failed_results) {
+      for (const item of starRes.value.failed_results) {
+        if (String(item.channel_id) === String(channelId)) {
+          if (item.error_details && item.error_details.final_url) {
+            const match = item.error_details.final_url.match(/__hdnea__=([^&]+)/);
+            if (match) {
+              primaryCookie = '__hdnea__=' + match[1];
+              break;
             }
           }
         }
       }
-    } catch(e) {}
+    }
 
-    if (!primaryCookie) {
-      try {
-        const res = await fetch(COOKIE_PRIMARY);
-        if (res.ok) {
-          const data = await res.json();
-          const entry = Array.isArray(data) ? data.find(i => i.cookie) : null;
-          if (entry?.cookie) primaryCookie = entry.cookie;
-        }
-      } catch(e) {}
+    if (!primaryCookie && primRes.status === 'fulfilled' && primRes.value) {
+      const entry = Array.isArray(primRes.value) ? primRes.value.find(i => i.cookie) : null;
+      if (entry?.cookie) primaryCookie = entry.cookie;
     }
 
     if (!primaryCookie) {
@@ -410,6 +358,10 @@
     if (jstrMatch?.url) candidateUrls.push(jstrMatch.url);
     if (jstrMatch?.url1) candidateUrls.push(jstrMatch.url1);
 
+    if (candidateUrls.length === 0) {
+      candidateUrls.push(`https://jiotvmblive.cdn.jio.com/bpk-tv/ColorsHD_MOB/WDVLive/index.mpd`);
+    }
+
     return {
       chName,
       candidateUrls,
@@ -419,7 +371,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", async () => {
-    showLoading('Loading channel config…');
+    resetHideTimer();
     const cfg = await fetchConfig();
     if (!cfg) return;
 
@@ -447,8 +399,14 @@
       drm: { clearKeys: drmKeys },
       streaming: {
         lowLatencyMode: true,
-        bufferingGoal: 20,
-        rebufferingGoal: 4
+        bufferingGoal: 1.5,
+        rebufferingGoal: 0.3,
+        inaccurateManifestTolerance: 0,
+        retryParameters: {
+          maxAttempts: 4,
+          baseDelay: 100,
+          backoffFactor: 1.1
+        }
       }
     });
 
@@ -470,26 +428,30 @@
     let loaded = false;
     for (let i = 0; i < candidateUrls.length; i++) {
       try {
-        showLoading('Connecting stream server (' + (i + 1) + '/' + candidateUrls.length + ')…');
         await player.load(candidateUrls[i]);
-        videoEl.play().then(() => {
-          hideLoading();
-        }).catch(() => {
+        videoEl.play().catch(() => {
           videoEl.muted = true;
           videoEl.play().catch(() => {});
-          hideLoading();
           if (unmuteBanner) unmuteBanner.classList.remove('hidden');
         });
 
         loaded = true;
         break;
       } catch (e) {
-        console.warn('Candidate failed:', candidateUrls[i], e);
+        console.warn('Candidate stream failed:', candidateUrls[i], e);
+        try {
+          // Automatic Proxy Fallback
+          const proxyUrl = `/api/proxy?url=${encodeURIComponent(candidateUrls[i])}`;
+          await player.load(proxyUrl);
+          videoEl.play().catch(() => {});
+          loaded = true;
+          break;
+        } catch(err2) {}
       }
     }
 
     if (!loaded) {
-      showError("Stream Offline", "Could not load video manifest for " + chName + ". Please retry or switch channel.");
+      showError("Stream Offline", "Could not load video manifest for " + chName + ". Please retry or choose another channel.");
     }
   });
 
