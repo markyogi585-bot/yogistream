@@ -116,6 +116,14 @@
     if (banner) banner.classList.add('hidden');
   }
 
+  function fetchWithTimeout(url, ms = 1200) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { signal: controller.signal })
+      .then(res => { clearTimeout(timeout); return res.json(); })
+      .catch(() => { clearTimeout(timeout); return null; });
+  }
+
   const channelId = new URLSearchParams(location.search).get("id") || "144";
 
   async function startFastPlayback() {
@@ -125,7 +133,6 @@
     const videoEl = document.getElementById("video");
     globalVideo = videoEl;
 
-    // Default Unmuted
     videoEl.muted = false;
     videoEl.volume = 1.0;
 
@@ -135,65 +142,65 @@
 
     new shaka.ui.Overlay(player, container, videoEl);
 
-    // Parallel fetch channel dataset + live cookies for instant load
-    const [chRes, cookieRes, starCookieRes] = await Promise.allSettled([
-      fetch('jstr4web.json').then(r => r.json()).catch(() => fetch('../api/jstr4web.json').then(r => r.json())),
-      fetch('https://allinonereborn2.online/jstrweb2/cookies.json').then(r => r.json()).catch(() => fetch('../api/cookies.json').then(r => r.json())),
-      fetch('https://allinonereborn2.online/jtv-fetch/jstarcookie/cookie.json').then(r => r.json()).catch(() => null)
+    player.configure({
+      abr: {
+        enabled: true,
+        defaultBandwidthEstimate: 500000
+      },
+      streaming: {
+        lowLatencyMode: true,
+        bufferingGoal: 1.0,
+        rebufferingGoal: 0.2,
+        bufferBehind: 5,
+        inaccurateManifestTolerance: 0
+      }
+    });
+
+    const [jstrData, starData, cookieData] = await Promise.all([
+      fetchWithTimeout('jstr4web.json').then(d => d || fetchWithTimeout('../api/jstr4web.json')),
+      fetchWithTimeout('https://allinonereborn2.online/jtv-fetch/jstarcookie/cookie.json'),
+      fetchWithTimeout('https://allinonereborn2.online/jstrweb2/cookies.json').then(d => d || fetchWithTimeout('../api/cookies.json'))
     ]);
 
-    let channelList = chRes.status === 'fulfilled' && chRes.value ? chRes.value : [];
     let primaryCookie = "";
-
-    // Check Star Sports / specific channel cookie
-    if (starCookieRes.status === 'fulfilled' && starCookieRes.value?.failed_results) {
-      for (const item of starCookieRes.value.failed_results) {
-        if (String(item.channel_id) === String(channelId)) {
-          if (item.error_details?.final_url) {
-            const match = item.error_details.final_url.match(/__hdnea__=([^&]+)/);
-            if (match) {
-              primaryCookie = '__hdnea__=' + match[1];
-              break;
-            }
+    if (starData?.failed_results) {
+      for (const item of starData.failed_results) {
+        if (String(item.channel_id) === String(channelId) && item.error_details?.final_url) {
+          const match = item.error_details.final_url.match(/__hdnea__=([^&]+)/);
+          if (match) {
+            primaryCookie = '__hdnea__=' + match[1];
+            break;
           }
         }
       }
     }
 
-    if (!primaryCookie && cookieRes.status === 'fulfilled' && cookieRes.value) {
-      const cdata = cookieRes.value;
-      const entry = Array.isArray(cdata) ? cdata.find(i => i.cookie) : null;
+    if (!primaryCookie && cookieData) {
+      const entry = Array.isArray(cookieData) ? cookieData.find(i => i.cookie) : null;
       if (entry?.cookie) primaryCookie = entry.cookie;
     }
 
-    const channelData = channelList.find(c => String(c.id) === String(channelId) || c.name === channelId) || {
-      id: channelId,
-      url: `https://jiotvmblive.cdn.jio.com/bpk-tv/ColorsHD_MOB/WDVLive/index.mpd`,
-      keyId: "5360e12d4bb2519a9148d1089a55908d",
-      key: "7e8f500cef51595f3d43acafab1a8fb4"
-    };
+    let channelData = null;
+    if (Array.isArray(jstrData)) {
+      channelData = jstrData.find(c => String(c.id) === String(channelId) || c.name === channelId);
+    }
 
-    document.title = (channelData.name || 'Live Channel') + ' - YogiStream Live';
+    if (!channelData) {
+      channelData = {
+        id: channelId,
+        url: `https://jiotvmblive.cdn.jio.com/bpk-tv/ColorsHD_MOB/WDVLive/index.mpd`,
+        keyId: "5360e12d4bb2519a9148d1089a55908d",
+        key: "7e8f500cef51595f3d43acafab1a8fb4"
+      };
+    }
+
+    document.title = (channelData.name || 'Live Channel') + ' - YogiStream';
 
     const drmMap = {};
     if (channelData.keyId && channelData.key) {
       drmMap[channelData.keyId] = channelData.key;
     }
-
-    player.configure({
-      drm: { clearKeys: drmMap },
-      streaming: {
-        lowLatencyMode: true,
-        bufferingGoal: 1.5,
-        rebufferingGoal: 0.3,
-        inaccurateManifestTolerance: 0,
-        retryParameters: {
-          maxAttempts: 4,
-          baseDelay: 100,
-          backoffFactor: 1.1
-        }
-      }
-    });
+    player.configure({ drm: { clearKeys: drmMap } });
 
     let activeCookie = primaryCookie;
 
@@ -222,7 +229,6 @@
         });
         break;
       } catch (err) {
-        console.warn('Direct stream retry:', err);
         try {
           const proxyUrl = `/api/proxy?url=${encodeURIComponent(streamUrls[i])}`;
           await player.load(proxyUrl);
