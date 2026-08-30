@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>YogiStream - Zee5 Live TV | @yogiprojects</title>
+    <title>YogiStream - Cinema Pro Player | @yogiprojects</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
@@ -21,56 +21,72 @@
             font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             color: #fff;
         }
+
+        /* Ambient Glow Backdrop */
+        .ambient-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25), transparent 70%);
+            filter: blur(50px);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.8;
+            transition: opacity 0.5s;
+        }
+
         .shaka-video-container {
             width: 100vw;
             height: 100dvh;
             position: absolute;
             inset: 0;
             background: #000;
+            z-index: 5;
         }
         video {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            transition: object-fit 0.2s;
         }
+
         /* Top Header */
         .player-header {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            padding: 18px 24px;
+            padding: 16px 20px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 20;
+            z-index: 25;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
         .header-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             pointer-events: auto;
         }
         .back-btn {
             background: rgba(255,255,255,0.18);
             border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
             backdrop-filter: blur(10px);
             transition: all 0.2s;
         }
         .back-btn:hover {
-            background: #d170ff;
+            background: #a855f7;
             color: #000;
             transform: scale(1.08);
         }
@@ -89,12 +105,30 @@
             border-radius: 20px;
             text-transform: uppercase;
         }
+
         .header-right {
             display: flex;
             align-items: center;
             gap: 10px;
             pointer-events: auto;
         }
+        .player-tool-btn {
+            background: rgba(0,0,0,0.65);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+        }
+        .player-tool-btn:hover {
+            background: #a855f7;
+            color: #000;
+        }
+
         .live-indicator {
             display: flex;
             align-items: center;
@@ -115,8 +149,86 @@
             animation: pulseDot 1.2s infinite;
         }
         @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(1.3); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* In-Player Channel Drawer Modal */
+        .channel-drawer {
+            position: fixed;
+            top: 0;
+            right: -360px;
+            width: 340px;
+            height: 100vh;
+            background: rgba(10, 13, 24, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -15px 0 40px rgba(0,0,0,0.8);
+        }
+        .channel-drawer.open { right: 0; }
+        .drawer-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .drawer-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; }
+        .drawer-close {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .drawer-search {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 8px 14px;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 14px;
+        }
+        .drawer-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .drawer-list::-webkit-scrollbar { width: 4px; }
+        .drawer-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .drawer-item:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-left: 3px solid #a855f7;
+            padding-left: 12px;
+        }
+        .drawer-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: contain;
+            background: rgba(0,0,0,0.5);
+            padding: 2px;
         }
 
         .unmute-banner {
@@ -138,41 +250,13 @@
           cursor: pointer;
           backdrop-filter: blur(8px);
           box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-          animation: bounce 2s infinite;
         }
         .unmute-banner.hidden { display: none; }
-        @keyframes bounce {
-          0%, 100% { transform: translate(-50%, 0); }
-          50% { transform: translate(-50%, -6px); }
-        }
-
-        .error-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.9);
-            color: #ff5555;
-            padding: 20px;
-            text-align: center;
-            z-index: 100;
-        }
-        .error-overlay button {
-            margin-top: 15px;
-            padding: 11px 26px;
-            border-radius: 30px;
-            background: linear-gradient(90deg, #9900ee, #ff0077);
-            color: #fff;
-            font-weight: 800;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
     </style>
 </head>
 <body>
+
+    <div class="ambient-glow" id="ambientGlow"></div>
 
     <div class="player-header">
       <div class="header-left">
@@ -185,11 +269,24 @@
         </div>
       </div>
       <div class="header-right">
+        <button class="player-tool-btn" onclick="cycleAspectRatio()" title="Aspect Ratio (Key: A)"><i class="fas fa-expand"></i> <span id="aspectLabel">FIT</span></button>
+        <button class="player-tool-btn" onclick="togglePiP()" title="Picture in Picture (Key: P)"><i class="fas fa-clone"></i> PiP</button>
+        <button class="player-tool-btn" onclick="toggleChannelDrawer()" title="Channel List (Key: C)"><i class="fas fa-list"></i> Channels</button>
         <div class="live-indicator">
           <div class="live-dot"></div>
           <span>LIVE</span>
         </div>
       </div>
+    </div>
+
+    <!-- Quick In-Player Channel Drawer -->
+    <div class="channel-drawer" id="channelDrawer">
+      <div class="drawer-head">
+        <div class="drawer-title"><i class="fas fa-tv" style="color:#a855f7;"></i> Quick Switch</div>
+        <button class="drawer-close" onclick="toggleChannelDrawer()"><i class="fas fa-times"></i></button>
+      </div>
+      <input type="text" class="drawer-search" id="drawerSearch" placeholder="Search channels..." oninput="filterDrawerChannels()">
+      <div class="drawer-list" id="drawerList"></div>
     </div>
 
     <div class="unmute-banner hidden" id="unmuteBanner" onclick="enableAudio()">
@@ -203,6 +300,66 @@
 
     <script>
         let globalVideo = document.getElementById('video');
+        let drawerChannels = [];
+        const aspectRatios = ['contain', 'cover', 'fill', 'none'];
+        const aspectLabels = ['FIT', 'COVER', 'FILL', 'STRETCH'];
+        let aspectIdx = 0;
+
+        function cycleAspectRatio() {
+          aspectIdx = (aspectIdx + 1) % aspectRatios.length;
+          globalVideo.style.objectFit = aspectRatios[aspectIdx];
+          document.getElementById('aspectLabel').textContent = aspectLabels[aspectIdx];
+        }
+
+        async function togglePiP() {
+          try {
+            if (document.pictureInPictureElement) {
+              await document.exitPictureInPicture();
+            } else if (document.pictureInPictureEnabled) {
+              await globalVideo.requestPictureInPicture();
+            }
+          } catch (e) {}
+        }
+
+        function toggleChannelDrawer() {
+          const d = document.getElementById('channelDrawer');
+          d.classList.toggle('open');
+          if (d.classList.contains('open') && drawerChannels.length === 0) {
+            loadDrawerChannels();
+          }
+        }
+
+        async function loadDrawerChannels() {
+          try {
+            const r = await fetch('channels199.json');
+            if (r.ok) {
+              const data = await r.json();
+              drawerChannels = data.channels || [];
+              renderDrawerList(drawerChannels);
+            }
+          } catch(e) {}
+        }
+
+        function renderDrawerList(list) {
+          const c = document.getElementById('drawerList');
+          c.innerHTML = list.map(ch => {
+            const keyId = ch.clearkey?.keyId || '';
+            const key = ch.clearkey?.key || '';
+            const url = `player.html?mpd=${encodeURIComponent(ch.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(ch.name)}`;
+            return `
+              <a href="${url}" class="drawer-item">
+                <img src="${ch.logo}" onerror="this.src='../assets/zee5.jpg'" class="drawer-logo" alt="${ch.name}">
+                <span>${ch.name}</span>
+              </a>
+            `;
+          }).join('');
+        }
+
+        function filterDrawerChannels() {
+          const q = (document.getElementById('drawerSearch')?.value || '').toLowerCase().trim();
+          const filtered = drawerChannels.filter(c => c.name.toLowerCase().includes(q));
+          renderDrawerList(filtered);
+        }
 
         function enableAudio() {
           if (globalVideo) {
@@ -223,22 +380,14 @@
         document.title = title + ' - YogiStream Live';
 
         async function initApp() {
-            if (!mpdUrl) {
-                showError("Stream URL Missing", "No DASH MPD stream specified in parameters.");
-                return;
-            }
+            if (!mpdUrl) return;
 
             shaka.polyfill.installAll();
-
-            if (!shaka.Player.isBrowserSupported()) {
-                showError("Unsupported Browser", "Your browser does not support Shaka Player.");
-                return;
-            }
+            if (!shaka.Player.isBrowserSupported()) return;
 
             const video = document.getElementById('video');
             globalVideo = video;
             
-            // Default Volume ON
             video.muted = false;
             video.volume = 1.0;
 
@@ -273,8 +422,8 @@
                 drm: drmConfig,
                 streaming: {
                     lowLatencyMode: true,
-                    bufferingGoal: 20,
-                    rebufferingGoal: 4
+                    bufferingGoal: 2,
+                    rebufferingGoal: 0.5
                 }
             });
 
@@ -287,20 +436,28 @@
                   if (banner) banner.classList.remove('hidden');
                 });
             } catch (e) {
-                showError("Stream Playback Error", e.message || "Failed to decode or play DASH ClearKey stream.");
+                console.warn('Player load error:', e);
             }
         }
 
-        function showError(title, msg) {
-            const container = document.getElementById('player-container');
-            container.innerHTML = `
-                <div class="error-overlay">
-                    <h2>⚠️ ${title}</h2>
-                    <p style="margin-top:8px; color:#ccc;">${msg}</p>
-                    <button onclick="window.history.back()">Go Back</button>
-                </div>
-            `;
-        }
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+          if (e.target.tagName === 'INPUT') return;
+          if (e.key === ' ' || e.key === 'k') {
+            globalVideo.paused ? globalVideo.play() : globalVideo.pause();
+            e.preventDefault();
+          } else if (e.key === 'f' || e.key === 'F') {
+            document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+          } else if (e.key === 'm' || e.key === 'M') {
+            globalVideo.muted = !globalVideo.muted;
+          } else if (e.key === 'a' || e.key === 'A') {
+            cycleAspectRatio();
+          } else if (e.key === 'p' || e.key === 'P') {
+            togglePiP();
+          } else if (e.key === 'c' || e.key === 'C') {
+            toggleChannelDrawer();
+          }
+        });
 
         document.addEventListener('DOMContentLoaded', initApp);
         document.addEventListener('click', () => { enableAudio(); }, { once: true });

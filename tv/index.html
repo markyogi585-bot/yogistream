@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YogiStream TV - Smart TV Leanback Interface | @yogiprojects</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --glow-cyan: rgba(0, 240, 255, 0.5);
+      --secondary: #7928ca;
+      --accent: #ff007a;
+      --dark-bg: #050609;
+      --sidebar-bg: #0a0d16;
+      --card-bg: rgba(18, 22, 38, 0.85);
+      --focus-border: #00f0ff;
+      --text-muted: #8e9fb8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: #050609;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      user-select: none;
+    }
+
+    /* Leanback TV Sidebar */
+    .tv-sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      gap: 12px;
+      z-index: 20;
+    }
+
+    .tv-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+    .tv-brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 0 20px var(--glow-cyan);
+    }
+    .tv-brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+    .tv-brand-title span {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tv-badge {
+      font-size: 10px;
+      background: #ff005a;
+      color: #fff;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+
+    .tv-nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .tv-nav-menu::-webkit-scrollbar { display: none; }
+
+    .tv-nav-btn {
+      background: transparent;
+      border: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .tv-nav-btn i { font-size: 1.2rem; width: 24px; text-align: center; }
+    .tv-nav-btn.focused, .tv-nav-btn:focus, .tv-nav-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      transform: translateX(6px);
+    }
+    .tv-nav-btn.active {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: #000;
+    }
+
+    /* Main Content Area */
+    .tv-main {
+      flex: 1;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 30px 40px;
+      background: radial-gradient(circle at 70% 10%, #151a30 0%, #050609 60%);
+    }
+    .tv-main::-webkit-scrollbar { width: 6px; }
+    .tv-main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+    .tv-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .tv-category-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+    }
+    .tv-remote-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Leanback TV Channel Grid */
+    .tv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 22px;
+      padding-bottom: 60px;
+    }
+
+    .tv-card {
+      background: var(--card-bg);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .tv-card.focused, .tv-card:focus, .tv-card:hover {
+      transform: scale(1.08) translateY(-4px);
+      border-color: var(--focus-border);
+      box-shadow: 0 15px 40px var(--glow-cyan);
+      background: linear-gradient(180deg, #1c223e, #0c1020);
+      z-index: 10;
+    }
+
+    .tv-card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 240, 255, 0.2);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: var(--primary);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+
+    .tv-logo-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .tv-logo-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .tv-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    .tv-card-sub {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Modal player inside TV */
+    .tv-player-modal {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 1000;
+      display: none;
+    }
+    .tv-player-modal.active { display: block; }
+    .tv-player-iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TV Sidebar Menu -->
+  <aside class="tv-sidebar">
+    <div class="tv-brand">
+      <div class="tv-brand-icon"><i class="fas fa-tv"></i></div>
+      <div class="tv-brand-title">Yogi<span>Stream</span><span class="tv-badge">TV</span></div>
+    </div>
+
+    <nav class="tv-nav-menu" id="tvNav">
+      <button class="tv-nav-btn active" data-cat="all" tabindex="1"><i class="fas fa-star"></i> Featured Channels</button>
+      <button class="tv-nav-btn" data-cat="Entertainment" tabindex="2"><i class="fas fa-film"></i> Entertainment</button>
+      <button class="tv-nav-btn" data-cat="Movies" tabindex="3"><i class="fas fa-video"></i> Movies & Cinema</button>
+      <button class="tv-nav-btn" data-cat="Sports" tabindex="4"><i class="fas fa-baseball-ball"></i> Live Sports</button>
+      <button class="tv-nav-btn" data-cat="News" tabindex="5"><i class="fas fa-newspaper"></i> Live 24/7 News</button>
+      <button class="tv-nav-btn" data-cat="Regional" tabindex="6"><i class="fas fa-globe-asia"></i> Regional Indian</button>
+      <button class="tv-nav-btn" data-cat="Infotainment" tabindex="7"><i class="fas fa-compass"></i> Discovery & Kids</button>
+      <button class="tv-nav-btn" data-cat="Music" tabindex="8"><i class="fas fa-music"></i> Music & Songs</button>
+      <button class="tv-nav-btn" onclick="window.location.href='../index.html'" tabindex="9"><i class="fas fa-home"></i> Exit TV Mode</button>
+    </nav>
+  </aside>
+
+  <!-- TV Main Channels Hub -->
+  <main class="tv-main">
+    <div class="tv-top-bar">
+      <div class="tv-category-title" id="catHeading">Featured Channels</div>
+      <div class="tv-remote-hint">
+        <i class="fas fa-gamepad"></i> Use D-Pad / Arrow Keys & Enter to Select
+      </div>
+    </div>
+
+    <div class="tv-grid" id="tvChannelGrid">
+      <!-- Generated TV channel cards -->
+    </div>
+  </main>
+
+  <!-- Fullscreen Leanback Player Modal -->
+  <div class="tv-player-modal" id="tvPlayerModal">
+    <iframe class="tv-player-iframe" id="tvIframe" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    let allChannels = [];
+    let currentCategory = 'all';
+
+    async function loadTVChannels() {
+      const sources = ['../api/channels199.json', '../zee5/channels199.json'];
+      let data = null;
+
+      for (const src of sources) {
+        try {
+          const res = await fetch(src);
+          if (res.ok) {
+            data = await res.json();
+            if (data?.channels) break;
+          }
+        } catch (e) {}
+      }
+
+      if (data?.channels) {
+        allChannels = data.channels;
+        renderTVGrid();
+      }
+    }
+
+    function renderTVGrid() {
+      const grid = document.getElementById('tvChannelGrid');
+      if (!grid) return;
+
+      const filtered = allChannels.filter(c => {
+        return (currentCategory === 'all') || (c.genre === currentCategory);
+      });
+
+      grid.innerHTML = filtered.map((c, idx) => {
+        const keyId = c.clearkey?.keyId || '';
+        const key = c.clearkey?.key || '';
+        const playUrl = `../zee5/player.html?mpd=${encodeURIComponent(c.mpd)}&keyid=${encodeURIComponent(keyId)}&key=${encodeURIComponent(key)}&title=${encodeURIComponent(c.name)}`;
+
+        return `
+          <div class="tv-card" tabindex="${idx + 10}" onclick="openTVPlayer('${playUrl}')">
+            <span class="tv-card-badge">HD LIVE</span>
+            <div class="tv-logo-wrap">
+              <img src="${c.logo}" onerror="this.src='../assets/logo.jpg'" alt="${c.name}">
+            </div>
+            <div class="tv-card-title">${c.name}</div>
+            <div class="tv-card-sub">${c.genre || 'Live TV'} • ${c.language || 'Hindi'}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openTVPlayer(url) {
+      const modal = document.getElementById('tvPlayerModal');
+      const iframe = document.getElementById('tvIframe');
+      iframe.src = url;
+      modal.classList.add('active');
+    }
+
+    function closeTVPlayer() {
+      const modal = document.getElementById('tvPlayerModal');
+      const iframe = document.getElementById('tvIframe');
+      iframe.src = 'about:blank';
+      modal.classList.remove('active');
+    }
+
+    // D-Pad / Remote Navigation Listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Back' || e.keyCode === 10009 || e.keyCode === 27) {
+        const modal = document.getElementById('tvPlayerModal');
+        if (modal.classList.contains('active')) {
+          closeTVPlayer();
+          e.preventDefault();
+        }
+      }
+    });
+
+    // Category button clicks
+    document.querySelectorAll('.tv-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-cat');
+        if (cat) {
+          currentCategory = cat;
+          document.querySelectorAll('.tv-nav-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('catHeading').textContent = btn.textContent.trim();
+          renderTVGrid();
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', loadTVChannels);
+  </script>
+  <script src="../assets/security.js"></script>
+</body>
+</html>
