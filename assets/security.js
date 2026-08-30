@@ -226,16 +226,8 @@
         },
 
         injectFloatingButton: function() {
-            if (document.getElementById('yogi-float-tg')) return;
-            const a = document.createElement('a');
-            a.id = 'yogi-float-tg';
-            a.className = 'yogi-float-btn';
-            a.href = YOGI_CONFIG.telegramUrl;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.title = 'Join @' + YOGI_CONFIG.telegramChannel + ' on Telegram';
-            a.innerHTML = '<i class="fab fa-telegram-plane"></i>';
-            document.body.appendChild(a);
+            // Disabled: Do not inject intrusive floating button over video players
+            return;
         },
 
         showModal: function() {
